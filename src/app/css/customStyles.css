@@ -1,0 +1,754 @@
+.create-checkbox input[type=checkbox]{
+	cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+	background: #34495E;
+	border-radius: 1px;
+	box-sizing: border-box;
+	position: relative;
+	box-sizing: content-box ;
+	width: 16px;
+	height: 16px;
+	border-width: 0;
+	transition: all .3s linear;
+}
+
+.create-checkbox input[type=checkbox]:checked {
+  background-color: #2ECC71;
+}
+
+.create-checkbox input[type="checkbox"]:focus{
+  outline: 0 none;
+  box-shadow: none;
+}
+
+.static-page {
+	width: 400px;
+	height: 640px;
+	background: white;
+	
+	border-radius: 0.3em;
+	border: 1px solid #2B2B34;
+
+	z-index: 10000;
+	margin: 0px;
+	padding: 0px;
+}
+
+.login-page {
+	position: absolute;
+    float: right;
+    width: 380px;
+    height: 100%;
+	background-color: #3F2664;
+	margin-left:40px;
+	padding: 20px 0px 0px 20px;
+	z-index: 10;
+	font-family:	"HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", "Arial", sans-serif;
+	box-sizing: border-box;
+}
+
+.login-title {
+	height: 18%;
+	color: #ffffff;
+	position: relative;
+	vertical-align: top;
+	text-align: left;
+	font-size: 1.6em;
+	font-weight: 300;
+}
+
+.login-page tr {
+	text-align: left;
+	width: 100%;
+}
+
+.login-page tr td {
+	width: 50%;
+	color: #ffffff;
+	padding: 5px 0px 0px 0px;
+	z-index: 20;
+}
+
+.login-page tr td input {
+	width: 90%;
+	padding: 3px 3px;
+	z-index: 20;
+
+}
+
+.login-submit {
+	height: 30%;
+	position: relative;
+	text-align: center;
+}
+
+.login-submit input[type=submit] {
+	height: 100%;
+	float: left;
+	padding: 8px 0px;
+}
+
+.login-notes {
+	width: 100%;
+	color: #F47839;
+	text-align: left;
+}
+
+.inner-box {
+	position: relative;
+	left: 35px;
+	height: 100%;
+	bottom: 7px;
+	/*background:rgba(105,105,105,0.85);*/
+	padding: 0px;
+	margin: 0px;
+}
+
+.logo {
+	height: 95%;
+	vertical-align: middle;
+}
+
+.company_name {
+	color: white;
+	margin: 0px;
+	padding: 2px;
+	font-size: 25px;
+	font-style: normal;
+	font-weight: normal;
+	height: 100%;
+	font-family:	"HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", "Arial", sans-serif;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.company_name_text{
+	transform: rotate(-90deg);
+	float: left;
+	margin: -7px;
+}
+
+.controls{
+	position: relative;
+	height: 35%
+	border-bottom: 1px solid black;
+	color: #2B2B34;
+	font-family: sans-serif;
+	background: white;
+	font-family:	"HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", "Arial", sans-serif;
+}
+
+.toggle {
+	height: 16px;
+	position: relative;
+	vertical-align: top;
+	position: absolute;
+	left:10px;
+	top: 20px;
+
+}
+
+.tg  {
+	border-collapse:collapse;
+	border-spacing:0;
+	width: 100%;
+	height: 100%;
+}
+
+#callcontrols {
+	padding: 0px 0px 0px 0px;
+	height: 200px;
+}
+
+
+.cc-title {
+	height: 18%;
+	position: relative;
+	vertical-align: top;
+	text-align: left;
+	text-transform: uppercase;
+	font-size: 1.2em;
+	font-weight: 300;
+	padding: 0px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.cc-toprow {
+	height: 28%;
+
+}
+
+.cc-middlerow {
+	height: 34%;
+
+}
+
+.cc-bottomrow {
+	height: 20%;
+
+}
+
+.cc-contact {
+	float: left;
+	height: 80%;
+	width:  55%;
+}
+
+.cc-time {
+	background-color: #cccccc;
+	float: right;
+	height: 80%;
+	width:  45%;
+	border-radius: 8px;
+}
+
+.contact-picture {
+	float: left;
+	height: 50px;
+	width: 50px;
+	border-radius: 50%;
+	border: 1px solid #2B2B34;
+	padding-bottom: 0%;
+	overflow: hidden;
+	position: relative;
+  	top: 50%;
+  	transform: translateY(-50%);
+}
+
+.contact-details {
+	float: left;
+	text-align: left;
+	position: relative;
+	font-size: 0.7em;
+	height: 100%;
+	max-width: 120px;
+	padding: 5px 8px 5px 8px;
+	font-weight: normal;
+
+}
+
+.cd-all {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	height: 33%;
+}
+
+.cd-name {
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+
+#contactAvatar {
+	position: relative;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, 0%);
+	height: 100%;
+}
+
+.time-numbers {
+	height: 60%;
+	font-size: 1.6em;
+	font-weight: 300;
+}
+
+.time-text-container {
+	width: 100%;
+}
+
+.time-text {
+	float:left;
+	font-size: 0.7em;
+	font-weight: 300;
+	text-align: center;
+	height: 20%;
+	width:  33%;
+}
+
+.midrow-table {
+	width: 100%;
+	height: 100%;
+	border: solid 1px #cccccc;
+	border-radius: 5px;
+}
+
+.midrow-table img {
+	height: 40%;
+	max-height: 30px;
+}
+
+.table-arrow {
+	width: 10%;
+}
+
+.table-arrow:hover {
+	background-color: #ACDDDE;
+}
+
+.call-icon {
+	width: 10%;
+	padding: 0px 4px 0px 0px;
+}
+
+.insights {
+	font-size: 0.75em;
+	text-align: left;
+	padding: 0px 0px 0px 2px;
+}
+
+.insights div {
+	float: left;
+}
+
+.insights-toprow {
+	height: 22%;
+	width: 100%;
+}
+
+.insights-date {
+	font-weight: 400;
+	width: 28%;
+
+}
+
+.insights-title {
+	font-weight: 600;
+	width: 71%;
+}
+
+.insights-note {
+	height: 60%;
+	max-width: 220px;
+	font-weight: 300;
+  	overflow: hidden;
+  	position: relative;
+  	line-height: 1.2em;
+  	max-height: 3.6em;
+  	word-break: normal;
+  	margin-right: -1em;
+  	padding-top: 2px;
+}
+
+.insights-note:before {
+	content: '...';
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+
+.insights-note:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	width: 1em;
+	height: 1em;
+	margin-top: 0.2em;
+	background-color: white;
+}
+
+.cc-bottomrow div {
+	float: left;
+	height: 100%;
+}
+
+.ellipsis-single {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.notesfield {
+	float: left;
+	resize: none;
+    width: 76%;
+    height: 100%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #F0EEF2;
+}
+
+.statusText {
+	font-family:	"HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", "Arial", sans-serif;
+	color: white;
+	font-weight: 300;
+	font-size: 0.7em;
+	text-align: left;
+	padding: 6px;
+}
+
+.statusListener {
+	color: #FFFFFF;
+	font-size: 1.8em;
+}
+
+.statusCRM {
+	padding-left: 1em;
+	color: #7DC358;
+}
+
+.callerIdTitle {
+	font-family:	"HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", "Arial", sans-serif;
+	/* color: white; */
+	/* float:left; */
+	font-weight: 500;
+	font-size: 1.2em;
+	padding-top: 12px;
+	padding-left: 6px;
+}
+.callerIdSpan {
+	font-family:	"HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", "Arial", sans-serif;
+	/* color: white; */
+	float:left;
+	font-weight: 600;
+	font-size: 1.0em;
+	padding-top: 6px;
+	padding-left: 6px;
+}
+
+input[type=submit] {
+	float: right;
+    width: 20%;
+    height: 100%;
+    background-color: #33BFC3;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.divContainer {
+	height: 100%;
+	position: relative;
+}
+
+.div1-record {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 1;
+	display: none;
+	background-color: white;
+}
+
+.div2-table {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	float: left;
+	z-index: 1; /* was 2 */
+	display: block;
+	background-color: white;
+}
+
+.div3-idle {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	float: left;
+	z-index: -1; /* was 0 */
+	background-image: url("../images/idlebackground.jpg");
+	display: block; 
+}
+
+.div4-callerid {
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	z-index: 1;
+	/* display: none; */
+}
+
+.idlecontainer {
+	padding: 16px;
+	position: absolute;
+	left:19%;
+	top: 20%;
+
+}
+
+.idletext {
+	font-family:	"Arial", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", sans-serif;
+	font-size: 0.8em;
+	font-weight: 400;
+	color: #FFFFFF;
+}
+
+.contacts-table {
+	width: 350px;
+	/* width: 400px */
+}
+.contacts-table th {
+	text-align: left;
+	color: #6c3990;
+	font-size: 0.6em;
+	font-weight: 300;
+	text-transform: uppercase;
+	padding-bottom: 2px;
+}
+
+.contacts-table td {
+	width: 50%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 170px;
+	font-size: 0.7em;
+}
+
+.contacts-table tr:hover {
+	color: #33BFC3;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.contacts-table-name {
+	font-weight: 500;
+	padding-bottom: 4px;
+}
+
+.contacts-table-name-new {
+	color: #EF4367;
+	font-weight: 500;
+	padding-bottom: 4px;
+}
+
+.contact-column {
+	font-weight: 600;
+}
+
+.cc-callhistory-table {
+	/* height: 40%; */
+	/* padding: 10px 25px 10px 25px; */
+	/* padding: 10px 5px 10px 5px;  */ 
+	height: 100px;
+	padding: 0px 5px 10px 5px;
+}
+
+.cc-callhistory-table tbody {
+	height: 150px;
+}
+
+.cc-activities-table {
+	height: 40%;
+	padding: 10px 25px 10px 25px;
+	z-index: 1; /* was 2 */
+	background-color: white;
+}
+
+.activities-table {
+	width: 350px;
+	/* width: 400px */
+}
+
+.activities-table th {
+	text-align: left;
+	color: #6c3990;
+	font-size: 0.6em;
+	font-weight: 300;
+	text-transform: uppercase;
+	padding-bottom: 2px;
+	padding-top: 8px;
+}
+
+.activities-table td {
+	width: 25%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 20px;
+	font-size: 0.7em;
+}
+
+.activities-table tr:hover {
+	color: #33BFC3;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.activities-table-name {
+	font-weight: 500;
+	padding-bottom: 4px;
+}
+
+.activities-table-name-new {
+	color: #EF4367;
+	font-weight: 500;
+	padding-bottom: 4px;
+}
+
+.activities-table-name-new:hover {
+	color: #33BFC3;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.call-history {
+	/* padding: 10px; /* 5px 25pn 25px; */
+	padding: 10px 5px 25px 25px;
+    position: absolute;
+    top: 15;
+    width: 400px;
+    /* width: 350px; */
+	z-index: 1;
+}
+
+#call-history-container {
+	height: 220px;
+	/*display: none;*/
+}
+
+.statusTable {
+	width: 100%;
+}
+
+.headerRow {
+	height: 60px;
+	background-color: #44295C
+	/* background-color: #44295D */
+	/* background-color: #492B56;*/
+}
+
+.footerRow {
+	height: 50px;
+	background-color: #44295C
+	/* background-color: #44295D */
+	/* background-color: #492B56;*/
+}
+
+.cid-phone-number {
+	padding-right: 3px;
+}
+
+.caller-info {
+	color: white;
+	background-color: #00C3C1;
+	height: 100px;
+	padding: 12px 0px 12px 25px;
+}
+
+.caller-info-child-left {
+	float: left;
+	width: 70%;
+}
+
+.caller-info-child-right {
+	float: left;
+	width: 30%;
+	height: 100px;
+}
+
+.call-status {
+	text-align: left;
+	font-size: 0.6em;
+	padding-bottom: 6px;
+}
+
+.call-direction-arrow {
+	height: 11px;
+}
+
+.cc-inboundnum {
+	font-size: 1.3em;
+}
+
+.cc-inboundname {
+	font-size: 1em;
+	color: #373838;
+	text-transform: none;
+	padding-top: 4px;
+}
+
+.cc-inboundloc {
+	font-size: 0.8em;
+	color: #373838;
+	text-transform: none;
+	padding-top: 4px;
+}
+
+.cc-contacts-table {
+	padding: 20px 25px 10px 25px;
+}
+
+.table-title {
+	position: relative;
+	vertical-align: top;
+	text-align: left;
+	text-transform: uppercase;
+	font-size: 0.9em;
+	font-weight: 300;
+	padding: 0px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ringing-box {
+	display: inline-block;
+	position: relative;
+	top:25%;
+	font-family:	"Arial", "HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica,
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", sans-serif;
+	color: #898681;
+	background-color: #EDEBE9;
+	height: 50%;
+	width: 70%;
+	text-align: center;
+	font-size: 0.5em;
+	border-radius: 1em;
+	line-height: 250%;
+	font-weight: 600;
+}
+
+.footer {
+	position: relative;
+	float: left;
+	padding: 10px;
+}
+
+.footerStatus {
+	float: right;
+	padding: 10px;
+	font-weight: 500
+}
+/*
+#incoming-content-tbody {
+	height: 160px;
+	overflow-y: auto;
+	display: block;
+	width: 100%;
+}
+
+#incoming-anchor-tbody {
+	height: 65px;
+	overflow-y: auto;
+	width: 100%;
+}
+
+.overflow-scroll thead {
+	display: block;
+	width: 100%;
+}
+
+.overflow-scroll tbody {
+	display: block;
+	overflow-y: auto;
+	width: 100%;
+}
+*/

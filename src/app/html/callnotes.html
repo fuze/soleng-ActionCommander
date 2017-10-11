@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Fuze Connect ... Wrap Up and Notes</title>
+<link rel="stylesheet" href="../css/popupStyles.css" type="text/css">
+</head>
+<body>
+<table class="mainTable">
+<tr class="rowHead">
+    <td>
+        <h1 class="titleImage"><img src="../images/titleImageWrapup.png"></h1>
+    </td>
+</tr>
+<tr>
+	<td>
+	<div class="container" id="wrapup-code-div" visibility: visible >
+		<div>Select a Wrap Up Code:</div>
+	    <select id="wrapup-code">
+
+		</select>
+	</div>
+	<div class="container" id="wrapup-notes-div" visibility: visible >
+		<div>Call Notes:</div>
+		<textarea  id="wrapup-notes" rows="6" cols="66" ></textarea>
+	</div>
+	<div class="container">
+	    <input type="button" value="Save" id="save">
+	</div>
+	</td>
+</tr>
+<tr>
+    <td>    
+        <div class="footer">
+        <div>
+            © Fuze 2017
+        </div>
+        </div>
+    </td>
+</tr>
+<script>
+	const { ipcRenderer } = require('electron');
+	const { remote } = require('electron');
+	const bg 	= require('../js/generalSetGet');
+	const lc 	= require('../js/localConfigSettings');
+	const uh 	= require('../js/utilityHandler')
+	const cn 	= require('../js/callnotes');
+</script>
+
+</body>
+</html>

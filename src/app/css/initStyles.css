@@ -1,0 +1,65 @@
+body {
+	font-family:	"HelveticaNeue-Light", "Helvetica Neue Light", "HelveticaNeue", "Helvetica Neue", Helvetica, 
+					'TeXGyreHerosCnRegular', "Lucida Grande", "Lato", "Open Sans", "Arial", sans-serif;
+	color: black;
+	font-weight: 300;
+	font-size: 1em;
+	max-width: 400px;
+	max-height: 640px;
+}
+
+.static-page {
+	position: absolute;
+	max-width: 400px;
+	max-height: 400px;
+	/* background: #492B56; */
+	z-index: 10000;
+	margin: 0px;
+	padding: 0px;
+}
+
+.init-container {
+	position: absolute;
+	margin: 100px;
+	max-height: 300px;
+	max-width: 300px
+	background: white;
+	float: left; 
+	display:center;
+	z-index: 1;
+}
+.headerRow {
+	height: 60px;
+	background-color: #3F2765;
+	/*#3F2765 */
+	/*#3F2765 */
+	/* background-color: #492B56; */
+}
+
+.init-container > img {
+	align-item:center;
+	justify-content:center;
+	/*margin: auto; */
+}
+
+.titleImage {
+	background-color: #3F2765;
+	/* background-color: #3F2664; */
+	margin-top: 0;
+}
+
+.footer {
+	position: fixed;
+	width: 100%;
+	max-width: 420px;
+	bottom: 10px;
+	left: 10px;
+	right: 10px;
+	margin 0px;
+	color: white;
+	font-weight: 300;
+	background-color: #3F2765;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+}

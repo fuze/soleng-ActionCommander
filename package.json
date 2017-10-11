@@ -1,0 +1,111 @@
+{
+  "name": "Fuze_Connect",
+  "description": "Fuze Connect Installable",
+  "version": "1.8.12.964",
+  "author": {
+    "name": "Fuze Solution Engineering",
+    "email": "coe@fuze.com",
+    "url": "https://www.fuze.com/"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fuze/coe-electron-fuze-connect.git"
+  },
+  "main": "/src/fuzeconnect.js",
+  "scripts": {
+    "test": "standard && mocha --recursive",
+    "unit": "standard && mocha test/unit --recursive",
+    "integration": "standard && mocha test/integration --recursive",
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- --recursive",
+    "depcheck": "dependency-check app --entry fuzeconnect.js --unused --no-dev",
+    "lint": "standard",
+    "start": "electron ./src/fuzeconnect",
+    "clean:linux": "rimraf dist/linux* dist/*.deb dist/*.AppImage",
+    "clean:osx": "rimraf dist/mac",
+    "clean:win": "rimraf dist/win*",
+    "clean": "npm run clean:linux && npm run clean:win && npm run clean:osx",
+    "pack:osx": "build --dir --mac",
+    "pack:win": "build --dir --win --x64",
+    "pack:linux": "build --dir --linux --x64",
+    "pack": "build --dir",
+    "prebuild": "node build/target.js",
+    "build:osx": "npm run prebuild && build --mac && npm run postbuild",
+    "build:win": "npm run prebuild && build --win --x64 && npm run postbuild",
+    "build:linux": "npm run prebuild && build --linux deb AppImage --x64 && npm run postbuild",
+    "build": "build",
+    "postbuild": "node build/target.js --clean",
+    "postinstall": "install-app-deps"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "after",
+      "it",
+      "before",
+      "beforeEach",
+      "afterEach",
+      "rm",
+      "cp"
+    ]
+  },
+  "pre-commit": [
+    "lint",
+    "unit"
+  ],
+  "keywords": [
+    "electron-app",
+    "electron",
+    "boilerplate"
+  ],
+  "build": {
+    "appId": "com.fuze.connect",
+    "productName": "Fuze Connect",
+    "dmg": {
+      "iconSize": 120,
+      "iconTextSize": 14,
+      "contents": [
+        {
+          "x": 478,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 170,
+          "type": "file"
+        }
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.business"
+    },
+    "linux": {
+      "category": "Development"
+    },
+    "win": {}
+  },
+  "devDependencies": {
+    "async": "^2",
+    "chai": "^3",
+    "chai-as-promised": "^6",
+    "dependency-check": "^2",
+    "devtron": "^1.4.0",
+    "electron": "^1",
+    "electron-builder": "^7",
+    "electron-eventbus": "^1",
+    "electron-settings": "^3",
+    "events": "^1",
+    "istanbul": "^0.4",
+    "mocha": "^3",
+    "pre-commit": "^1",
+    "rimraf": "^2",
+    "shelljs": "^0.7",
+    "spectron": "^3",
+    "standard": "^8",
+    "xmlhttprequest": "^1",
+    "libphonenumber-node" : "^0",
+    "google-libphonenumber" : "^3"
+  }
+}

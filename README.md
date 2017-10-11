@@ -1,2 +1,6 @@
-# soleng-fuze-connect-electron
-Home of the Fuze Connect built with Electron
+# Fuze Connect Installable
+
+~~~ console
+$ BUILD_TARGET=debug npm run build:osx
+~~~
+

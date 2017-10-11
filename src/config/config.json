@@ -1,0 +1,17 @@
+{
+	"fuzeUrl": 					"https://fcon.gts.fuze.com",
+	"getUserDataUrl": 			"https://fcon.gts.fuze.com/dbapiuser/users/byname?name=",
+	"updateUserDataUrl": 		"https://fcon.gts.fuze.com/dbapiuser/users/byname?name=",
+	"updateTempKeys": 			"https://fcon.gts.fuze.com/dbapitmpkeys/token/update?state=",
+	"getTempKeys": 				"https://fcon.gts.fuze.com/dbapitmpkeys/token/get?state=",
+	"fuzeoAuthCallBack": 		"https://fcon.gts.fuze.com/oauth/oauthproxy",
+	"tempKeysIter" : 			"50",
+	"tempKeysTimeOut" : 		"5",
+	"socketTimer" : 			"30",
+	"fuzeAuthenticationURL" : 	"https://synapse.thinkingphones.com/tpn-webapi-broker/services/authenticate",
+	"fuzeWebSocketURL" : 		"wss://synapse.thinkingphones.com/tpn-webapi-broker/websocket?token=",
+	"fuzeClick2CallURL" : 		"https://synapse.thinkingphones.com/tpn-webapi-broker/services/calls/preferredCall?",
+	"cloudElementsUrl" : 		"https://console.cloud-elements.com/elements/api-v2/hubs",
+	"cloudElementsApiUrl" : 	"https://api.cloud-elements.com/elements/api-v2/",
+	"cldElmntsProvUrl" : 		"https://console.cloud-elements.com/elements/api-v2/elements/"
+}

@@ -1,0 +1,38 @@
+{
+  "name": "FuzeConnect",
+  "productName": "Fuze Connect",
+  "description": "Fuze Installable",
+  "version": "2.8.12.961",
+  "homepage": "https://www.fuze.com",
+  "author": {
+    "name": "Fuze - Solution Engineering",
+    "email": "gts@fuze.com",
+    "url": "https://www.fuze.com/"
+  },
+  "license": "UNLICENSED",
+  "main": "fuzeconnect.js",
+  "electronVersion": "1.0.0",
+  "dependencies": {
+    "devtron": "^1",
+    "electron-debug": "^1",
+    "electron-is-dev": "^0.1",
+    "electron-window-state": "^3",
+    "lodash": "^4",
+    "ws" : "^2"
+  },
+  "config": {
+  	"debug"			: true,
+  	"infourl"		: "app/html/info.html",
+  	"reseturl"		: "app/html/reset.html",
+  	"initurl"		: "app/html/index.html",
+    "mainurl"		: "app/html/mainpage.html",
+    "loginurl"		: "app/html/setup.html",
+    "passwdurl" 	: "app/html/passwd.html",
+    "callnotes" 	: "app/html/callnotes.html",
+    "crmuserprompt" : "app/html/crmuserprompt.html",
+    "focusurl" 		: "app/html/focusvison.html",
+    "update": {
+      "url": false
+    }
+  }
+}
