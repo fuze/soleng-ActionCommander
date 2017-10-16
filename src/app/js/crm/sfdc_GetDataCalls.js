@@ -280,10 +280,12 @@ function sfdc__dispatchNameForActivity(contacts, content, sfdc__handleContentRes
 		console.debug('sfdc__dispatchNameForActivity results = ' + content.length);
 		for ( var i = 0; i <= (content.length - 1 );  i++) {
 			console.log('sfdc__dispatchNameForActivity == ' + i + " " + content[i].WhoId);
-			if (i == 0) {
-				uri = 'Id=\''+ content[i].WhoId + '\'';
-			} else {
-				uri += ' OR Id=\'' +  content[i].WhoId + '\'';
+			if (content[i].WhoId && content[i].WhoId != 'undefined') {
+				if (i == 0) {
+					uri = 'Id=\'' + content[i].WhoId + '\'';
+				} else {
+					uri += ' OR Id=\'' + content[i].WhoId + '\'';
+				}
 			}
 		}
 		console.debug('sfdc__dispatchNameForActivity url = ' + uri)
