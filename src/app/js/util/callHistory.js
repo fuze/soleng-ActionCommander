@@ -52,8 +52,8 @@ callHistory.prototype.setCallHistory = function (historyitem) {
 	if (bg.getHistoryFlag) {
 		bg.setHistoryFlag(false);
 		var history = JSON.parse(historyitem);
-		var allHistory;
-	
+		var allHistory = [];
+
 		if ((history.name !== undefined) && (history.name !== false)) {
 			if(history != 'false') {
 				if(this.getCallHistory() !== null) {

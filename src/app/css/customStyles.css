@@ -554,9 +554,7 @@ input[type=submit] {
 }
 
 .activities-table {
-	width: 350px;
-	/* width: 400px */
-}
+	width: 400px;  }
 
 .activities-table th {
 	text-align: left;
@@ -602,7 +600,7 @@ input[type=submit] {
 
 .call-history {
 	/* padding: 10px; /* 5px 25pn 25px; */
-	padding: 10px 5px 25px 25px;
+	padding: 10px 5px 25px 10px;
     position: absolute;
     top: 15;
     width: 400px;

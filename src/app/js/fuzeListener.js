@@ -60,7 +60,7 @@ function __startSocket()  {
 	 console.debug('startSocket:ws not declared yet.');
 	 __openConnection();
 	} else {
-		console.debug('ws.startSocket ' + socket.readyState);
+		console.debug('ws.startSocket ' + ws.readyState);
 		switch(ws.readyState) {
 			case 0:
 				console.debug('startSocket: Connecting.');
