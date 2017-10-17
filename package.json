@@ -19,7 +19,6 @@
     "integration": "standard && mocha test/integration --recursive",
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --recursive",
     "depcheck": "dependency-check app --entry fuzeconnect.js --unused --no-dev",
-    "lint": "standard",
     "start": "electron ./src/fuzeconnect",
     "clean:linux": "rimraf dist/linux* dist/*.deb dist/*.AppImage",
     "clean:osx": "rimraf dist/mac",
@@ -97,15 +96,15 @@
     "electron-eventbus": "^1",
     "electron-settings": "^3",
     "events": "^1",
+    "google-libphonenumber": "^3",
     "istanbul": "^0.4",
+    "libphonenumber-node": "^0",
     "mocha": "^3",
     "pre-commit": "^1",
     "rimraf": "^2",
     "shelljs": "^0.7",
     "spectron": "^3",
-    "standard": "^8",
-    "xmlhttprequest": "^1",
-    "libphonenumber-node" : "^0",
-    "google-libphonenumber" : "^3"
+    "standard": "^8.6.0",
+    "xmlhttprequest": "^1"
   }
 }
