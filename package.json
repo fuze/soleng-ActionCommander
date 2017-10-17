@@ -49,7 +49,6 @@
     ]
   },
   "pre-commit": [
-    "unit"
   ],
   "keywords": [
     "electron-app",
