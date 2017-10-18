@@ -93,7 +93,7 @@ utilityHandler.prototype.utilityActionController = function(action, clickdata) {
 ///////////////////////////////////////////////////////////////
 function contactsOpenWindow(title, idforwin) {
 
-	if (lc.getCEType() == 'sfdcservicecloud') {
+	if ((lc.getCEType() == 'sfdcservicecloud') || (lc.getCEType() == 'sfdc')) {
 		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/' + idforwin;
 		shell.openExternal(openwinurl)
@@ -181,7 +181,7 @@ function incidentsOpenWindow (title, idforwin) {
 // @ idforwin == is the ID of the content
 ///////////////////////////////////////////////////////////////
 function accountsOpenWindow(title, idforwin) {
-	if (lc.getCEType() == 'sfdcservicecloud') {
+	if ((lc.getCEType() == 'sfdcservicecloud') || (lc.getCEType() == 'sfdc')) {
 
 		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/' + idforwin;

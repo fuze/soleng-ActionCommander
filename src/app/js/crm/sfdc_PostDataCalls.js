@@ -1,5 +1,6 @@
 'use strict'
-const { remote, ipcRenderer } = require('electron');
+const { remote, shell, ipcRenderer } = require('electron');
+
 const pjson = remote.getGlobal('pjson')
 
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
@@ -253,9 +254,10 @@ function sfdc__createOpportunity() {
 				if (results.Id) {
 					bg.setActivityId(results.Id);
 					var incidentUrl = lc.getCrmBaseUrl() + '/' + results.Id;
-					
-					var new_window = window.open(incidentUrl, 'New Opportunity' + results.Id);
-    				console.log("sfdc__createOpportunity: New Opportunity " + results.Id);
+
+					shell.openExternal(incidentUrl)
+
+					console.log("sfdc__createOpportunity: New Opportunity " + results.Id);
     				bg.setCrmAuthStatus(true);
     			} else {
     				console.log("sfdc__createOpportunity: Failed to Create a new Opportunity " + postData );
@@ -368,6 +370,7 @@ function sfdc__createCallLogBigPayload(endtime, successCallback) {
 			postData += '"Status": "Completed" ,';
 		}
 		postData += '"Type" : "Phone Call", ';
+		postData += '"ActivityDate" : "' + bg.getFormattedDate('date') + '", ';
 		postData += '"Description" : "Phone Call: Start Time = ' + bg.getStarttime() + '\\r\\n';
 		postData += 'End Time = ' + bg.getFormattedDate('mdy') + '\\r\\n';
 	if (((bg.getActivityId()  === 'false') ||  (bg.getActivityId() == null)) && ((bg.getUserConnectorAcct()  === 'false') ||  (bg.getUserConnectorAcct() == null))) {
@@ -415,6 +418,7 @@ function sfdc__createCallLogSmallgPayload(endtime, successCallback) {
 
 	var postData = '{ "Subject" : "' + bg.getCallDirection() +' Automatic Call Log ' + bg.getStarttime() + '" , ';
 		postData += '"CallType" : "' + bg.getCallDirection() + '", ';
+		postData += '"ActivityDate" : "' + bg.getFormattedDate('date') + '", ';
 		postData += '"CallDurationInSeconds" : "'+ duration +'", ';
 		if (((bg.getActivityId() === 'false') ||  (bg.getActivityId() == null)) && ((bg.getUserConnectorAcct()  === 'false') ||  (bg.getUserConnectorAcct() == null))) {
 			postData += '"Status": "In Progress" ,';
