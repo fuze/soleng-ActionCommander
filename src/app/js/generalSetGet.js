@@ -5,6 +5,7 @@ const mainWindow = remote.getGlobal('mainWindow')
 
 const lc = require('./localConfigSettings');
 const ph = require('./util/phoneUtils')
+const moment = require('./util/moment-timezone-with-data');
 
 function backgroundSettings() {};
 ////////////////////////////////////////////////////////////////////////////////////////

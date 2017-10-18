@@ -113,9 +113,9 @@ function msdynamics__createActivity(type) {
 				if (results.id) {
 					bg.setActivityId(results.Id);
 					var activityUrl = lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=task&id=' + results.id;
-			
-					var new_window = window.open(activityUrl, 'New Activity' + results.id);
-    				console.log("msdynamics__createActivity: New Activity " + results.id);
+
+					shell.openExternal(activityUrl)
+					console.log("msdynamics__createActivity: New Activity " + results.id);
     				bg.setCrmAuthStatus(true);
     			} else {
     				msdynamics__createActivity('small')
@@ -186,7 +186,8 @@ function msdynamics__createOpportunity(type) {
 				if (results.id) {
 					bg.setActivityId(results.id);
 					var opportunityUrl = lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=opportunity&id=' + results.id;
-					var new_window = window.open(opportunityUrl, 'New Opportunity' + results.id);
+
+					shell.openExternal(opportunityUrl)
     				console.log("msdynamics__createOpportunity: New Opp " + results.id);
     				bg.setCrmAuthStatus(true);
     			} else {
