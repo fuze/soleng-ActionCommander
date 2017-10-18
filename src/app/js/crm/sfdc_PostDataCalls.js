@@ -108,8 +108,9 @@ function sfdc__createActivity() {
 				if (results.Id) {
 					bg.setActivityId(results.Id);
 					var activityUrl = lc.getCrmBaseUrl() + '/' + results.Id;
-					
-					var new_window = window.open(activityUrl, 'New Activity' + results.Id);
+
+					shell.openExternal(activityUrl)
+
     				console.log("sfdc__createActivity: New Activity " + results.Id);
     				bg.setCrmAuthStatus(true);
     			} else {
@@ -197,7 +198,7 @@ function sfdc__createFocusvisionOpportunity(method, intAccount) {
 					bg.setActivityId(results.Id);
 					var incidentUrl = lc.getCrmBaseUrl() + '/' + results.Id;
 
-					var new_window = window.open(incidentUrl, 'New Opportunity' + results.Id );
+					shell.openExternal(incidentUrl)
 					console.warn("sfdc__createFocusvisionOpportunity: New Opportunity " + results.Id);
 					bg.setCrmAuthStatus(true);
 				} else {
