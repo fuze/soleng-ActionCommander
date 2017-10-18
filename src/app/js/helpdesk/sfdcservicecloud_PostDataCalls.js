@@ -1,6 +1,6 @@
 'use strict'
 
-const { remote, ipcRenderer } = require('electron');
+const { remote, shell, ipcRenderer } = require('electron');
 const pjson = remote.getGlobal('pjson')
 
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
@@ -80,8 +80,8 @@ function sfdcservicecloud__createIncident() {
 				if (results.Id) {
 					bg.setActivityId(results.Id);
 					var incidentUrl = lc.getCrmBaseUrl() + '/' + results.Id;
-					
-					var new_window = window.open(incidentUrl, 'New Incident');
+
+					shell.openExternal(incidentUrl)
     				console.log("sfdcservicecloud__createIncident: New Incident " + results.Id);
     				bg.setCrmAuthStatus(true);
     			} else {
@@ -101,7 +101,7 @@ function sfdcservicecloud__createIncident() {
 ///////////////////////////////////////////////////////////////
 function sfdcservicecloud__createCallLog(endtime, callback) {
 
-	var recLink = bg.getRecordingLinkBase();
+	var recLink = lc.getRecordingLinkBase();
 	
 	var postUrl = cloudElementsUrl + '/' + lc.getRoutePath();
 	    postUrl += '/' + lc.getContentPrimary() +'/' + bg.getActivityId() + '/tasks';
@@ -114,12 +114,12 @@ function sfdcservicecloud__createCallLog(endtime, callback) {
 	console.log("sfdcservicecloud__createCallLog: Direction " + bg.getCallDirection());
 	console.log("sfdcservicecloud__createCallLog: starttime " + bg.getRawStartTime());
 	console.log("sfdcservicecloud__createCallLog: endtime   " + endtime);
-	console.log("sfdcservicecloud__createCallLog: wrap code   " + bg.getWrapUpCode());
-	console.log("sfdcservicecloud__createCallLog: notes   " + bg.getCallNotes());
-	if (bg.getWrapUpCode() != 'false') {
+	console.log("sfdcservicecloud__createCallLog: wrap code   " + lc.getWrapUpCode());
+	console.log("sfdcservicecloud__createCallLog: notes   " + lc.getCallNotes());
+	if (lc.getWrapUpCode() != 'false') {
 		console.log("sfdcservicecloud__createCallLog: Wrap Code " + bg.getWrapUpValue());
 	}
-	if (bg.getCallNotes() != 'false') {
+	if (lc.getCallNotes() != 'false') {
 		console.log("sfdcservicecloud__createCallLog: CallNotes " + bg.getNoteValue());
 	}
 	
@@ -133,17 +133,18 @@ function sfdcservicecloud__createCallLog(endtime, callback) {
 		postData += '"CallDurationInSeconds" : "'+ duration +'", ';
 		postData += '"Status": "Completed" ,';
 		postData += '"Type" : "Phone Call", ';
+		//postData += '"ActivityDate" : "' + bg.getFormattedDate('date') + '", ';
 		postData += '"Description" : "Start Time = ' + bg.getStarttime() + '\\r\\n';
 		postData += 'End Time = ' + bg.getFormattedDate('mdy')+ '\\r\\n\\r\\n';
-		if (bg.getWrapUpCode() != 'false') {
+		if (lc.getWrapUpCode() != 'false') {
 			postData += 'Wrap-up Code: ' + bg.getWrapUpValue() + '\\r\\n\\r\\n';
 		}
-		if (bg.getCallNotes() != 'false') {
+		if (lc.getCallNotes() != 'false') {
 			postData += 'Notes: ' + bg.getNoteValue() + '\\r\\n\\r\\n';
 			//postData = postData.replace(/(\r\n|\n|\r)/gm,"\\r\\n");
 		}
-		if (bg.getRecordingLinkBase()) {
-			postData += 'Call Record Link:  '+ recLink + '?userID=' + bg.getTrimmedUsername() + '&callId=' + bg.getCallIdFromSocket();
+		if (lc.getRecordingLinkBase()) {
+			postData += 'Call Record Link:  '+ recLink + '?userID=' + lc.getTrimmedUsername() + '&callId=' + bg.getCallIdFromSocket();
 		} 
 		postData +=  '\\r\\n"}';
 
