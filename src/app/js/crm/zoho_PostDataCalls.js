@@ -1,5 +1,6 @@
 'use strict'
-const { remote } = require('electron');
+const { remote, shell } = require('electron');
+
 const pjson = remote.getGlobal('pjson')
 
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
@@ -93,8 +94,8 @@ function zoho__createActivity() {
 					bg.setActivityId(results.Id);
 					var activityUrl = lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Calls&id=' + results.ACTIVITYID;
 
-					var new_window = window.open(activityUrl, 'New Activity' + results.ACTIVITYID);
-    				console.log("zoho__createActivity: New Incident " + results.Id + " url: " + activityUrl);
+					shell.openExternal(activityUrl)
+					console.log("zoho__createActivity: New Incident " + results.Id + " url: " + activityUrl);
     				bg.setCrmAuthStatus(true);
     			} else {
     				console.log("zoho__createActivity: Failed to Create a new Activity " + postData );
@@ -151,8 +152,8 @@ function zoho__createOpportunity() {
 				if (results.POTENTIALID) {
 					bg.setActivityId(results.Id);
 					var incidentUrl = lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Potentials&id=' + results.POTENTIALID;
-					
-					var new_window = window.open(incidentUrl, 'New Incident' + results.POTENTIALID );
+
+					shell.openExternal(incidentUrl)
     				console.log("zoho__createIncident: New Incident " + results.Id);
     				bg.setCrmAuthStatus(true);
     			} else {
