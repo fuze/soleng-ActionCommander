@@ -1,6 +1,7 @@
 'use strict'
 
-const { remote } = require('electron');
+const { remote, shell } = require('electron');
+
 const pjson = remote.getGlobal('pjson')
 
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
@@ -10,7 +11,6 @@ const util 	= require('../util/setCallData')
 const ch 	= require('../util/callHistory')
 const reset = require('../util/resetBackGroundData');
 const ph 	= require('../util/phoneUtils')
-
 
 const cloudElementsUrl = pjson.config.cloudElementsUrl;
 
@@ -27,7 +27,6 @@ exports.zendesk__actionHandler = function(callState, json) {
 	} else if (json.type == 'logcall') {
 		console.log("zendesk__actionHandler : end of call");
 
-		
 		if (bg.getHistoryFlag()) {
 			console.log("servicenow__actionHandler bg.getHistoryFlag() == true");
 			ch.createCallHistory();
@@ -81,8 +80,10 @@ function zendesk__createIncident() {
     			console.log("zendesk__createIncident: xhr.status = " + xhr.status); 
 				if (results.id) {
 					bg.setActivityId(results.id);
-					incidentsOpenWindow('Incident', results.id);
-    				console.debug("zendesk__createIncident: New Incident " + results.id);
+
+					var openwinurl = lc.getCrmBaseUrl() + '/agent/tickets/' + results.id;
+					console.debug("zendesk__createIncident: New Incident URL == " + openwinurl );
+					shell.openExternal(openwinurl);
     				bg.setCrmAuthStatus(true);
     			} else {
     				console.debug("zendesk__createIncident: Failed to Create a new Incident " + postData );

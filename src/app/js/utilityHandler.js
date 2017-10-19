@@ -113,8 +113,7 @@ function contactsOpenWindow(title, idforwin) {
 
 		console.debug("openwindow == " +lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/agent/users/' + idforwin;
-		var new_window = window.open(openwinurl, title + idforwin);
-		new_window.focus();
+		shell.openExternal(openwinurl)
 
 	} else if (lc.getCEType() == 'zohocrm') {
 
@@ -413,8 +412,8 @@ function helpdeskactionRouter (action, clickdata) {
 		sCldPost.sfdcservicecloud__actionHandler(action, clickdata);
 	} else if (lc.getCEType() == 'servicenow') {
 		snowPost.servicenow__actionHandler(action, clickdata);
-	} else if (lc.getCEType == 'zendesk') {
-		if (lc.getCrmType == 'Custom' && lc.getCrmJSPackage == 'JustGiving') {
+	} else if (lc.getCEType() == 'zendesk') {
+		if (lc.getCrmType() == 'Custom' && lc.getCrmJSPackage() == 'JustGiving') {
 			jgPost.justGiving__callHandler(action, clickdata);
 		} else {
 			zenPost.zendesk__actionHandler(action, clickdata);
