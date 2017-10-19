@@ -10,7 +10,7 @@ const lc = require('../localConfigSettings');
 function phoneUtils() {};
 
 var phoneNumberPattern = JSON.parse(
-	'{ 	"International" : "global", "InternationalRaw" : "e164", "National" : "local", "NationalRaw" : "e164" }');
+	'{ 	"International" : "0", "InternationalPlus" : "1", "InternationalRaw" : "2", "InternationalRawPlus" : "3", "National" : "4", "NationalRaw" : "5" }');
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // getPhonePatterns
@@ -28,7 +28,7 @@ phoneUtils.prototype.getPhonePatterns = function() {
 //===================================================================================//
 phoneUtils.prototype.getPhoneNumberPattern = function(rawphone, pattern){
 	var callid = false;
-
+console.log("getPhoneNumberPattern::pattern= " + pattern)
 	if (rawphone != false) {
 		var extractLocale = function (lang) {
 			if (lang !== null && lang.indexOf("-") !== -1) {
@@ -52,25 +52,34 @@ console.debug("number == " + JSON.stringify(number));
 			
 			switch(pattern) {
 				case phoneNumberPattern.International:
-					callid = phoneLib.format(number, phoneNumberPattern.International);
+					callid = phoneLib.format(number, "global");
                     callid = callid.replace(/\+/g,'');
                     break;
+				case phoneNumberPattern.InternationalPlus:
+					callid = phoneLib.format(number, "global");
+					callid = "%2B" + callid.replace(/\+/g,'');
+					break;
 				case phoneNumberPattern.InternationalRaw:
-					callid = phoneLib.format(number, phoneNumberPattern.InternationalRaw);
+					callid = phoneLib.format(number, "global");
 					callid = callid.replace(/\D/g,'');
 					break;
+				case phoneNumberPattern.InternationalRawPlus:
+					callid = phoneLib.format(number, "global");
+					callid = "%2B" + callid.replace(/\D/g,'');
+					break;
 				case phoneNumberPattern.National:
-					callid = phoneLib.format(number, phoneNumberPattern.National);
+					callid = phoneLib.format(number, "local");
                     callid = callid.replace(/\+/g,'');
                     break;
 				case phoneNumberPattern.NationalRaw:
-					callid = phoneLib.format(number, phoneNumberPattern.NationalRaw);
+					callid = phoneLib.format(number, "local");
 					callid = callid.replace(/\D/g,'');
 					break;
 			}
 		}
 	}
-	
+	console.log("getPhoneNumberPattern::callid= " + callid)
+
 	return callid;
 }
 

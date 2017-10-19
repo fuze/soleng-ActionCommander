@@ -42,6 +42,7 @@ exports.servicenow__callHandler = function(callState, json) {
 	}
 
 };
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // servicenow__getContactByPhoneMobileDispatcher
 // Find the Contact(s)  given phone number
@@ -58,14 +59,16 @@ function servicenow__getContactByPhoneDispatcher(json, iteration, failCallBack, 
 	
 	var numbers = [];
 	numbers.push(ph.getPhoneNumberPattern(callerId, phoneNumberPattern.International));
+	numbers.push(ph.getPhoneNumberPattern(callerId, phoneNumberPattern.InternationalPlus));
 	numbers.push(ph.getPhoneNumberPattern(callerId, phoneNumberPattern.InternationalRaw));
+	numbers.push(ph.getPhoneNumberPattern(callerId, phoneNumberPattern.InternationalRawPlus));
 	numbers.push(ph.getPhoneNumberPattern(callerId, phoneNumberPattern.National));
 	numbers.push(ph.getPhoneNumberPattern(callerId, phoneNumberPattern.NationalRaw));
 	
 	for (var i = iteration; i < numbers.length; i++) {
 		var url = cloudElementsUrl +  '/' + lc.getRoutePath();
-			url +='/contacts?where=phone%3D\'' + numbers[i] + '\'';
-		console.error('servicenow__getContactByPhoneDispatcher: iteration # ' + i + ' max = ' + numbers.length);
+			url +='/contacts?where=phone=\'' + numbers[i] + '\'';
+		console.log('servicenow__getContactByPhoneDispatcher: iteration # ' + i + ' max = ' + numbers.length);
 		servicenow__getContactByPhone(json, i, url, numbers.length, failCallBack, successCallBack); 
 	}
 }
@@ -104,7 +107,7 @@ function servicenow__getContactByPhone(json, iteration, url, max, failCallBack, 
     				} //servicenow__getContactByMobile(json);
     				
     			} else {
-    				console.error("servicenow__getContactByPhone: results " + JSON.stringify(results, null, 2));
+    				console.log("servicenow__getContactByPhone: results " + JSON.stringify(results, null, 2));
     				bg.setCallerName(results[0].name);
     				var vip = results[0].vip;
     				bg.setContactRole('VIP: ' + vip.toUpperCase());
@@ -121,6 +124,7 @@ function servicenow__getContactByPhone(json, iteration, url, max, failCallBack, 
 	}
 	xhr.send(null);
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // servicenow__getContactByPhoneDispatcher
 // Find the Contact(s)  given phone number
@@ -144,7 +148,7 @@ function servicenow__getContactByMobileDispatcher(json, iteration, failCallBack,
 	for (var i = iteration; i < numbers.length; i++) {
 		var url = cloudElementsUrl +  '/' + lc.getRoutePath();
 			url +='/contacts?where=phone%3D\'' + numbers[i] + '\'';
-		console.error('servicenow__getContactByMobileDispatcher: iteration # ' + i + ' max = ' + numbers.length);
+		console.log('servicenow__getContactByMobileDispatcher: iteration # ' + i + ' max = ' + numbers.length);
 		servicenow__getContactByPhone(json, i + 1, url, numbers.length, failCallBack, successCallBack) 
 	}
 }
@@ -182,7 +186,7 @@ function servicenow__getContactByMobile(json) {
     				} 
     				
     			} else {
-    				console.error("servicenow__getContactByMobile: results " + JSON.stringify(results, null, 2));
+    				console.log("servicenow__getContactByMobile: results " + JSON.stringify(results, null, 2));
     				bg.setCallerName(results[0].name);
     				var vip = results[0].vip;
     				bg.setContactRole('VIP: ' + vip.toUpperCase());
@@ -222,7 +226,7 @@ function servicenow__getAccountPhoneDispatcher(json, iteration, failCallBack, su
 	for (var i = iteration; i < numbers.length; i++) {
 		var url = cloudElementsUrl +  '/' + lc.getRoutePath();
 			url +='/accounts?where=phone%3D\'' + numbers[i] + '\'';
-		console.error('servicenow__getContactByMobileDispatcher: iteration # ' + i + ' max = ' + numbers.length);
+		console.log('servicenow__getContactByMobileDispatcher: iteration # ' + i + ' max = ' + numbers.length);
 		servicenow__getAccountByPhone(json, i + 1, url, numbers.length, failCallBack, successCallBack) 
 	}
 }
@@ -253,7 +257,7 @@ function servicenow__getAccountByPhone(json, iteration, url, max, failCallBack, 
     				} 
     				
     			} else {
-    				console.error("servicenow__getContactByMobile: results " + JSON.stringify(results, null, 2));
+    				console.log("servicenow__getContactByMobile: results " + JSON.stringify(results, null, 2));
     				bg.setCallerName(results[0].name);
     				var vip = results[0].vip;
     				bg.setContactRole('VIP: ' + vip.toUpperCase());

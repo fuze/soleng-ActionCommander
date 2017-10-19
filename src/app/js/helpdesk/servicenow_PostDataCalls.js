@@ -1,6 +1,6 @@
 'use strict'
 
-const { remote, ipcRenderer } = require('electron');
+const { remote, shell, ipcRenderer } = require('electron');
 const pjson = remote.getGlobal('pjson')
 
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
@@ -11,6 +11,7 @@ const reset = require('../util/resetBackGroundData');
 const ph = require('../util/phoneUtils')
 
 const cloudElementsUrl = pjson.config.cloudElementsUrl;
+const phoneNumberPattern = ph.getPhonePatterns()
 
 ///////////////////////////////////////////////////////////////
 exports.servicenow__actionHandler = function(callState, json) {
@@ -89,9 +90,9 @@ function servicenow__createIncident() {
 				if (results.sys_id) {
 					bg.setActivityId(results.sys_id);
 					var incidentUrl = lc.getCrmBaseUrl() + '/nav_to.do?uri=/incident.do?sys_id=' + results.sys_id;
-					
-					var new_window = window.open(incidentUrl, 'New Incident');
-    				console.log("servicenow__createIncident: New Incident " + results.sys_id);
+
+					shell.openExternal(incidentUrl)
+					console.log("servicenow__createIncident: New Incident " + results.sys_id);
     				bg.setCrmAuthStatus(true);
     			} else {
     				console.log("servicenow__createIncident: Failed to Create a new Incident " + postData );
@@ -154,8 +155,8 @@ function servicenow__createCallLog(endtime, callback) {
 		} 
 		postData +=  '\\r\\n"}';
 
-	console.error("servicenow__createCallLog" + postData);
-	console.error("servicenow__createCallLog " + postUrl);
+	console.log("servicenow__createCallLog" + postData);
+	console.log("servicenow__createCallLog " + postUrl);
 	
 	
 	var xhr = new XMLHttpRequest();
