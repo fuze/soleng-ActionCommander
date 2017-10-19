@@ -51,8 +51,6 @@ exports.bullhorn__callHandler = function(callState, json) {
 
 ////////////////////////////////////////////////////////////////////////////////////////
 function bullhorn__getCandidateByPhone(json) {
-	console.log("bullhorn__getCandidateByPhone: format == " + json);
-	
 	var callerId = bg.getRawCallId();
 	var internationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.International);
 	var internationalRawNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.InternationalRaw);
@@ -74,6 +72,7 @@ function bullhorn__getCandidateByPhone(json) {
 			if ( xhr.status == 200 ) {
 				var results = JSON.parse( xhr.responseText );
 				if (results.length <= 0) {
+					console.log("bullhorn__getCandidateByPhone: No match")
 
 				} else {
 					console.log("bullhorn__getCandidateByPhone: Candidate found!!")
@@ -118,11 +117,11 @@ function bullhorn__getContactByPhone(json) {
 	var header = lc.getCloudElementsId();
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
 
-	url +='/contacts?where=(phone=\'' +  internationalRawNumber + '\)';
+	url +='/contacts?where=( phone=\'' +  internationalRawNumber + '\' or phone=\'%2B' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\' )';
 	// or phone=\'%2B' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\')';
 	//url +='or mobile=\'' +  internationalRawNumber + '\' or mobile=\'' +  nationalNumber + '\' or mobile=\'' +  nationalRawNumber + '\')';
 
-	console.log("bullhorn__getContactByPhoneDataCall: url == " + url);
+	console.log("bullhorn__getContactByPhone: url == " + url);
 
 	var xhr = new XMLHttpRequest();
 	xhr.withCredentials = true;
@@ -135,8 +134,9 @@ function bullhorn__getContactByPhone(json) {
 				var results = JSON.parse( xhr.responseText );
 				if (results.length <= 0) {
 					//bullhorn__getLeadByPhone(json)
+					console.log("bullhorn__getContactByPhone: No matches")
 				} else {
-					console.log("Name: " + results[0].name);
+					console.log("bullhorn__getContactByPhone::Name: " + results[0].name);
 					var personalRef = '"personReference": {'+
 						'"firstName": "' + results[0].firstName + '",'+
 						'"lastName": "' + results[0].lastName + '",'+
@@ -154,8 +154,8 @@ function bullhorn__getContactByPhone(json) {
 
 			} else {
 				//bg.setCrmAuthStatus(false);
-				console.log("xhr.responseText = " + xhr.responseText);
-				console.log("xhr.status = " + xhr.status);
+				console.log("bullhorn__getContactByPhone::xhr.responseText = " + xhr.responseText);
+				console.log("bullhorn__getContactByPhone::xhr.status = " + xhr.status);
 			}
 		}
 	}
@@ -187,8 +187,9 @@ function bullhorn__getLeadByPhone(json, candidates, contacts) {
 				var results = JSON.parse( xhr.responseText );
 				if (results.length <= 0) {
 					//bullhorn__getAccountByPhone(json)
+					console.log("bullhorn__getLeadByPhone: No matches");
 				} else {
-					console.log("Name: " + results[0].name);
+					console.log("bullhorn__getLeadByPhone::Name: " + results[0].name);
 					var personalRef = '"personReference": {'+
 						'"firstName": "' + results[0].firstName + '",'+
 						'"lastName": "' + results[0].lastName + '",'+
@@ -207,8 +208,8 @@ function bullhorn__getLeadByPhone(json, candidates, contacts) {
 
 			} else {
 				//bg.setCrmAuthStatus(false);
-				console.log("xhr.responseText = " + xhr.responseText);
-				console.log("xhr.status = " + xhr.status);
+				console.log("bullhorn__getLeadByPhone::xhr.responseText = " + xhr.responseText);
+				console.log("bullhorn__getLeadByPhone::xhr.status = " + xhr.status);
 			}
 		}
 	}
@@ -677,12 +678,9 @@ function bullhorn__handleCallResults(type, contacts, accounts) {
 		var id = contacts[i].id;
 		nameDict[id] = name;
 		var acctId = 0;
-		if (type == "Client Contact" || type == "Lead") {
-			if( contacts[i].hasOwnProperty('clientCorporation.id')){
-				acctId = contacts[i].clientCorporation.id;
-			}
+		if ((type == "Client Contact" || type == "Lead") && (contacts[i].clientCorporation)){
+			acctId = contacts[i].clientCorporation.id;
 		}
-
 
 		achorString.dataRows.push({
 			"rowstart": '<tr id="remove-' + i + '">',

@@ -13,7 +13,7 @@ const reset = require('../util/resetBackGroundData');
 
 const recordingAttempts  = pjson.config.recordingAttempts;
 const recordingDelayTime = pjson.config.recordingDelayTime;
-const cloudElementsUrl = pjson.config.callRecordingURL;
+const cloudElementsUrl = pjson.config.cloudElementsUrl;
 
 
 ///////////////////////////////////////////////////////////////
@@ -26,6 +26,16 @@ exports.bullhorn__actionHandler = function(callState, json) {
 		bg.setUserConnectorAcct(json.uid);
 		bg.setAcctConnectorID(json.acctid)
 		bullhorn__createOpportunity();
+	} else if (json.type == 'job-orders') {
+		bg.setUserConnectorAcct(json.uid);
+		bg.setAcctConnectorID(json.acctid)
+
+		var openwinurl = lc.getCrmBaseUrl() + '/BullhornStaffing/OpenWindow.cfm?entity=JobOrder&view=Add'
+			+ '&personReferenceID=' + json.uid;
+		//+ '?t=' +  (new Date().getTime());
+		console.log("open new job: " + openwinurl)
+		shell.openExternal(openwinurl)
+
 	} else if (json.type == 'logcall') {
 		console.log("bullhorn__actionHandler : end of call");
 
@@ -70,21 +80,6 @@ function bullhorn__createOpportunity() {
 
 	console.log("bullhorn__createOpportunity: " + datetime);
 
-	/*
-	 {
-	 "clientContact": {
-	 "id": 506274
-	 },
-	 "clientCorporation": {
-	 "id": 23866
-	 },
-	 "title": "Batatas",
-	 "status": "Open",
-	 "type": "Contract"
-	 }
-	 */
-
-
 	var postData = '{ "title":"' + bg.getStarttime() + ' - Temporary Description", ';
 	postData += '"clientContact": {"id": ' + bg.getUserConnectorAcct() + '}, ';
 	postData += '"clientCorporation": {"id": ' + bg.getAcctConnectorID() + '}, ';
@@ -108,10 +103,7 @@ function bullhorn__createOpportunity() {
 					//bg.setActivityId(results.Id);
 
 					var openwinurl = lc.getCrmBaseUrl() + '/BullhornStaffing/OpenWindow.cfm?entity=Opportunity&id=' + results.id + '&view=Overview';
-					var new_window = window.open(openwinurl, 'New Opportunity' + results.Id);
-
-					new_window.focus();
-
+					shell.openExternal(openwinurl)
 
 					console.log("bullhorn__createOpportunity: New Opportunity " + results.id);
 					bg.setCrmAuthStatus(true);
