@@ -44,16 +44,15 @@ console.warn("Please Check UserName and Password " + domain);
 				console.log("\n\n\nbuildMSDInstance: oauthUrl == " + JSON.stringify(resp));
 				console.log("\n\n\nbuildMSDInstance: ID == " + resp.id);
 				console.log("\n\n\nbuildMSDInstance: token == " + resp.token);
-				userData.updateUserData(resp.id, resp.token, null);
-				callback();
+				userData.updateUserData(resp.id, resp.token, null, callback);
 			} else if ( xhr.status == 401 ) {
-				console.error("Please Check UserName and Password");
+				alert("Please Check UserName and Password");
 				authCnt.authController(); 
-				callback();
 			} else {
 				console.error("General Error\n" + xhr.responseText);
 				console.error("buildMSDInstance: xhr.responseText == " + xhr.responseText);
 				console.error("buildMSDInstancee: xhr.status == " + xhr.status);
+				callback();
 			}
 		}
 	};

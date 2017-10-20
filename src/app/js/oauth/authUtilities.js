@@ -6,6 +6,7 @@ const pjson = remote.getGlobal('pjson');
 const lc 	= require('../localConfigSettings');
 const sfdc 	= require('./buildSFDCInstance');
 const zen	= require('./buildZendeskInstance');
+const bull	= require('./buildBullhornInstance');
 
 const updateUserDataUrl = pjson.config.updateUserDataUrl;
 const updateTempKeys	= pjson.config.updateTempKeys;
@@ -146,6 +147,9 @@ function buildTheInstance(responce, resp, state) {
 	} else if (lc.getCEType() == 'zendesk') {
 		console.log('buildTheInstance buildZendeskInstance');
 		zen.buildZendeskInstance(responce, resp, state);
+	} else if (lc.getCEType() == 'bullhorn') {
+		console.log('buildTheInstance bg.buildBullhornInstance');
+		bull.buildBullhornInstance(responce, resp, state);
 	}
 }
 

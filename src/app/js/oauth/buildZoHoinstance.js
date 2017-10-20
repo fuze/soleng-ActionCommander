@@ -41,11 +41,11 @@ exports.buildZoHoInstance = function(user, password, callback) {
 				console.log("\n\n\n\buildZoHoInstance: oauthUrl == " + JSON.stringify(resp));
 				console.log("\n\n\n\buildZoHoInstance: ID == " + resp.id);
 				console.log("\n\n\n\buildZoHoInstance: token == " + resp.token);
-				userData.updateUserData(resp.id, resp.token, null);
-				callback();
+				userData.updateUserData(resp.id, resp.token, null, callback);
 			} else if ( xhr.status == 401 ) {
-				//alert("Please Check UserName and Password");
-				callback();
+				alert("Please Check UserName and Password");
+				//callback();
+				authCnt.authController();
 			} else {
 				//alert("General Error\n" + xhr.responseText);
 				console.log("buildZoHoInstance: xhr.responseText == " + xhr.responseText);

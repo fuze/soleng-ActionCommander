@@ -110,10 +110,10 @@ eventBus.on('1002', function(json, code, action, event, message) {
 eventBus.on('1003', function(json, code, action, event, message) {
 	var buttons = [ 'Exit', 'Continue'];
 
-	remote.dialog.showMessageBox(mainWindow, { 
+	remote.dialog.showMessageBox(mainWindow, {
 			type: 'error', 
 			buttons: buttons, 
-			message: "Error " + json.code + "\n\n" + json.message + "\nPlease Contact Support\n"
+			message: json.message + "\nDo you want to create a new one?\n"
 		},  function(buttonIndex) {
 			exitOrContinue(buttonIndex, function() {
 				authCntr.authController();

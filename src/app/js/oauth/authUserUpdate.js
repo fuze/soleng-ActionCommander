@@ -12,7 +12,7 @@ const updateTempKeys	= pjson.config.updateTempKeys;
 function oauthUserUpdate() {};
 
 ////////////////////////////////////////////////////////////////////////////////////////
-oauthUserUpdate.prototype.updateUserData = function(id, token, state) {
+oauthUserUpdate.prototype.updateUserData = function(id, token, state, callback) {
 	
 	var userUrl = updateUserDataUrl + encodeURIComponent(lc.getUsername()) + '&ce_element_id=Element ';
 		userUrl += encodeURIComponent(token);
@@ -31,6 +31,9 @@ oauthUserUpdate.prototype.updateUserData = function(id, token, state) {
 				//____.getUserData(lc.getUsername(), lc.getPassword());
 				if (state) {
 					updateTmpKeyData(state);
+				}
+				if (callback) {
+					callback();
 				}
 			} else {
 				console.log("updateUserData: xhr.responseText == " + xhr.responseText)

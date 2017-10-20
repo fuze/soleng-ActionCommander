@@ -40,6 +40,12 @@ exports.authController = function() {
 	
 		ipcRenderer.send('open-password-window', pjson.config.passwdurl);
 	
+	} else if (lc.getCEType() == 'bullhorn') {
+
+		url = cldElmntsProvUrl +'1702/oauth/url';
+		console.log("authController: URL == " + url);
+		oAuthUtils.authGetProxy(url, lc.getCrmBaseUrl());
+
 	}
-	
+
 }

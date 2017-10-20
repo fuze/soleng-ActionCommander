@@ -49,16 +49,17 @@ exports.buildServiceNowInstance = function(user, password, callback) {
 				console.log("\n\n\n\buildSNowInstance: oauthUrl == " + JSON.stringify(resp));
 				console.log("\n\n\n\buildSNowInstance: ID == " + resp.id);
 				console.log("\n\n\n\buildSNowInstance: token == " + resp.token);
-				userData.updateUserData(resp.id, resp.token, null);
+				userData.updateUserData(resp.id, resp.token, null, callback);
 				//callback();
 			} else if ( xhr.status == 401 ) {
-				//alert("Please Check UserName and Password");
+				alert("Please Check UserName and Password");
 				//callback();
+				authCnt.authController();
 			} else {
 				//alert("General Error\n" + xhr.responseText);
 				console.log("buildTheInstance: xhr.responseText == " + xhr.responseText);
 				console.log("buildTheInstance: xhr.status == " + xhr.status);
-				//callback();
+				callback();
 			}
 		}
 	};
