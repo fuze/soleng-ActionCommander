@@ -18,17 +18,17 @@ const phoneNumberPattern = ph.getPhonePatterns()
 var nameDict = {};
 var acctDict = {};
 ///////////////////////////////////////////////////////////////
-exports.sfdc__callHandler = function(callState, json) {
+exports.netsuite__callHandler = function(callState, json) {
 	bg.setCallDirection(json.direction);
 
 
-	console.log("sfdc__callHandler: "+ callState +" Caller ID == " + json.clidname);
-	console.log("sfdc__callHandler: "+ callState +" Caller ID == " + json.direction);
+	console.log("netsuite__callHandler: "+ callState +" Caller ID == " + json.clidname);
+	console.log("netsuite__callHandler: "+ callState +" Caller ID == " + json.direction);
 	if ((!_callHandled) && (callState == 'RING' || callState == 'DIAL' || callState == 'CALL_START')) {
 		_callHandled = true;
-		
+
 		util.setCallData(callState, json);
-		sfdc__getContactByPhone(json, sfdc__getAccountForContactResults);
+		netsuite__getContactByPhone(json, netsuite__getAccountForContactResults);
 		
 	} else if (callState == 'CONNECT') {
 
@@ -37,7 +37,7 @@ exports.sfdc__callHandler = function(callState, json) {
 
 	} else if (callState == 'CALL_END') {
 
-		console.debug("sfdc__callHandler: CALL_END Caller ID == " + json.clidname);
+		console.log("netsuite__callHandler: CALL_END Caller ID == " + json.clidname);
 		util.setCallData(callState, json);
 		uh.utilityActionController('callend', JSON.parse('{"type":"logcall", "endtime" : "' + json.timestamp + '" }'));
 		_callHandled = false;
@@ -45,9 +45,8 @@ exports.sfdc__callHandler = function(callState, json) {
 
 };
 
-
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__getContactByPhone(json, callback) {
+function netsuite__getContactByPhone(json, callback) {
 
 	var callerId = bg.getRawCallId();
 	var internationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.International);
@@ -55,13 +54,10 @@ function sfdc__getContactByPhone(json, callback) {
 	var nationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.National);
 	var nationalRawNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.NationalRaw);
 	var header = lc.getCloudElementsId();
-
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
-		url +='/contacts?where=(Phone like \'%25' + internationalNumber + '\' or Phone like \'%25' +  internationalRawNumber + '\' or Phone=\'' +  nationalNumber + '\' or Phone=\'' +  nationalRawNumber + '\'';
-		url +=' or MobilePhone like \'%25' + internationalNumber + '\' or MobilePhone like \'%25' +  internationalRawNumber + '\' or MobilePhone=\'' +  nationalNumber + '\' or MobilePhone=\'' +  nationalRawNumber + '\')';
 
-	console.debug("sfdc__getContactByPhoneDataCall: url == " + url);
-
+	url +='/contacts?where=(phone like \'' + internationalNumber + '\' or phone like \'' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\')';
+	console.log("netsuite__getContactByPhoneDataCall: url == " + url);
 	
 	var xhr = new XMLHttpRequest();
 	xhr.withCredentials = true;                                                                  
@@ -73,21 +69,24 @@ function sfdc__getContactByPhone(json, callback) {
     		if ( xhr.status == 200 ) { 
     			var results = JSON.parse( xhr.responseText );
     			if (results.length <= 0) {
-    				console.log("sfdc__getContactByPhone: ");
-    				sfdc__getAccountByPhone(json, sfdc__buildAccountListForGetContactByAccountId); 
+    				console.log("netsuite__getContactByPhone: ");
+    				netsuite__getAccountByPhone(json, netsuite__buildAccountListForGetContactByAccountId);
     			} else {
-    				bg.setCallerName(results[0].Name);
-    				bg.setContactRole(results[0].Title);
-    				if (results.length == 1) {
-						bg.setUserConnectorAcct(results[0].Id);
-					}
-					bg.setAcctConnectorID(results[0].AccountId);
-    			    sfdc__getAccountForContactResults(results, sfdc__dispatchAccountForContactResults);
+					console.log("netsuite__getContactByPhone == " + JSON.stringify(results, null, 2));
+
+					bg.setCallerName(results[0].firstName + ' ' + results[0].lastName);
+    				bg.setContactRole(results[0].salutation);
+					if (results.length == 1)
+						bg.setUserConnectorAcct(results[0].internalId);
+
+					bg.setAcctConnectorID(results[0].company.internalId);
+    			    netsuite__getAccountForContactResults(results, netsuite__dispatchAccountForContactResults);
     			    bg.setCrmAuthStatus(true);
     			} 
-      		} else { 
-      			console.error("xhr.responseText = " + xhr.responseText);
-    			console.error("xhr.status = " + xhr.status); 
+      		} else {
+      			bg.setCrmAuthStatus(false);
+      			console.log("xhr.responseText = " + xhr.responseText);
+    			console.log("xhr.status = " + xhr.status); 
       		}
       	}  
   		
@@ -95,36 +94,39 @@ function sfdc__getContactByPhone(json, callback) {
 	xhr.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__getAccountNameById(accountId, rownum, results, callback) {
-	console.debug("sfdc__getAccountNameById == " + accountId);
-	console.debug("sfdc__getAccountNameById == " + rownum);
+function netsuite__getAccountNameById(accountId, rownum, results, callback) {
+	console.log("netsuite__getAccountNameById == " + accountId);
+	console.log("netsuite__getAccountNameById == " + rownum);
 
 	var header = lc.getCloudElementsId();
 	
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
-	url += '/accounts?where=Id=\''+ accountId + '\'';
+	url += '/accounts?where=internalId=\''+ accountId + '\'';
 	
-	console.debug("sfdc__getAccountNameById: URL == " + url + ">");
+	console.log("netsuite__getAccountNameById: URL == " + url + ">");
 
-	var xhr = new XMLHttpRequest();                                                            
+	var xhr = new XMLHttpRequest();
+	//xhr.withCredentials = true;                                                                  
 	xhr.open('GET', url, true);
 	xhr.setRequestHeader("authorization",  header ); 
 	xhr.setRequestHeader("cache-control", "no-cache"); 
 	xhr.onreadystatechange = function() { 
 		if (xhr.readyState == 4) {
 			if ( xhr.status == 200 ) { 
-				console.debug("sfdc__getAccountNameById: xhr.responseText == <" +xhr.responseText + ">");
+			console.log("netsuite__getAccountNameById: xhr.responseText == <" +xhr.responseText + ">");
 				var resp = JSON.parse(xhr.responseText);
-				console.debug("sfdc__getAccountNameById: length == <" + resp.length + ">");
+			console.log("netsuite__getAccountNameById: length == <" + resp.length + ">");
 				if (resp.length > 0) {
-					console.debug("sfdc__getAccountNameById: resp.Name == <" + resp[0].Name + ">");
-					var str = '{"resultrow": "'+ rownum + '", "accountId": "' + accountId + '", "accountName": "' + resp[0].Name + '"}';
+					console.log("netsuite__getAccountNameById: resp.Name == <" + resp[0].entityId + ">");
+					console.log("\n\n\n");
+					var str = '{"resultrow": "'+ rownum + '", "accountId": "' + accountId + '", "accountName": "' + resp[0].entityId + '"}';
+					//callback(resp, str, rownum, 1);
 					callback(results, str, rownum, 1);
 				}
 				bg.setCrmAuthStatus(true);
-			} else { 
-				console.error("sfdc__getAccountNameById: xhr.responseText = " + xhr.responseText);
-				console.error("sfdc__getAccountNameById: xhr.status = " + xhr.status); 
+			} else {
+				console.error("netsuite__getAccountNameById: xhr.responseText = " + xhr.responseText);
+				console.error("netsuite__getAccountNameById: xhr.status = " + xhr.status);
 			}
 		}  
 	}
@@ -132,24 +134,26 @@ function sfdc__getAccountNameById(accountId, rownum, results, callback) {
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 // the First Contact Result Callback 
-function sfdc__getAccountForContactResults(results, callback) {
+function netsuite__getAccountForContactResults(results, callback) {
 	var acctCount = results.length;
-	console.log("sfdc__getAccountForContactResults == " + JSON.stringify(results));
-	console.log("sfdc__getAccountForContactResults == " + acctCount);
+	console.log("netsuite__getAccountForContactResults == " + JSON.stringify(results));
+	console.log("netsuite__getAccountForContactResults == " + acctCount);
 	
 	for ( var i = 0; i <= (results.length - 1);  i++) {
-		var acct = results[i].AccountId
-		console.log("sfdc__getAccountForContactResults == " + acct + " i " + i + " length " + results.length);
-		sfdc__getAccountNameById(acct, i, results, sfdc__dispatchAccountForContactResults);
+		var acct = results[i].company.internalId;
+		console.log("netsuite__getAccountForContactResults == " + acct + " i " + i + " length " + results.length);
+		netsuite__getAccountNameById(acct, i, results, netsuite__dispatchAccountForContactResults);
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 var acctCount = 0;
 var acctResult;
-function sfdc__dispatchAccountForContactResults(contacts, acctdata, iteration, retcount) {
-	acctCount += retcount; 
-	console.debug("sfdc__dispatchAccountForContactResults == " + acctCount);
-	console.debug("sfdc__dispatchAccountForContactResults == " + JSON.stringify(contacts));
+function netsuite__dispatchAccountForContactResults(contacts, acctdata, iteration, retcount) {
+	acctCount += retcount;
+	console.log("netsuite__dispatchAccountForContactResults == " + JSON.stringify(acctdata));
+
+	console.log("netsuite__dispatchAccountForContactResults == " + acctCount);
+	console.log("netsuite__dispatchAccountForContactResults == " + JSON.stringify(contacts));
 	if (acctCount == 1) {
 		acctResult = acctdata;
 	} else if (acctCount > 1)  {
@@ -159,20 +163,20 @@ function sfdc__dispatchAccountForContactResults(contacts, acctdata, iteration, r
 	if (acctCount == contacts.length) {
 		//acctResult = '[' + acctResult + ']';
 		
-		sfdc__dispatchContentByAccountId(contacts, JSON.parse('[' + acctResult + ']'), sfdc__getContentByAccountId); // Activities
-		sfdc__handleCallResults('incident', contacts, JSON.parse('[' + acctResult + ']'));
-	}	
+		netsuite__dispatchContentByAccountId(contacts, JSON.parse('[' + acctResult + ']'), netsuite__getContentByAccountId); // Activities
+		netsuite__handleCallResults('incident', contacts, JSON.parse('[' + acctResult + ']'));
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__handleCallResults(type, contacts, accounts) {
-console.log("sfdc__handleCallResults == " + type);
+function netsuite__handleCallResults(type, contacts, accounts) {
+console.log("netsuite__handleCallResults == " + type);
 acctCount = 0;
 	var rowCount = contacts.length;
 	var anchorHead = {};
 	var achorString = {};
 	anchorHead.dataRows = new Array();
 	achorString.dataRows = new Array();
-	
+
 	if (contacts.length) {
     	anchorHead.dataRows.push({
     		"rowstart" : 	'<tr id="remove-' + (contacts.length + 1) + '">',
@@ -184,12 +188,12 @@ acctCount = 0;
 	}
 	
 	for ( var i = 0; i <= (contacts.length - 1);  i++) {
-		var name = contacts[i].Name;
-		var acctId = contacts[i].AccountId;
-		var id = contacts[i].Id;
-		var userUrl = lc.getCrmBaseUrl() + '/' + id;
+		var name = contacts[i].firstName + ' ' + contacts[i].lastName
+		var acctId = contacts[i].company.internalId;
+		var id = contacts[i].internalId;
 		var acctname = accounts[i].accountName;
 		nameDict[id] = name;
+
     	achorString.dataRows.push({
 			"rowstart" : 	'<tr id="remove-' + i + '">',
 			"cell_1"   : 	'<td action="openwindow" type="contacts" uid="'+ id + '" class="contacts-table-name">' + name + '</td>',
@@ -203,34 +207,41 @@ acctCount = 0;
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 // the Build URL for Incident  Result Callback 
-function sfdc__dispatchContentByAccountId(contacts, accounts, callback) {
+function netsuite__dispatchContentByAccountId(contacts, accounts, callback) {
 	
-	console.debug("sfdc__dispatchContentByAccountId == " + JSON.stringify(contacts));
-	console.debug("sfdc__dispatchContentByAccountId == " + JSON.stringify(accounts));
-	console.debug("sfdc__dispatchContentByAccountId == " + accounts.length + "\n\n");
+	console.log("\n\netsuite__dispatchContentByAccountId == " + JSON.stringify(contacts));
+	console.log("\n\netsuite__dispatchContentByAccountId == " + JSON.stringify(accounts));
+	console.log("netsuite__dispatchContentByAccountId == " + accounts.length + "\n\n");
 	var uri;
-	 	
+	var attribute = "";
+
+	if (lc.getContentPrimary() == 'activities') {
+		attribute = 'company';
+	} else if (lc.getContentPrimary() == 'opportunities') {
+		attribute = 'entity';
+	}
+
 	 if (accounts.length >= 1) {
 		for ( var i = 0; i <= (accounts.length - 1);  i++) {
-			console.log("sfdc__dispatchContentByAccountId == in for loop AccountId " + accounts.length);
+			console.log("netsuite__dispatchContentByAccountId == in for loop AccountId " + accounts.length);
 			if (i == 0) {
-				uri = 'AccountId=\''+ accounts[i].accountId + '\'';
+				uri = attribute + '=\''+ accounts[i].accountId + '\'';
 			} else {
-				uri += ' OR AccountId=\'' +  accounts[i].accountId + '\'';
+				uri += ' OR ' + attribute + '=\'' +  accounts[i].accountId + '\'';
 			}
-			console.debug("sfdc__dispatchContentByAccountId == AccountId " + accounts.length);
+			console.log("netsuite__dispatchContentByAccountId == AccountId " + accounts.length);
 		}
 	} else if (accounts.length == 1){
-		uri += 'AccountId=\''+  accounts[0].accountId + '\'';
-		console.log("sfdc__dispatchContentByAccountId == only 1 " + uri);
+		uri += attribute + '=\''+  accounts[0].accountId + '\'';
+		console.log("netsuite__dispatchContentByAccountId == only 1 " + uri);
 	}
 	
-	console.debug("sfdc__dispatchContentByAccountId == url " + uri );
-	sfdc__getContentByAccountId(contacts, encodeURIComponent('(' + uri + ')'));
+	console.log("netsuite__dispatchContentByAccountId == url " + uri );
+	netsuite__getContentByAccountId(contacts, encodeURIComponent('(' + uri + ')'));
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__getContentByAccountId(contacts, uri) {
-	console.log("\n" +lc.getContentPrimary() + "\nsfdc__getContentByAccountId == " + uri);
+function netsuite__getContentByAccountId(contacts, uri) {
+	console.log("\n" +lc.getContentPrimary() + "\nnetsuite__getContentByAccountId == " + uri);
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
 	
 	if (lc.getContentPrimary() == 'activities') {
@@ -239,9 +250,10 @@ function sfdc__getContentByAccountId(contacts, uri) {
 		url += '/opportunities?where=' + uri;
 	}
 	
-	console.debug(lc.getContentPrimary() + "sfdc__getContentByAccountId == " + uri);
-	console.debug(lc.getContentPrimary() + "sfdc__getContentByAccountId == " + url);
+	console.log("\n" + lc.getContentPrimary() + "\nnetsuite__getContentByAccountId == " + uri);
+	console.log("\n" + lc.getContentPrimary() + "\n\n\nnetsuite__getContentByAccountId == " + url);
 	var header = lc.getCloudElementsId();
+	
 	
 	var xhr = new XMLHttpRequest();
 	xhr.withCredentials = true;                                                                  
@@ -252,48 +264,51 @@ function sfdc__getContentByAccountId(contacts, uri) {
 		if (xhr.readyState == 4) {
 			if ( xhr.status == 200 ) { 
 				var resp = JSON.parse(xhr.responseText);
-    			console.log("sfdc__getContentByAccountId == " + JSON.stringify(resp, null, 2));
+    			//console.log("netsuite__getAccountById == " + uri);
+    			console.log("netsuite__getContentByAccountId == " + JSON.stringify(resp, null, 2));
     			if (resp.length > 0) {
-    				if (lc.getContentPrimary() == 'activities') {
-    					sfdc__dispatchNameForActivity(contacts, resp, sfdc__handleContentResults);
-    				} else {
-    					sfdc__handleContentResults(resp);
-    				}
-    			}
-			} else { 
-				console.error("xhr.responseText = " + xhr.responseText);
-				console.error("xhr.status = " + xhr.status); 
+    				//if ((bg.getContentPrimary() == 'activities') || (bg.getContentPrimary() == 'opportunities')) {
+    				// if (bg.getContentPrimary() == 'activities') {
+    				// 	netsuite__dispatchNameForActivity(contacts, resp, netsuite__handleContentResults);
+    				// } else {
+    				// 	netsuite__handleContentResults(resp);
+    				// }
+					netsuite__handleContentResults(resp);
+
+				}
+    			bg.setCrmAuthStatus(true);
+			} else {
+				console.log("xhr.responseText = " + xhr.responseText);
+				console.log("xhr.status = " + xhr.status); 
 			}
 		}
     }  
 	xhr.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__dispatchNameForActivity(contacts, content, sfdc__handleContentResults) { 
+function netsuite__dispatchNameForActivity(contacts, content, netsuite__handleContentResults) {
 	var uri;
-	console.debug('sfdc__dispatchNameForActivity contacts = ' + contacts.length);
-	console.debug('sfdc__dispatchNameForActivity content = ' + content.length);
+	console.log('netsuite__dispatchNameForActivity contacts = ' + contacts.length);
+	console.log('netsuite__dispatchNameForActivity content = ' + content.length);
 	if (content.length == 0) {
-		sfdc__buildNameDict(contacts, content, sfdc__handleContentResults)
+		netsuite__buildNameDict(contacts, content, netsuite__handleContentResults)
 	} else {
-		console.debug('sfdc__dispatchNameForActivity results = ' + JSON.stringify(content, null, 2))
-		console.debug('sfdc__dispatchNameForActivity results = ' + content.length);
+		console.log('netsuite__dispatchNameForActivity results = ' + JSON.stringify(content, null, 2))
+		console.log('netsuite__dispatchNameForActivity results = ' + content.length);
 		for ( var i = 0; i <= (content.length - 1 );  i++) {
-			console.log('sfdc__dispatchNameForActivity == ' + i + " " + content[i].WhoId);
-			if (content[i].WhoId && content[i].WhoId != 'undefined') {
-				if (i == 0) {
-					uri = 'Id=\'' + content[i].WhoId + '\'';
-				} else {
-					uri += ' OR Id=\'' + content[i].WhoId + '\'';
-				}
+			console.log('netsuite__dispatchNameForActivity == ' + i + " " + content[i].WhoId);
+			if (i == 0) {
+				uri = 'Id=\''+ content[i].WhoId + '\'';
+			} else {
+				uri += ' OR Id=\'' +  content[i].WhoId + '\'';
 			}
 		}
-		console.debug('sfdc__dispatchNameForActivity url = ' + uri)
-		sfdc__getContactByIds(uri, content, sfdc__handleContentResults);
+		console.log('netsuite__dispatchNameForActivity url = ' + uri)
+		netsuite__getContactByIds(uri, content, netsuite__handleContentResults);
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__getContactByIds(uri, content, sfdc__handleContentResults) {
+function netsuite__getContactByIds(uri, content, netsuite__handleContentResults) {
 	
 	var callerId = bg.getRawCallId();
 	var clid = callerId.substring(2);
@@ -303,7 +318,7 @@ function sfdc__getContactByIds(uri, content, sfdc__handleContentResults) {
 	    url +='/contacts?where=' + uri;
 	var header = lc.getCloudElementsId();
 
-	 console.debug("sfdc__getContactByIds: url == " + url);
+	console.log("netsuite__getContactByIds: url == " + url);
 	
 	var xhr = new XMLHttpRequest();
 	xhr.withCredentials = true;                                                                  
@@ -314,15 +329,15 @@ function sfdc__getContactByIds(uri, content, sfdc__handleContentResults) {
     	if (xhr.readyState == 4) {
     		if ( xhr.status == 200 ) { 
     			var results = JSON.parse( xhr.responseText );
-    			console.debug("sfdc__getContactByIds: " + results.length);
+    			console.log("netsuite__getContactByIds: " + results.length);
     			if (results.length <= 0) {
-    				console.debug("sfdc__getContactByIds: ");
+    				console.log("netsuite__getContactByIds: ");
     			} else {
-    				console.debug("sfdc__getContactByIds: " + JSON.stringify(results, null, 2));
-    				sfdc__buildNameDict(results, content, sfdc__handleContentResults)
+    				console.log("netsuite__getContactByIds: " + JSON.stringify(results, null, 2));
+    				netsuite__buildNameDict(results, content, netsuite__handleContentResults)
     			    bg.setCrmAuthStatus(true);
     			} 
-      		} else { 
+      		} else {
       	
       			console.log("xhr.responseText = " + xhr.responseText);
     			console.log("xhr.status = " + xhr.status); 
@@ -333,50 +348,44 @@ function sfdc__getContactByIds(uri, content, sfdc__handleContentResults) {
 	xhr.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__buildNameDict(results, content, sfdc__handleContentResults ) { 
-	console.log('sfdc__buildNameDict results = ' + results.length);
+function netsuite__buildNameDict(results, content, netsuite__handleContentResults ) {
+	console.log('netsuite__buildNameDict results = ' + results.length);
 	for ( var i = 0; i <= (results.length - 1 );  i++) {
 		nameDict[results[i].Id] = results[i].Name; 
 	}
-	console.log('sfdc__buildNameDict url = ' + JSON.stringify(nameDict, null, 2));
-	sfdc__handleContentResults(content);
+	console.log('netsuite__buildNameDict url = ' + JSON.stringify(nameDict, null, 2));
+	netsuite__handleContentResults(content);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__handleContentResults(content) {
+function netsuite__handleContentResults(content) {
 	
 	var contentUrl;
 	var rowCount = content.length;
-	console.log("sfdc__handleContentResults: rowCount == " + rowCount);
+	console.log("netsuite__handleContentResults: rowCount == " + rowCount);
 		var contentJson = {};
 	var theadJson = {};
 	contentJson.dataRows = new Array();
 	theadJson.dataRows = new Array();
-console.log('sfdc__handleContentResults nameDict == ' + JSON.stringify(nameDict, null, 2));	
+console.log('netsuite__handleContentResults nameDict == ' + JSON.stringify(nameDict, null, 2));
 	if (rowCount) {
 		if (lc.getContentPrimary() == 'activities') {
     		theadJson.dataRows.push({
     			"rowstart" : 	'<tr id="remove-' + (rowCount + 1) + '">',
-				"cell_1"   : 	'<th id="content-head-1" class="contacts-table">Type</th>',
-       			"cell_2"   : 	'<th id="content-head-2" class="contacts-table">Contact</th>',
-    			"cell_3"   : 	'<th id="content-head-3" class="contacts-table">Subject</th>',
-				"cell_4"   : 	'<th id="content-head-3" class="contacts-table">Due Date</th>',
+				"cell_1"   : 	'<th id="content-head-1" class="contacts-table">Contact</th>',
+       			"cell_2"   : 	'<th id="content-head-2" class="contacts-table">Subject</th>',
+    			"cell_3"   : 	'<th id="content-head-3" class="contacts-table">Due Date</th>',
+				"cell_4"   : 	'<th id="content-head-3" class="contacts-table">Status</th>',
        			"rowend"   : 	'</tr>'
 	    	});
 	    } else if (lc.getContentPrimary() == 'opportunities') {
-	    		var c3;
-	    		if ( lc.getCrmType() == "Custom" && bg.getCrmJSPackage() == 'FocusVision') {
-   					c3 = '<th id="content-head-3" class="contacts-table">Value</th>';
-   				} else {
-   					c3 = '<th id="content-head-3" class="contacts-table">MRR</th>';
-   				}
+
 	    
 	    		theadJson.dataRows.push({
 				"rowstart" : 	'<tr id="remove-' + i + '">',
-				"cell_1"   : 	'<th id="content-head-1" class="contacts-table">Stage</th>',
+				"cell_1"   : 	'<th id="content-head-1" class="contacts-table">Status</th>',
    				"cell_2"   : 	'<th id="content-head-2" class="contacts-table">Name</th>',
-   				"cell_3"   : 	c3,
-   				
+   				"cell_3"   : 	'<th id="content-head-3" class="contacts-table">Weighted Total</th>',
        			"cell_4"   : 	'<th id="content-head-3" class="contacts-table">Close Date</th>',
        			"rowend"   : 	'</tr>'
 	    	});
@@ -386,27 +395,23 @@ console.log('sfdc__handleContentResults nameDict == ' + JSON.stringify(nameDict,
 	for ( var i = 0; i <= (content.length - 1);  i++) {
 		if (lc.getContentPrimary() == 'activities') {
 
-			var subtype = content[i].EventSubtype;			
-			var id = content[i].Id;	
-			var status = content[i].Status;		
-			var date = content[i].EndDateTime;
-			console.log("sfdc__handleContentResults: WhoId == " + content[i].WhoId + "name == " + nameDict[content[i].WhoId]);		
-			var col1 = content[i].Type || 'Not Defined';    			// Type			// 
-			var col2 = nameDict[content[i].WhoId];						// Name ,-- Get the contact names
-			var col3 = content[i].Subject;								// Subject
-			var col4 = date.slice(1, 10); 								//Date	
-			
+			var id = content[i].internalId;
+			var date = content[i].endDate;
+
+			//var col1 = content[i].Type || 'Not Defined';    			// Type			//
+			var col1 = content[i].contact.name;						// Name ,-- Get the contact names
+			var col2 = content[i].title;								// Subject
+			var col3 = date.slice(0, 10); 								//Date
+			var col4 = content[i].status.value;								// Subject
+
 		} else if (lc.getContentPrimary() == 'opportunities') {
-			var col1 = content[i].StageName || 'Not Defined';  			//Stage
-			var col2 = content[i].Name;	
-			if ( lc.getCrmType() == "Custom" && bg.getCrmJSPackage() == 'FocusVision') {								//Name
-				var col3 = content[i].Net_Calculated__c || '0';
-			} else {
-				var col3 = content[i].Amount || '0';
-			}
-			
-			var col4 = content[i].CloseDate;							//Close Date
-			var id = content[i].Id;
+			var col1 = content[i].status || 'Not Defined';  			//Stage
+			var col2 = content[i].title;
+			var col3 = content[i].weightedTotal || '0';
+			var date = content[i].expectedCloseDate;
+
+			var col4 = date.slice(0, 10);							//Close Date
+			var id = content[i].internalId;
 		}
 		
 		if (i >= 0) {
@@ -426,8 +431,8 @@ console.log('sfdc__handleContentResults nameDict == ' + JSON.stringify(nameDict,
 	bg.setContentTableData(JSON.stringify(contentJson));
 } 
 ////////////////////////////////////////////////////////////////////////////////////////
-//callback sfdc__getAccountByPhone
-function sfdc__getAccountByPhone(json, callback) {
+//callback netsuite__getAccountByPhone
+function netsuite__getAccountByPhone(json, callback) {
 
 	var callerId = bg.getRawCallId();
 	var internationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.International);
@@ -435,11 +440,11 @@ function sfdc__getAccountByPhone(json, callback) {
 	var nationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.National);
 	var nationalRawNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.NationalRaw);
 	
-console.log("sfdc__getAccountByPhone == " + json);
+console.log("netsuite__getAccountByPhone == " + json);
 
 	var header = lc.getCloudElementsId();
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
-	url +='/accounts?where=(Phone like \'%25' + internationalNumber + '\' or Phone like \'%25' +  internationalRawNumber + '\' or Phone=\'' +  nationalNumber + '\' or Phone=\'' +  nationalRawNumber + '\')';
+	url +='/accounts?where=(phone like \'' + internationalNumber + '\' or phone like \'' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\')';
 
 	var xhr = new XMLHttpRequest();
 	xhr.withCredentials = true;                                                                  
@@ -449,22 +454,26 @@ console.log("sfdc__getAccountByPhone == " + json);
 	xhr.onreadystatechange = function() { 
 		if (xhr.readyState == 4) {
 			if ( xhr.status == 200 ) { 
-				console.log("sfdc__getAccountByPhone == " + xhr.status)
-				console.log("sfdc__getAccountByPhone == " + xhr.responseText)
+				console.log("netsuite__getAccountByPhone == " + xhr.status)
+				console.log("netsuite__getAccountByPhone == " + xhr.responseText)
 				var resp = JSON.parse(xhr.responseText);
-				
-				if ((resp[0] !== undefined) || (resp.length > 0)) {
-					bg.setAcctConnectorID(resp[0].Id);
-					callback(resp, sfdc__dispatchContactForAccountResults)
+				//  HANDLE NO RESULTS !!!!
+				//callback(resp, netsuite__getContactByAccountId); //, str, rownum, 1);
+				if ((resp[0] !== undefined) || (resp.length > 0))
+				{
+					bg.setAcctConnectorID(resp[0].internalId);
+
+					callback(resp, netsuite__dispatchContactForAccountResults)
 				} else {
-				
+					// Look for a Users ....
 					bg.setContactRole('No Match Found');
 					console.log('No Contact or Account results for ' + bg.getFormattedCallID());
 					bg.setCrmAuthMessage('No Contact or Account results for ' + bg.getFormattedCallID());
 				}
+				bg.setCrmAuthStatus(true);
 			} else { 
 				console.error("xhr.responseText = " + xhr.responseText);
-				console.error("xhr.status = " + xhr.status); 
+				console.error("xhr.status = " + xhr.status);
 			}
 		}  
 	}
@@ -476,56 +485,56 @@ If not successful display No Match and prompt for new user and Opportunit/activi
 then create the contact (pop screen) and Create Ticket (pop screen)
 */
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__buildAccountListForGetContactByAccountId(accounts) {
-console.log("sfdc__dispatchContactForAccountResults == " + JSON.stringify(accounts));	
+function netsuite__buildAccountListForGetContactByAccountId(accounts) {
+console.log("\n\netsuite__dispatchContactForAccountResults == " + JSON.stringify(accounts));
 	
 	var jsonString;
 	
 	for ( var i = 0; i <= (accounts.length - 1);  i++) {
 		if (i == 0) {
-			jsonString = '{"resultrow": "'+ i + '", "accountId": "' + accounts[i].Id + '", "accountName": "' + accounts[i].Name + '"}';
+			jsonString = '{"resultrow": "'+ i + '", "accountId": "' + accounts[i].internalId + '", "accountName": "' + accounts[i].entityId + '"}';
 		} else {
-			jsonString += ', {"resultrow": "'+ i + '", "accountId": "' + accounts[i].Id + '", "accountName": "' + accounts[i].Name + '"}';
+			jsonString += ', {"resultrow": "'+ i + '", "accountId": "' + accounts[i].internalId + '", "accountName": "' + accounts[i].entityId + '"}';
 		}
 	}
 	
 	jsonString = '[' + jsonString + ']';
-	console.log("sfdc__dispatchContactForAccountResults == " + JSON.stringify(jsonString));	
-	sfdc__dispatchContactForAccountResults(JSON.parse(jsonString), sfdc__getContactByAccountId)			
+	console.log("\n\nnetsuite__dispatchContactForAccountResults == " + JSON.stringify(jsonString));
+	netsuite__dispatchContactForAccountResults(JSON.parse(jsonString), netsuite__getContactByAccountId)
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__dispatchContactForAccountResults(accountData, callback) {
-	console.log("sfdc__dispatchContactForAccountResults == " + JSON.stringify(accountData));
-	console.log("sfdc__dispatchContactForAccountResults == length " + accountData.length);
+function netsuite__dispatchContactForAccountResults(accountData, callback) {
+	console.log("\n\netsuite__dispatchContactForAccountResults == " + JSON.stringify(accountData));
+	console.log("\n\netsuite__dispatchContactForAccountResults == length " + accountData.length);
 	
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
-	 	url += '/contacts?where=AccountId=\'';
-
+	 	url += '/contacts?where=company=\'';
+// Lets' make sure we don't have duplicate account ID.
 	 if (accountData.length >= 1) {
 		for ( var i = 0; i <= (accountData.length - 1);  i++) {
-			console.log("sfdc__dispatchContactForAccountResults == in for loop AccountId " + accountData.length);
+			console.log("netsuite__dispatchContactForAccountResults == in for loop AccountId " + accountData.length);
 			if (i == 0) {
 				url += accountData[i].accountId + '\'';
 	
 			} else {
-				url += encodeURIComponent(' OR AccountId=\'' +  accountData[i].accountId + '\'');
+				url += encodeURIComponent(' OR company=\'' +  accountData[i].accountId + '\'');
 			}
-			console.log("sfdc__dispatchContactForAccountResults == AccountId " + results.length);
+			//console.log("netsuite__dispatchContactForAccountResults == AccountId " + results.length);
 		}
 	} else if (accountData.length == 1){
 		url +=  accountData[0].accountId + '\'';
-		console.log("sfdc__dispatchContactForAccountResults == only 1 " + url);
+		console.log("netsuite__dispatchContactForAccountResults == only 1 " + url);
 	}
-	console.log("sfdc__dispatchContactForAccountResults ==  " + url);
-	sfdc__getContactByAccountId(accountData, url)
+	console.log("netsuite__dispatchContactForAccountResults ==  " + url);
+	netsuite__getContactByAccountId(accountData, url)
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //callback 
-function sfdc__getContactByAccountId(accounts, url) { //, callback) {
-	console.log("sfdc__getContactByAccountId: == " + JSON.stringify(accounts));	
+function netsuite__getContactByAccountId(accounts, url) { //, callback) {
+	console.log("netsuite__getContactByAccountId: == " + JSON.stringify(accounts));
 	
 	var header = lc.getCloudElementsId();
-	
+
 	var xhr = new XMLHttpRequest();
 	xhr.withCredentials = true;                                                                  
     xhr.open('GET', url, true);
@@ -535,22 +544,29 @@ function sfdc__getContactByAccountId(accounts, url) { //, callback) {
     	if (xhr.readyState == 4) {
     		if ( xhr.status == 200 ) { 
     			var results = JSON.parse( xhr.responseText );
-    			console.log("sfdc__getContactByAccountId: results.length == " + results.length);
-    			console.log("\n\n");
-    	
+
+				console.log("netsuite__getContactByAccountId: results.length == " + results.length);
+				console.log("\n\n");
     			// What if there are no results  look at accounts.
     			if (results.length <= 0) {
-    				console.log("sfdc__getContactByAccountId: ");
+    				console.log("netsuite__getContactByAccountId: ");
+    				
+    				bg.setCrmAuthStatus(true);
     			} else {
-    			  	sfdc__dispatchContentByAccountId(results, accounts, sfdc__getContentByAccountId);
-    				sfdc__handleContactsByAccountById('any', results, accounts);//, sfdc__dispatchContactForAccountResults)
+    			  	netsuite__dispatchContentByAccountId(results, accounts, netsuite__getContentByAccountId);
+    				netsuite__handleContactsByAccountById('any', results, accounts);//, netsuite__dispatchContactForAccountResults)
+    			    bg.setCrmAuthStatus(true);
+    			    return true;
     			} 
       		} else if ( xhr.status == 401 ){ 
+      			//bg.setCrmAuthStatus(false);
       			console.log("xhr.responseText = " + xhr.responseText);
     			console.log("xhr.status = " + xhr.status); 
+    			return false;
       		} else { 
       			console.log("xhr.responseText = " + xhr.responseText);
     			console.log("xhr.status = " + xhr.status);
+    			return false;
     		}
       	}  
   		
@@ -558,12 +574,14 @@ function sfdc__getContactByAccountId(accounts, url) { //, callback) {
 	xhr.send(null);
 }
 ////////////////////////////////////////////////////////////////////////////////////////
-function sfdc__handleContactsByAccountById(type, contacts, accounts) {
-	console.log("sfdc__handleContactsByAccountById: type == " + type);
-	console.log("sfdc__handleContactsByAccountById: accounts == " + JSON.stringify(accounts));
-	acctdict = {}
+
+
+function netsuite__handleContactsByAccountById(type, contacts, accounts) {
+	console.log("netsuite__handleContactsByAccountById: type == " + type);
+	console.log("netsuite__handleContactsByAccountById: accounts == " + JSON.stringify(accounts));
+	acctDict = {}
 	accounts.forEach(function(accounts) {
-    		acctdict[accounts.accountId] = accounts.accountName
+		acctDict[accounts.accountId] = accounts.accountName
 	});
 	
 	var rowCount = contacts.length;
@@ -581,12 +599,12 @@ function sfdc__handleContactsByAccountById(type, contacts, accounts) {
 	}
 	
 	for ( var i = 0; i <= (contacts.length - 1);  i++) {
-		var name = contacts[i].Name; 
-		nameDict[contacts[i].Id] = contacts[i].Name;
-		var acctId = contacts[i].AccountId;
-		var id = contacts[i].Id;
-		var userUrl = lc.getCrmBaseUrl() + '/' + id;
-		var acctname = acctdict[contacts[i].AccountId];
+		var name = contacts[i].firstName + ' ' + contacts[i].lastName
+		var acctId = contacts[i].company.internalId;
+		var id = contacts[i].internalId;
+		var acctname = acctDict[acctId];
+		nameDict[id] = name;
+
 		
     	 jsonString.dataRows.push({
 			"rowstart" : 	'<tr id="remove-' + i + '">',
@@ -596,19 +614,6 @@ function sfdc__handleContactsByAccountById(type, contacts, accounts) {
        		"rowend"   : 	'</tr>'
     	});
     }
-    
-   
-    if (rowCount == 1) {
-		
-		bg.setContactLeadId(json[i].id); 
-		var new_window = window.open(url, 'Contact ' + name);
-		new_window.focus();
-		
-	} else  if (rowCount > 1) {
-		console.log('sfdc__handleCallResults: tblstr ' + jsonString);
-		console.log('sfdc__handleCallResults: tblstr ' + JSON.stringify(jsonString));
-		bg.setAnchorTableData(JSON.stringify(jsonString));
-		
-	}
+
 	bg.setAnchorTableData(JSON.stringify(jsonString));
-} 
+}

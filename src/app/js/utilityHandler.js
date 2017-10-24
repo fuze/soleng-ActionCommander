@@ -20,6 +20,7 @@ const bullPost 		= require('./crm/bullhorn_PostDataCalls')
 const msdPost 		= require('./crm/msdynamics_PostDataCalls')
 const sfdcPost 		= require('./crm/sfdc_PostDataCalls')
 const zohoPost 		= require('./crm/zoho_PostDataCalls')
+const netsuitePost	= require('./crm/netsuite_PostDataCalls');
 
 function utilityHandler() {};
 
@@ -138,6 +139,11 @@ function contactsOpenWindow(title, idforwin) {
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
 		//new_window.focus();
+	} else if (lc.getCEType() == 'netsuitecrmv2') {
+
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/app/common/entity/contact.nl?id=' + idforwin );
+		var openwinurl = lc.getCrmBaseUrl() + '/app/common/entity/contact.nl?id=' + idforwin;
+		shell.openExternal(openwinurl)
 	}
 }
 ///////////////////////////////////////////////////////////////
@@ -226,6 +232,13 @@ function accountsOpenWindow(title, idforwin) {
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
 		//new_window.focus();
+	} else if (lc.getCEType() == 'netsuitecrmv2') {
+
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/app/common/entity/custjob.nl?id=' + idforwin );
+		var openwinurl = lc.getCrmBaseUrl() + '/app/common/entity/custjob.nl?id=' + idforwin;
+		shell.openExternal(openwinurl)
+		//var new_window = window.open(openwinurl, title + idforwin);
+		//new_window.focus();
 	}
 }
 
@@ -254,6 +267,13 @@ function activityOpenWindow(title, idforwin, subtype) {
 
 		console.log("openwindow == " + lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Calls&id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Calls&id=' + idforwin;
+		shell.openExternal(openwinurl)
+		//var new_window = window.open(openwinurl, title + idforwin);
+		//new_window.focus();
+	} else if (lc.getCEType() == 'netsuitecrmv2') {
+
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/app/crm/calendar/task.nl?id=' + idforwin );
+		var openwinurl = lc.getCrmBaseUrl() + '/app/crm/calendar/task.nl?id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
 		//new_window.focus();
@@ -293,6 +313,13 @@ function opportunityOpenWindow(title, idforwin) {
 		//https://www.bullhornstaffing.com/BullhornStaffing/OpenWindow.cfm?entity=Candidate&id=506271&view=Overview
 		console.log("openwindow == " + lc.getCrmBaseUrl() + '/BullhornStaffing/OpenWindow.cfm?entity=Opportunity&id=' + idforwin + '&view=Overview');
 		var openwinurl = lc.getCrmBaseUrl() + '/BullhornStaffing/OpenWindow.cfm?entity=Opportunity&id=' + idforwin + '&view=Overview';
+		shell.openExternal(openwinurl)
+		//var new_window = window.open(openwinurl, title + idforwin);
+		//new_window.focus();
+	} else if (lc.getCEType() == 'netsuitecrmv2') {
+
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/app/accounting/transactions/opprtnty.nl?id=' + idforwin );
+		var openwinurl = lc.getCrmBaseUrl() + '/app/accounting/transactions/opprtnty.nl?id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
 		//new_window.focus();
@@ -445,6 +472,8 @@ console.log("crmactionRouter: " + lc.getRoutePath());
 		msdPost.msdynamics__actionHandler(action, clickdata);
 	} else if (lc.getCEType() == 'bullhorn') {
 		bullPost.bullhorn__actionHandler(action, clickdata);
+	} else if (lc.getCEType() == 'netsuitecrmv2') {
+		netsuitePost.netsuite__actionHandler(action, clickdata);
 	}
 
 }

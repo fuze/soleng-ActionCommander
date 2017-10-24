@@ -20,10 +20,11 @@ const snowGet 	= require('./helpdesk/servicenow_GetDataCalls');
 const zenGet 	= require('./helpdesk/zendesk_GetDataCalls');
 
 //CRM 
-const bullGet 	= require('./crm/bullhorn_GetDataCalls');
-const msdGet 	= require('./crm/msdynamics_GetDataCalls');
-const sfdcGet 	= require('./crm/sfdc_GetDataCalls');
-const zohoGet 	= require('./crm/zoho_GetDataCalls');
+const bullGet 		= require('./crm/bullhorn_GetDataCalls');
+const msdGet 		= require('./crm/msdynamics_GetDataCalls');
+const sfdcGet 		= require('./crm/sfdc_GetDataCalls');
+const zohoGet 		= require('./crm/zoho_GetDataCalls');
+const netsuiteGet	= require('./crm/netsuite_GetDataCalls');
 
 
 function callHandler() {};
@@ -104,6 +105,9 @@ function crmCallRouter(action, callData) {
 		msdGet.msdynamics__callHandler(callData.callstate, callData);
 	} else if (pjson.config.userData.ce_type == 'bullhorn') {
 		bullGet.bullhorn__callHandler(callData.callstate, callData);
+	} else if (pjson.config.userData.ce_type == 'netsuitecrmv2') {
+		netsuiteGet.netsuite__callHandler(callData.callstate, callData);
 	}
+
 }
 module.exports = new callHandler();
