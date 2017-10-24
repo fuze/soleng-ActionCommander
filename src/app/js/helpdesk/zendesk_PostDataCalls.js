@@ -36,7 +36,8 @@ exports.zendesk__actionHandler = function(callState, json) {
 		
         if ((lc.getWrapUpCode() !== false || lc.getCallNotes() !== false ) && (bg.getWrapUpValue() == '__blank__' || !bg.getNoteValue() == '__blank__' )) {
              console.log("zendesk__actionHandler: Wrap Up Codes or Call Notes Required");
-            ipcRenderer.send('open-utility-window', pjson.config.callnotes);
+			var json ={pageUrl: pjson.config.callnotes, callerName: bg.getCallerName()}
+			ipcRenderer.send('open-utility-window', json);
         } else {
 			reset.resetBackGroundData();
 		} 

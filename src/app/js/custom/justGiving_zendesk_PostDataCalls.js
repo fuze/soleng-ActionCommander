@@ -40,7 +40,8 @@ exports.justGiving__actionHandler = function(callState, json) {
 		if ((bg.getActivityId() != 'false') &&  (bg.getActivityId() !== null)) {
         	if ((lc.getWrapUpCode() !== false || lc.getCallNotes() !== false ) && (bg.getWrapUpValue() == '__blank__' || !bg.getNoteValue() == '__blank__' )) {
                 console.log("sfdc__actionHandler: Wrap Up Codes or Call Notes Required");
-                ipcRenderer.send('open-utility-window', pjson.config.callnotes);
+				var json ={pageUrl: pjson.config.callnotes, callerName: bg.getCallerName()}
+				ipcRenderer.send('open-utility-window', json);
             } else {
                console.log("sfdc__actionHandler: do the sfdc__createCallLog(json.endtime)");
 				if ( lc.getCrmType() == "Standard" ){

@@ -95,3 +95,17 @@ input[type=button] {
 #socket-stop {
 	background-color: #EF4367;
 }
+
+#wrapup-code-div {
+	float: left;
+	width: 200px;
+	margin-right: 20px;
+}
+
+#wrapup-info-div {
+	margin-left: 220px;
+	width: 200px;
+	display: block;
+	font-weight: bold;
+}
+}

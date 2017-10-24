@@ -301,7 +301,7 @@ function initialize () {
 	// Utility Window -- Call Notes and the like
 	//////////////////////////////////////////////////////////////////////////////////////
 	ipcMain.on('open-utility-window', (event, arg) => {
-		console.debug("Args == " + JSON.stringify(arg));
+		console.log("Args == " + JSON.stringify(arg));
 		if (utilWindow) {
 			return
 		}
@@ -313,12 +313,12 @@ function initialize () {
 			'resizable': false,
 			'frame': true
 		})
-	
 
-		utilWindow.loadURL(`file://${__dirname}/${arg}`, {})
-		
+
+		utilWindow.loadURL(`file://${__dirname}/${arg.pageUrl}`, {})
+
 		utilWindow.webContents.on('did-finish-load', () => {
-			utilWindow.webContents.send('utility-loaded', 'contents-loaded')
+			utilWindow.webContents.send('utility-loaded', arg.callerName)
 		})
 
 		utilWindow.on('closed', () => {

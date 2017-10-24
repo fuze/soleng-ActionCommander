@@ -38,8 +38,9 @@ exports.servicenow__actionHandler = function(callState, json) {
         bg.setCallState('CALL_END');
 		
         if ((lc.getWrapUpCode() !== false || lc.getCallNotes() !== false ) && (bg.getWrapUpValue() == '__blank__' || !bg.getNoteValue() == '__blank__' )) {
-             console.log("servicenow__actionHandler: Wrap Up Codes or Call Notes Required");
-            ipcRenderer.send('open-utility-window', pjson.config.callnotes);
+			console.log("servicenow__actionHandler: Wrap Up Codes or Call Notes Required");
+			var json ={pageUrl: pjson.config.callnotes, callerName: bg.getCallerName()}
+            ipcRenderer.send('open-utility-window', json);
         } else {
 			reset.resetBackGroundData();
 		} 

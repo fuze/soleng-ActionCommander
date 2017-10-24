@@ -4,11 +4,14 @@
 var _wrapUpCodes; // = bg.getWrapUpCode();
 var _callNotes; // = getCallNotes();
 var _endTime;
+var _callerName;
 
 var wrapup_code_div		= document.getElementById('wrapup-code-div');
 var wrapup_code			= document.getElementById('wrapup-code');
 var wrapup_notes_div	= document.getElementById('wrapup-notes-div');
 var wrapup_notes		= document.getElementById('wrapup-notes')
+var wrapup_info_caller	= document.getElementById('wrapup-info-caller')
+var wrapup_info_time	= document.getElementById('wrapup-info-time')
 var save 				= document.getElementById('save');
 
 console.log("wrapupNotes.js");
@@ -18,17 +21,34 @@ ipcRenderer.on('utility-loaded', (event, arg) => {
 	_wrapUpCodes = lc.getWrapUpCode();
 	_callNotes = lc.getCallNotes();
 	_endTime = Date.now();
-	
+	if (arg)
+		_callerName = arg;
+
 	console.log("imb.wrapupNotes.js  getWrapUpCode == " + lc.getWrapUpCode());
 	console.log("imb.wrapupNotes.js  getCallNotes == " + lc.getCallNotes());
 	console.log("imb.wrapupNotes.js  myParam == " + _endTime);
-	
+	console.log("imb.wrapupNotes.js  arg == " + _callerName);
+
 	setInitialState();
 	
 	var thisWindow = remote.getCurrentWindow();
     thisWindow.focus()
 });
 
+//////////////////////////////////////////////////////////////////////////
+function getDateTime(timestamp) {
+
+	var date = new Date(timestamp*1000);
+	var datetime = date.getFullYear() + '-'
+		+ String("0" + (date.getMonth()+1)).substr(-2) + '-'
+		+ String("0" + date.getDate()).substr(-2) + ' '
+		+ String("0" + date.getHours()).substr(-2) + ':'
+		+ String("0" + date.getMinutes()).substr(-2) + ':'
+		+ String("0" + date.getSeconds()).substr(-2);
+
+	console.log(datetime)
+	return datetime;
+}
 //////////////////////////////////////////////////////////////////////////
 function setInitialState() {
 	
@@ -52,6 +72,11 @@ function setInitialState() {
 		wrapup_notes_div.parentNode.removeChild(wrapup_notes_div);
 		wrapup_notes_div.style.visibility	= 'hidden';
 	}
+
+	var timestamp =  Math.round(_endTime/1000);
+
+	wrapup_info_caller.text = decodeURIComponent(_callerName);
+	wrapup_info_time.text = getDateTime(timestamp);
 }
 //////////////////////////////////////////////////////////////////////////
 save.onclick = function() {
