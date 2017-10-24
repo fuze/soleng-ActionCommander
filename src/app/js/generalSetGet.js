@@ -660,5 +660,29 @@ console.log("__setCallList == " + callId);
 }
 
 
+////////////////////////////////////////////////////////////////////////////////////////
+// getCreateNewString
+// return the string for the create new entity
+//===================================================================================//
+backgroundSettings.prototype.getCreateNewString = function() {
+
+	var newString = "New...";
+
+	if (lc.getContentPrimary() == 'activities') {
+		newString = "New Activity..."
+	} else if (lc.getContentPrimary() == 'opportunities') {
+		newString = "New Opportunity..."
+	} else if (lc.getContentPrimary() == 'job-orders') {
+		newString = "New Job..."
+	} else if (lc.getContentPrimary() == 'tasks') {
+		newString = "New Task..."
+	} else if (lc.getContentPrimary() == 'incidents') {
+		newString = "New Incident..."
+	}
+
+	return newString;
+}
+
+
 
 module.exports = new backgroundSettings();

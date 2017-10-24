@@ -663,7 +663,7 @@ function epsilon__sfdc__handleContactsByAccountById(type, contacts, accounts) {
 			"rowstart" : 	'<tr id="remove-' + i + '">',
 			"cell_1"   : 	'<td action="openwindow" type="contacts" uid="'+ id + '" class="contacts-table-name">' + name + '</td>',
         	"cell_2"   : 	'<td action="openwindow" type="accounts" acctid="' + acctId +'" >' + acctname + '</td>',
-       		"cell_3"   : 	'<td action="create" type="' + lc.getContentPrimary()+ '"  uid="'+ id + '" acctid="' + acctId +'">New...</td>',
+       		"cell_3"   : 	'<td action="create" type="' + lc.getContentPrimary()+ '"  uid="'+ id + '" acctid="' + acctId +'">' + bg.getCreateNewString() + '</td>',
        		"rowend"   : 	'</tr>'
     	});
     }
@@ -718,7 +718,7 @@ console.info("epsilon__sfdc__handleCallResults == ");
 			"rowstart" : 	'<tr id="remove-' + i + '">',
 			"cell_1"   : 	'<td action="openwindow" type="contacts" uid="'+ id + '" class="contacts-table-name">' + name + '</td>',
         	"cell_2"   : 	'<td action="openwindow" type="accounts" acctid="' + acctId +'" >' + acctname + '</td>',
-       		"cell_3"   : 	'<td action="create" type="' + lc.getContentPrimary()+ '"  uid="'+ id + '" acctid="' + acctId +'">New...</td>',
+       		"cell_3"   : 	'<td action="create" type="' + lc.getContentPrimary()+ '"  uid="'+ id + '" acctid="' + acctId +'">' + bg.getCreateNewString() + '</td>',
        		"rowend"   : 	'</tr>'
     	});
     }
