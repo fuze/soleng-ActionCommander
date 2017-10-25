@@ -33,6 +33,11 @@ callHistory.prototype.createCallHistory = function() {
 		}
 		
 		var cHistory = '{ "name" : "' + bg.getCallerName() +'", ';
+
+		if ((bg.getUserConnectorAcct() != 'false') &&  (bg.getUserConnectorAcct() != null))
+		{
+			cHistory += '"contactId" : "' +  bg.getUserConnectorAcct() +'", ';
+		}
 		cHistory += '"phone" : "' +  phone +'", ';
 		cHistory += '"rawphone" : "' +  bg.getRawCallId().replace('+','') +'", ';
 		cHistory += '"datetime" : "' +  bg.getFormattedDate('history') +'" }';

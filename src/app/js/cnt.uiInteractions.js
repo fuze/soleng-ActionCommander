@@ -176,9 +176,12 @@ console.log("cnt.uiInteractions _callHistoryChange length " + len + " pages" + p
 			
 			console.log("cnt.uiInteractions _callHistoryChange: start with i " + JSON.stringify(history[i]));
 			if (history[i].phone != false) {
-				
-				tablestr += '<tr><td action=\"clicktocall\" type=\"phone\" phone=' + history[i].rawphone +  '>' + history[i].name + '</td>';	
-				tablestr += '<td action=\"clicktocall\" type=\"phone\"  phone=' + history[i].rawphone +  '>' + history[i].phone + '</td>';	
+				if (history[i].contactId != false && history[i].contactId != null) {
+					tablestr += '<tr><td action=\"openwindow\" type=\"contacts\" uid=' + history[i].contactId +  '>' + history[i].name + '</td>';
+				} else {
+					tablestr += '<tr><td type=\"contact\">' + history[i].name + '</td>';
+				}
+				tablestr += '<td action=\"clicktocall\" type=\"phone\"  phone=' + history[i].rawphone +  '>' + history[i].phone + '</td>';
 				tablestr += '<td action=\"clicktocall\" type=\"phone\" phone=' + history[i].rawphone +  '>' + history[i].datetime + '</td></tr>';
 			}			
 		
