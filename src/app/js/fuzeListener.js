@@ -56,8 +56,8 @@ function __startSocket()  {
 	console.debug('fuzeListener: fuzeAuthenticationURL ' + fuzeAuthenticationURL);
 	console.debug('fuzeListener: ws ' + ws);
 
-	if(typeof ws === 'undefined') {
-	 console.debug('startSocket:ws not declared yet.');
+	if ((typeof ws === "undefined") || (typeof ws === "string")) {
+		console.debug('startSocket:ws not declared yet.');
 	 __openConnection();
 	} else {
 		console.debug('ws.startSocket ' + ws.readyState);
@@ -84,7 +84,7 @@ function __startSocket()  {
 ////////////////////////////////////////////////////////////////////////////////////////	
 function __openConnection() {
 
-	 console.log('__openConnection: In try2Open.');
+	console.log('__openConnection: In try2Open.');
 		
 	var xhr = new XMLHttpRequest();     
 	 
@@ -136,14 +136,14 @@ function __openConnection() {
 ////////////////////////////////////////////////////////////////////////////////////////
 function __stopSocket() {
 	
-	bg.setUnSubscribeID(false);
 	try{
 		ws.close();
 	} catch(e) {}
 	clearInterval(_watchInt);
 	console.warn('stopSocket: Setting connect to null and saving to localStorage');
 	ws = 'undefined';
-	_keepAlive = false;
+	//_keepAlive = false;
+	bg.setUnSubscribeID(false);
 	bg.setSocketStatus(false);
 	bg.setSocketMessage('Not Currently The Active Listener');
 	_callback(JSON.parse('{"code" : 200, "action" : 2001, "event" : "Stopped Socket",  "message" : "Socket Stopped" }'));
@@ -202,7 +202,6 @@ function __disconnectRecovery() {
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 function __socketWatcher() {
-	console.log("fuzeListener: (socketWatcher) keepAlive " + bg.getFormattedDate('mdy') + " keep alive " + _keepAlive);
 	console.warn("fuzeListener: (socketWatcher) keepAlive " + bg.getFormattedDate('mdy') + " keep alive " + _keepAlive);
 	if ((ws !== 'undefined') && ((_keepAlive === true ) || (bg.getSocketStatus() === true))) {
 
