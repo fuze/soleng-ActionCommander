@@ -172,7 +172,7 @@ console.log("cnt.uiInteractions _callHistoryChange length " + len + " pages" + p
 		callHistoryThead.innerHTML = "<tr><th>Contact</th><th>Phone</th><th>Date/Time</th></tr>";		
 		
 	
-		for (var i = len - 1; ( i >= len - pageSize && i >= 0); i--) {
+		for (var i = len - 1; ( i >= len - maxHistory && i >= 0); i--) {
 			
 			console.log("cnt.uiInteractions _callHistoryChange: start with i " + JSON.stringify(history[i]));
 			if (history[i].phone != false) {

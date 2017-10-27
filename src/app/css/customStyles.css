@@ -571,7 +571,7 @@ input[type=submit] {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	max-width: 20px;
+	max-width: 100px;
 	font-size: 0.7em;
 }
 
@@ -725,9 +725,9 @@ input[type=submit] {
 	padding: 10px;
 	font-weight: 500
 }
-/*
+
 #incoming-content-tbody {
-	height: 160px;
+	height: 140px;
 	overflow-y: auto;
 	display: block;
 	width: 100%;
@@ -749,4 +749,3 @@ input[type=submit] {
 	overflow-y: auto;
 	width: 100%;
 }
-*/
