@@ -48,8 +48,7 @@
       "cp"
     ]
   },
-  "pre-commit": [
-  ],
+  "pre-commit": [],
   "keywords": [
     "electron-app",
     "electron",
@@ -98,6 +97,7 @@
     "istanbul": "^0.4",
     "libphonenumber-node": "^0",
     "mocha": "^3",
+    "moment": "^2.19.1",
     "pre-commit": "^1",
     "rimraf": "^2",
     "shelljs": "^0.7",
