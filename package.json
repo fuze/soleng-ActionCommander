@@ -70,7 +70,8 @@
     },
     "mac":{
       "target": [
-        "dir"
+        "dir",
+        "dmg"
       ]
     },
     "nsis": {
