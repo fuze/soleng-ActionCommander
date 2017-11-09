@@ -1,7 +1,7 @@
 {
   "name": "Fuze_Connect",
   "description": "Fuze Connect Installable",
-  "version": "1.8.12.964",
+  "version": "2.8.12.964",
   "author": {
     "name": "Fuze Solution Engineering",
     "email": "coe@fuze.com",
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/fuze/coe-electron-fuze-connect.git"
   },
-  "main": "/src/fuzeconnect.js",
+  "main": "./src/fuzeconnect.js",
   "scripts": {
     "test": "standard && mocha --recursive",
     "unit": "standard && mocha test/unit --recursive",
@@ -34,7 +34,11 @@
     "build:linux": "npm run prebuild && build --linux deb AppImage --x64 && npm run postbuild",
     "build": "build",
     "postbuild": "node build/target.js --clean",
-    "postinstall": "install-app-deps"
+    "builder-win-local": "electron-builder -w --x64",
+    "builder-win": "electron-builder -w --x64 -p always",
+    "builder-mac-local": "electron-builder --mac",
+    "builder-mac": "electron-builder --mac -p always",
+    "dist": "build"
   },
   "standard": {
     "globals": [
@@ -55,32 +59,26 @@
     "boilerplate"
   ],
   "build": {
-    "appId": "com.fuze.connect",
+    "appId": "com.soleng-fuze-connect-electron",
     "productName": "Fuze Connect",
-    "dmg": {
-      "iconSize": 120,
-      "iconTextSize": 14,
-      "contents": [
-        {
-          "x": 478,
-          "y": 170,
-          "type": "link",
-          "path": "/Applications"
-        },
-        {
-          "x": 130,
-          "y": 170,
-          "type": "file"
-        }
+    "asar": true,
+    "compression": "maximum",
+    "win": {
+      "target": [
+        "squirrel"
       ]
     },
-    "mac": {
-      "category": "public.app-category.business"
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "runAfterFinish": false
     },
-    "linux": {
-      "category": "Development"
-    },
-    "win": {}
+    "publish": {
+      "repo": "soleng-fuze-connect-electron",
+      "owner": "fuze",
+      "private": true,
+      "provider": "github"
+    }
   },
   "devDependencies": {
     "async": "^2",
@@ -89,9 +87,12 @@
     "dependency-check": "^2",
     "devtron": "^1.4.0",
     "electron": "^1",
-    "electron-builder": "^7",
+    "electron-builder-squirrel-windows": "^19.45.0",
+    "electron-debug": "^1",
     "electron-eventbus": "^1",
+    "electron-is-dev": "^0.1",
     "electron-settings": "^3",
+    "electron-window-state": "^3",
     "events": "^1",
     "google-libphonenumber": "^3",
     "istanbul": "^0.4",
