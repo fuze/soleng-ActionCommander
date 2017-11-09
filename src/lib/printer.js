@@ -50,8 +50,8 @@ function copyToTemp (filePath) {
 function printTXTTest (device, callback) {
   var filename = copyToTemp(path.resolve(path.join(__dirname, '../assets/printer/test.txt')))
   console.info('Printing TXT test page', device)
-  console.debug('Platform:', process.platform)
-  console.debug('Trying to print file: ' + filename)
+  console.log('Platform:', process.platform)
+  console.log('Trying to print file: ' + filename)
 
   if (process.platform !== 'win32') {
     np.printFile({filename: filename,
@@ -74,8 +74,8 @@ function printTXTTest (device, callback) {
 function printPDFTest (device, callback) {
   var filename = path.resolve(path.join(__dirname, '../assets/printer/test.pdf'))
   console.info('Printing PDF test page', device)
-  console.debug('Platform:', process.platform)
-  console.debug('Trying to print file: ' + filename)
+  console.log('Platform:', process.platform)
+  console.log('Trying to print file: ' + filename)
 
   if (process.platform === 'win32') {
     return callback('Sorry, printing not supported on Windows :(')
@@ -85,7 +85,7 @@ function printPDFTest (device, callback) {
       console.error('Err:' + err)
       return callback(err)
     }
-    console.debug('Data type is: ' + typeof (data) + ', is buffer: ' + Buffer.isBuffer(data))
+    console.log('Data type is: ' + typeof (data) + ', is buffer: ' + Buffer.isBuffer(data))
     np.printDirect({
       printer: device.name,
       data: data,

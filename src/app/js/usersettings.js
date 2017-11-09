@@ -1,7 +1,7 @@
 'use strict'
 
 const settings = require('electron-settings');
-const isDev = (require('electron-is-dev') || global.appSettings.debug);
+// const isDev = (require('electron-is-dev') || global.appSettings.debug);
 
 const fs = require('fs');
 const _ = require('lodash');
@@ -12,7 +12,9 @@ const Bus = require('electron-eventbus');
 const eventBus = new Bus();
 const lc = require('./localConfigSettings');
 
+console.log(`pjson: ${pjson}`);
 var config = pjson.config;
+console.log(`pjson: ${config}`);
 
 var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
 function UserSettings() {};
@@ -21,7 +23,7 @@ function UserSettings() {};
 // setCmrId
 UserSettings.prototype.resetSettings = function(callback) {
 	var settingsFilePath = settings.file();
-	console.debug('\n settingsFilePath : ' + settingsFilePath)
+	console.log('\n settingsFilePath : ' + settingsFilePath)
     try {
       fs.unlinkSync(settingsFilePath);
     } catch (err) {
@@ -29,7 +31,7 @@ UserSettings.prototype.resetSettings = function(callback) {
     }
     settings.clearPath();
     callback(settingsFilePath);
-    
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -37,12 +39,12 @@ UserSettings.prototype.resetSettings = function(callback) {
 function setCrmId(id, callback) {
 	var obj = settings.getAll();
 		obj = obj.userData;
-	console.debug('setCmrId id: ' + id)
-	console.debug('setCmrId obj: ' + JSON.stringify(obj, null, 2) +'\n\n')
+	console.log('setCmrId id: ' + id)
+	console.log('setCmrId obj: ' + JSON.stringify(obj, null, 2) +'\n\n')
 	obj['crmid'] = id;
 	//settings.set('{ "userData" : { "crmid" : "' + id + '" } }');
 	settings.setAll({ userData : obj });
-	console.debug('setCmrId obj: ' + JSON.stringify(settings.getAll(), null, 2) +'\n\n')
+	console.log('setCmrId obj: ' + JSON.stringify(settings.getAll(), null, 2) +'\n\n')
 	callback(settings.getAll())
 }
 
@@ -53,29 +55,29 @@ function setSettings(results, passwd, callback) {
 	results['CloudElementsId'] = results.company_ce_id + ", " + results.integration_ce_id + ", " + results.user_ce_id;
 	settings.setAll({ userData : results });
 	var obj = settings.getAll()
-	console.debug('\n\nsetSettings obj: ' + JSON.stringify(obj, null, 2) +'\n\n')
+	console.log('\n\nsetSettings obj: ' + JSON.stringify(obj, null, 2) +'\n\n')
 	callback(obj)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // getUserData
  function getUserData(username, password, callback) {
-	
-	console.debug('getUserData:  ' + JSON.stringify(config, null, 2));
+
+	console.log('getUserData:  ' + JSON.stringify(config, null, 2));
 
 	var url = config.getUserDataUrl + username;
 	var resp;
-	console.debug('getUserData:  ' + url);
+	console.log('getUserData:  ' + url);
 	// Get inbox entries
   	var xhr = new XMLHttpRequest();
   	xhr.open('GET', url, true);
   	xhr.onreadystatechange = function() {
     	if (xhr.readyState == 4) {
-    		console.debug('getUserData:  ' + xhr.responseText);
+    		console.log('getUserData:  ' + xhr.responseText);
       		var results = JSON.parse(xhr.responseText)
       		if (results.length <= 0) {
-        		console.debug('getUserData: getUserData: data 0 == ' + JSON.stringify(results, null, 2));
-        		
+        		console.log('getUserData: getUserData: data 0 == ' + JSON.stringify(results, null, 2));
+
         		callback(JSON.parse('{"code" : 404, "action" : 1005, "event" : "no-matching-user",  "message" : "No Matching User" }'));
 
       		} else if (results.length > 1) {
@@ -93,14 +95,14 @@ function setSettings(results, passwd, callback) {
 // getUserSettings
 UserSettings.prototype.getUserSettings = function (callback) {
 
-console.debug('getUserSettings: global.appSettings == ' + JSON.stringify(pjson.config, null, 2));
+console.log('getUserSettings: global.appSettings == ' + JSON.stringify(pjson.config, null, 2));
 
   //var filename = settings.getSettingsFilePath()
   var filename = settings.file()
-  console.debug('is this where I would check for settings ' + filename)
+  console.log('is this where I would check for settings ' + filename)
 
 	fs.exists(filename, function(exists) {
-		if (exists) { 
+		if (exists) {
 			fs.stat(filename, function(err, stats) {
         		if (stats.isDirectory()) {
           			console.log('getUserSettings: ' + filename + ' : is a directory');
@@ -108,8 +110,8 @@ console.debug('getUserSettings: global.appSettings == ' + JSON.stringify(pjson.c
         		} else {
   					var username = settings.get('userData.username');
   					var password = crypt.decryptPassword(settings.get('userData.password'))
-  					console.debug('getUserSettings: username == ' + username)
-  					console.debug('getUserSettings: password == ' + password)
+  					console.log('getUserSettings: username == ' + username)
+  					console.log('getUserSettings: password == ' + password)
 					getUserData(username, password, function(obj) {
 						console.log('getUserSettings: Settings will be Refreshed or Created' );
 						processUserData(obj, function(ret) {
@@ -151,16 +153,16 @@ console.debug('getUserSettings: global.appSettings == ' + JSON.stringify(pjson.c
 		} else {
 			console.log('getUserSettings: No Data ');
 			callback(JSON.parse('{"code" : 204, "action" : 1002, "event" : "show-login-window",  "message" : "No Settings Available Show Login"}'));
-		} 
+		}
 	})
 }
 //////////////////////////////////////////////////////////////////////////////////////////
 // createUserSettings
 //UserSettings.prototype.createUserSettings = function (username, password, callback) {
 UserSettings.prototype.createUserSettings = function (username, password, callback) {
-	console.debug('createUserSettings: global.appSettings == ' + JSON.stringify(pjson.config, null, 2));
+	console.log('createUserSettings: global.appSettings == ' + JSON.stringify(pjson.config, null, 2));
 	getUserData(username, password, function(obj) {
-		console.log('createUserSettings: Settings will be Refreshed or Created' );	
+		console.log('createUserSettings: Settings will be Refreshed or Created' );
 		processUserData(obj, function(ret) {
 			console.log('createUserSettings: ' + JSON.stringify(ret, null, 2));
 			callback(ret);

@@ -50,7 +50,7 @@ window.onload = function () {
 	changeCrmVisibility("none");
 	//changeUandPVisibility("none");
 	
-	console.debug("mainSetup in window.onload ");
+	console.log("mainSetup in window.onload ");
 	setupuserspan.textContent =  'Not Set';
 	setuppasswdspan.textContent = 'Not Set';
 	updateSaveButtonState()
@@ -73,24 +73,24 @@ window.onload = function () {
     
 	// On Reset
 	reset.onclick = function reset() {
-		console.debug("reset button clicked ");
+		console.log("reset button clicked ");
 	}
 	
 	// On Save of Main UserName/Password
 	setupsave.onclick = function login() {
-		console.debug("save button clicked user == " + setupusername.value + " '" + setuppassword.value + "'");
-		console.debug("save button clicked user == " + setuppassword.value.length + " '" + setuppassword.value.length + "'");
+		console.log("save button clicked user == " + setupusername.value + " '" + setuppassword.value + "'");
+		console.log("save button clicked user == " + setuppassword.value.length + " '" + setuppassword.value.length + "'");
 		
 		
 		if ((setupusername.value.length <= 0 ) && (setuppassword.value.length <= 0)) {
-			console.debug("incomplete data");
+			console.log("incomplete data");
 			setupuserspan.textContent =  'Check User Name';
 			setuppasswdspan.textContent = 'Check Password';	
 		} else {
-			console.debug("Do the Login");
+			console.log("Do the Login");
 			settings.createUserSettings(setupusername.value, setuppassword.value, function(json) {
-				console.debug("background: Action == "+ json.action + " event " + json.event + " message " + json.message);
-				console.debug('initializeData:  ' + JSON.stringify(json, null, 2))
+				console.log("background: Action == "+ json.action + " event " + json.event + " message " + json.message);
+				console.log('initializeData:  ' + JSON.stringify(json, null, 2))
 				userhandler.userDataHandler(json, function(obj) {
 					console.warn("mainSetup UserHadner" + obj);
 				});	
@@ -104,19 +104,19 @@ window.onload = function () {
 	/*
 	// On Save of CRM UserName
 	crmusername.onclick = function login() {
-		console.debug("save button clicked user == " + username.value + " '" + password.value + "'");
-		console.debug("save button clicked user == " + username.value.length + " '" + password.value.length + "'");
+		console.log("save button clicked user == " + username.value + " '" + password.value + "'");
+		console.log("save button clicked user == " + username.value.length + " '" + password.value.length + "'");
 		
 		
 		if ((username.value.length <= 0 ) && (password.value.length <= 0)) {
-			console.debug("incomplete data");
+			console.log("incomplete data");
 			userspan.textContent =  'Check User Name';
 			passwdspan.textContent = 'Check Password';	
 		} else {
-			console.debug("Do the Login");
+			console.log("Do the Login");
 			settings.createUserSettings(username.value, password.value, function(json) {
-				console.debug("background: Action == "+ json.action + " event " + json.event + " message " + json.message);
-				console.debug('initializeData:  ' + JSON.stringify(json, null, 2))
+				console.log("background: Action == "+ json.action + " event " + json.event + " message " + json.message);
+				console.log('initializeData:  ' + JSON.stringify(json, null, 2))
 				userhandler.userDataHandler(json, function(obj) {
 					console.warn("mainSetup UserHadner" + obj);
 				});	
@@ -128,19 +128,19 @@ window.onload = function () {
 	}
 	// On Save of CRM UserName/Password
 	username.onclick = function login() {
-		console.debug("save button clicked user == " + username.value + " '" + password.value + "'");
-		console.debug("save button clicked user == " + username.value.length + " '" + password.value.length + "'");
+		console.log("save button clicked user == " + username.value + " '" + password.value + "'");
+		console.log("save button clicked user == " + username.value.length + " '" + password.value.length + "'");
 		
 		
 		if ((username.value.length <= 0 ) && (password.value.length <= 0)) {
-			console.debug("incomplete data");
+			console.log("incomplete data");
 			userspan.textContent =  'Check User Name';
 			passwdspan.textContent = 'Check Password';	
 		} else {
-			console.debug("Do the Login");
+			console.log("Do the Login");
 			settings.createUserSettings(username.value, password.value, function(json) {
-				console.debug("background: Action == "+ json.action + " event " + json.event + " message " + json.message);
-				console.debug('initializeData:  ' + JSON.stringify(json, null, 2))
+				console.log("background: Action == "+ json.action + " event " + json.event + " message " + json.message);
+				console.log('initializeData:  ' + JSON.stringify(json, null, 2))
 				userhandler.userDataHandler(json, function(obj) {
 					console.warn("mainSetup UserHadner" + obj);
 				});	

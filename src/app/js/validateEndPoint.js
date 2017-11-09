@@ -21,10 +21,10 @@ exports.validateEndPoint = function(callback) {
 		var url = cloudElementsUrl +  '/' + lc.getRoutePath();
 	    	url += '/ping';
 	    
-		console.debug("validateEndPoint: " + JSON.stringify(pjson, null, 2));    
+		console.log("validateEndPoint: " + JSON.stringify(pjson, null, 2));    
 		var header = lc.getCloudElementsId();
-		console.debug("validateEndPoint: " + url);
-		console.debug("validateEndPoint: " + header);
+		console.log("validateEndPoint: " + url);
+		console.log("validateEndPoint: " + header);
 	
 		var xhr = new XMLHttpRequest();
 		xhr.withCredentials = true;                                                                  
@@ -39,18 +39,18 @@ exports.validateEndPoint = function(callback) {
     				if ( typeof resp.endpoint == 'string' ) { 
     					console.log("helpdesk_Validate: User Validated ");
     					bg.setCrmAuthStatus(true); 
-    					console.debug("validateEndPoint: User Validated getUserDataCallBack");
+    					console.log("validateEndPoint: User Validated getUserDataCallBack");
     					callback(JSON.parse('{"code" : 200, "action" : 3000, "event" : "end-point-validated",  "message" : "End Point Validated" }'));
     				}
     			} else if ( xhr.status == 401 ){ 
       				bg.setCrmAuthStatus(false);
-      				console.debug("UN authorized");
-      				console.debug("xhr.responseText = " + xhr.responseText);
-    				console.debug("xhr.status = " + xhr.status); 
+      				console.log("UN authorized");
+      				console.log("xhr.responseText = " + xhr.responseText);
+    				console.log("xhr.status = " + xhr.status); 
     				callback(JSON.parse('{"code" : 401, "action" : 3001, "event" : "end-point-invalid",  "message" : "End Not Point Validated" }'));
       			} else { 
-      				console.debug("xhr.responseText = " + xhr.responseText);
-    				console.debug("xhr.status = " + xhr.status);
+      				console.log("xhr.responseText = " + xhr.responseText);
+    				console.log("xhr.status = " + xhr.status);
     				callback(JSON.parse('{"code" : "' + xhr.status +'", "action" : 3002, "event" : "general-exception",  "message" : "' +xhr.responseText +'" }'));
     			}
       		

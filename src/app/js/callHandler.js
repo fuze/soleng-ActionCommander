@@ -38,18 +38,18 @@ callHandler.prototype.callActionController = function (action, callData) {
 	var crmPath = pjson.config.userData.routepath;
 
 	if (action == 'call') {
-		console.debug("workFlowController: Call Data \n" + JSON.stringify(callData) + "\n");
+		console.log("workFlowController: Call Data \n" + JSON.stringify(callData) + "\n");
 		switch(pjson.config.userData.routepath) {
 			case 'vtiger' :
-				console.debug("CALL routePath == "+ pjson.config.userData.routepath + " " + action + " " + JSON.stringify(callData));
+				console.log("CALL routePath == "+ pjson.config.userData.routepath + " " + action + " " + JSON.stringify(callData));
 				vTiger.vtiger_callHandler(callData.callstate, callData);
 				break;
 			case 'helpdesk' :
-				console.debug("CALL routePath == "+ pjson.config.userData.routepath + " " + pjson.config.userData.ce_type + " " + action + " " + JSON.stringify(callData));
+				console.log("CALL routePath == "+ pjson.config.userData.routepath + " " + pjson.config.userData.ce_type + " " + action + " " + JSON.stringify(callData));
 				helpdeskCallRouter(action, callData)
 				break;
 			case 'crm' :
-				console.debug("CALL routePath == "+  pjson.config.userData.routepath + " " +  pjson.config.userData.ce_type + " " + action + " " + JSON.stringify(callData));
+				console.log("CALL routePath == "+  pjson.config.userData.routepath + " " +  pjson.config.userData.ce_type + " " + action + " " + JSON.stringify(callData));
 				crmCallRouter(action, callData)
 				break;
 			case 'usauto' :
@@ -61,7 +61,7 @@ callHandler.prototype.callActionController = function (action, callData) {
 				crmCallRouter(action, callData);
 				break;
 			default:
-				console.debug("CALL routePath == default");
+				console.log("CALL routePath == default");
 				break;
 		}
 	}
@@ -69,8 +69,8 @@ callHandler.prototype.callActionController = function (action, callData) {
 
 ///////////////////////////////////////////////////////////////
 function helpdeskCallRouter(action, callData) {
-console.debug("helpdeskCallRouter == ce_type " + pjson.config.userData.ce_type  );
-console.debug("helpdeskCallRouter == callstate " + callData.callstate  );
+console.log("helpdeskCallRouter == ce_type " + pjson.config.userData.ce_type  );
+console.log("helpdeskCallRouter == callstate " + callData.callstate  );
 	if (pjson.config.userData.ce_type == 'sfdcservicecloud') {
 		sCldGet.sfdcservicecloud__callHandler(callData.callstate, callData);
 	} else if (pjson.config.userData.ce_type == 'servicenow') {

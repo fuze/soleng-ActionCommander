@@ -50,7 +50,7 @@ module.exports = (logFileName) => {
     logger.log.apply(null, arguments)
   }
 
-  console.debug = function () {
+  console.log = function () {
     arguments[0] = new Date().toISOString() + ' - <Debug> ' + arguments[0]
     if (isDev || (global.appSettings && global.appSettings.debug)) {
       logger.log.apply(null, arguments)

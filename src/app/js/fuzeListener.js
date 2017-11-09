@@ -8,8 +8,8 @@ const bg = require('./generalSetGet')
 const ch = require('./callHandler')
 const lc = require('./localConfigSettings');
 
-console.debug("This is the fuzeListener.js" + JSON.stringify(pjson.config));
-console.debug("fuzeListner: " + JSON.stringify(pjson.config.userData))
+console.log("This is the fuzeListener.js" + JSON.stringify(pjson.config));
+console.log("fuzeListner: " + JSON.stringify(pjson.config.userData))
 
 var 	ws;
 const 	fuzeAuthenticationURL = pjson.config.fuzeAuthenticationURL
@@ -29,7 +29,7 @@ var 	_isCallActive = false;
 var 	_socketMessage;
 var 	_callback;
 var		_watchInt;
-console.debug("This is the fuzeListener.js");
+console.log("This is the fuzeListener.js");
 
 ////////////////////////////////////////////////////////////////////////////////////////
  exports.startSocket = function(callback) {
@@ -52,30 +52,30 @@ console.debug("This is the fuzeListener.js");
 ////////////////////////////////////////////////////////////////////////////////////////
 function __startSocket()  {
 	//var try2Open;
-	console.debug('fuzeListener: username: ' + socketUser + ', password: ' +  socketPassword +' , tenantid: ' + socketTenant);
-	console.debug('fuzeListener: fuzeAuthenticationURL ' + fuzeAuthenticationURL);
-	console.debug('fuzeListener: ws ' + ws);
+	console.log('fuzeListener: username: ' + socketUser + ', password: ' +  socketPassword +' , tenantid: ' + socketTenant);
+	console.log('fuzeListener: fuzeAuthenticationURL ' + fuzeAuthenticationURL);
+	console.log('fuzeListener: ws ' + ws);
 
 	if ((typeof ws === "undefined") || (typeof ws === "string")) {
-		console.debug('startSocket:ws not declared yet.');
+		console.log('startSocket:ws not declared yet.');
 	 __openConnection();
 	} else {
-		console.debug('ws.startSocket ' + ws.readyState);
+		console.log('ws.startSocket ' + ws.readyState);
 		switch(ws.readyState) {
 			case 0:
-				console.debug('startSocket: Connecting.');
+				console.log('startSocket: Connecting.');
 				break;
 			case 1:
-				console.debug('startSocket: Already connected.');
+				console.log('startSocket: Already connected.');
 				break;
 			case 3:
-				console.debug('startSocket: Closing.');
+				console.log('startSocket: Closing.');
 				break;
 			case 4:
-				console.debug('startSocket: Closed.');
+				console.log('startSocket: Closed.');
 				break;
 			default:
-				console.debug('startSocket: Unknown - no state.');
+				console.log('startSocket: Unknown - no state.');
 		}
 	} 
 
@@ -106,26 +106,26 @@ function __openConnection() {
 			console.log('fuzeListener:wss call == ' + fuzeWebSocketURL + token)
 			// On Open
 			ws.onopen = function(event) {
-				console.debug('fuzeListener: ws.onopen == ' + JSON.stringify(event));
+				console.log('fuzeListener: ws.onopen == ' + JSON.stringify(event));
 				__socketOpen();
 				
 			}
 			// On close
     		ws.onclose = function(event) { 
-    			console.debug('fuzeListener: ws.onclose == ' + event);
+    			console.log('fuzeListener: ws.onclose == ' + event);
 				__socketClose();
     		}
 
 		
 			// On Error
     		ws.onerror = function(event) { 
-    			//console.debug('fuzeListener: ws.onerror == ' + JSON.stringify(event));
+    			//console.log('fuzeListener: ws.onerror == ' + JSON.stringify(event));
     			__socketError(JSON.parse(event.data));
 			}
 
 			//On Message Received
     		ws.onmessage = function(event) { 
-    			//console.debug('fuzeListener: ws.message == ' + JSON.stringify(event.data));
+    			//console.log('fuzeListener: ws.message == ' + JSON.stringify(event.data));
     			__socketMessage(JSON.parse(event.data));
     		}
 		}
@@ -248,8 +248,8 @@ function __getCurrentCall() {
 }
 ///////////////////////////////////////////////////////////////////////////////////////
 function __socketError(eventData) {
-	console.debug("fuzeListener Event == " + eventData.operation);
-    console.debug('fuzeListener: Error '+ eventData.data);
+	console.log("fuzeListener Event == " + eventData.operation);
+    console.log('fuzeListener: Error '+ eventData.data);
 	bg.setSocketStatus(false);
 	//__disconnectRecovery();
 	bg.setSocketMessage('Unknown Web Socket Error');
@@ -289,7 +289,7 @@ function __socketOpen(eventData) {
 ///////////////////////////////////////////////////////////////////////////////////////
 function __socketMessage(eventData) {
 
-	//console.debug("__socketMessage PAYLOAD before Processing " + JSON.stringify(eventData));
+	//console.log("__socketMessage PAYLOAD before Processing " + JSON.stringify(eventData));
 	
 	if (eventData.id == "10") {
 		console.warn("__socketMessage message type (10) " + eventData.operation + "\n" + JSON.stringify(eventData));
@@ -325,25 +325,25 @@ function __socketMessage(eventData) {
 				prevId = eventData.callStateUpdate.previousCallIds[0];
 			} catch(e) {}
 		
-			console.debug("__socketMessage message THIS CALL BEING Procesed " + "prevId " + prevId + " " + JSON.stringify(eventData));
-			console.debug("__socketMessage message BEFORE HANDLE __handleCallEvent CallList and CurrentCall " + "\n" + bg.getCallList() + "\n" + bg.getCurrentCall()); 
+			console.log("__socketMessage message THIS CALL BEING Procesed " + "prevId " + prevId + " " + JSON.stringify(eventData));
+			console.log("__socketMessage message BEFORE HANDLE __handleCallEvent CallList and CurrentCall " + "\n" + bg.getCallList() + "\n" + bg.getCurrentCall()); 
 			if (!JSON.parse(bg.getCallList()) && (!JSON.parse(bg.getCurrentCall()))) {
 
 				//console.log("__socketMessage message BEFORE HANDLE __handleCallEvent CallList and CurrentCall " + "\n" + bg.getCallList() + "\n" + bg.getCurrentCall() + "\n" + JSON.stringify(eventData));
 				__handleCallEvent(eventData.callStateUpdate);
 				// handling all actions after the first call.
 			} else if (JSON.parse(bg.getCallList()) && ((bg.getCurrentCall() == eventData.callStateUpdate.callId ))) {
-				console.debug("__socketMessage message BEFORE HANDLE __handleCallEvent CallList and CurrentCall " + "\n" + bg.getCallList() + "\n" + bg.getCurrentCall() + "\n" + eventData.callStateUpdate.callId + "\n" + JSON.stringify(eventData));
+				console.log("__socketMessage message BEFORE HANDLE __handleCallEvent CallList and CurrentCall " + "\n" + bg.getCallList() + "\n" + bg.getCurrentCall() + "\n" + eventData.callStateUpdate.callId + "\n" + JSON.stringify(eventData));
 				__handleCallEvent(eventData.callStateUpdate);
 		
 			} else if (JSON.parse(bg.getCallList()) && ((bg.getCurrentCall() != eventData.callStateUpdate.callId ) && ((prevId != 'n/a') && (eventData.callStateUpdate.previousCallIds[0] == prevId)))) {
-				console.debug("__socketMessage message FALL THROUGH BEFORE HANDLE __handleCallEvent CallList and CurrentCall " + JSON.stringify(eventData));
+				console.log("__socketMessage message FALL THROUGH BEFORE HANDLE __handleCallEvent CallList and CurrentCall " + JSON.stringify(eventData));
 				__handleCallEvent(eventData.callStateUpdate);
 			} else {
 				__handleCallEvent(eventData.callStateUpdate);
-				console.debug("__socketMessage message THIS MUST BE A CALL " + bg.getCallList());
-				console.debug("__socketMessage message THIS MUST BE A CALL " + bg.getCurrentCall());
-				console.debug("__socketMessage message THIS CALL BEING IGNORED " + JSON.stringify(eventData));
+				console.log("__socketMessage message THIS MUST BE A CALL " + bg.getCallList());
+				console.log("__socketMessage message THIS MUST BE A CALL " + bg.getCurrentCall());
+				console.log("__socketMessage message THIS CALL BEING IGNORED " + JSON.stringify(eventData));
 			}
 		} else {
 			__unauthorizedMessage(eventData);
@@ -408,7 +408,7 @@ function __retrieveMessage(eventData) {
 			
 		} else if (subscriptionCount == 0) { 
 
-			console.debug('__retrieveMessage: No Subscription: Let\'s Make One');
+			console.log('__retrieveMessage: No Subscription: Let\'s Make One');
 			var subscribeMe = '{"id" : "10", "operation":"create","subscription":{"tenantId":"' + lc.getTenantId() + '","userId":"' + lc.getTrimmedUsername()  + '"}}';
 
 			ws.send(subscribeMe);	
@@ -518,7 +518,7 @@ console.info('__handleCallActions: callData: ' + JSON.stringify(callData, null, 
 		
 			bg.setIsCallAnswered(false);
 			
-			console.debug('__handleCallActions: callstate: DIAL || CALL_START for .... : ' + JSON.stringify(callData, null, 2));
+			console.log('__handleCallActions: callstate: DIAL || CALL_START for .... : ' + JSON.stringify(callData, null, 2));
 			
 			if (JSON.parse(callData.ringback)) {
 				console.log('__handleCallActions: callState: RING ringback == true for .... :\n' + JSON.stringify(callData, null, 2))

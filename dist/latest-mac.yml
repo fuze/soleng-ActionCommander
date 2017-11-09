@@ -1,0 +1,10 @@
+version: 2.8.1-2.964
+files:
+  - url: Fuze_Connect-2.8.1-2.964-mac.zip
+    sha512: ekfHLzJGUoZBrDltYj+tw+Kiq0U/+HunAk6kF5yIB2+Te+OOvcwuPgJBDeHzqby1X+P/KrgvR0nt3zNuHMv53Q==
+  - url: Fuze_Connect-2.8.1-2.964.dmg
+    sha512: 9kHFko8sQL+3xcxYuBlHu4CoFalojJ6IF+y0YjoN8zlDg5pvKIKvpesyqEr4N68YveLZ2YThPSY/54sYDQ8gWg==
+    size: 56917238
+path: Fuze_Connect-2.8.1-2.964-mac.zip
+sha512: ekfHLzJGUoZBrDltYj+tw+Kiq0U/+HunAk6kF5yIB2+Te+OOvcwuPgJBDeHzqby1X+P/KrgvR0nt3zNuHMv53Q==
+releaseDate: '2017-11-09T18:50:29.014Z'

@@ -10,14 +10,14 @@ const endPointValidate = require('../js/validateEndPoint');
 const Bus = require('electron-eventbus');
 const eventBus = new Bus();
 
-console.debug("initializeMainPage " + JSON.stringify(pjson, null, 2));
+console.log("initializeMainPage " + JSON.stringify(pjson, null, 2));
 
 
 window.onload = function () {
 	reset.resetBackGroundData();
-	console.debug("in InitializeMainPage " + 'bbbb');
+	console.log("in InitializeMainPage " + 'bbbb');
 	settings.getUserSettings(function(json) {
-		console.debug("in InitializeMainPage " + JSON.stringify(json, null, 2));
+		console.log("in InitializeMainPage " + JSON.stringify(json, null, 2));
 		connect.checkConnectivity(json, function(retObj) {
 			console.warn("InitializeMainPage: Socket" + JSON.stringify(retObj));
 			if ( retObj.code == 200) {

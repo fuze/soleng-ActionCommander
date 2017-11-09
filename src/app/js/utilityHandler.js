@@ -28,10 +28,10 @@ function utilityHandler() {};
 utilityHandler.prototype.utilityActionController = function(action, clickdata) {
 //exports.utilityActionController = function(action, clickdata) {
 
-	console.debug("utilityController: Action == " + action + " Call Data \n" + JSON.stringify(clickdata) + "\n");
+	console.log("utilityController: Action == " + action + " Call Data \n" + JSON.stringify(clickdata) + "\n");
 	var crmPath = lc.getRoutePath();
 	if (action == 'create' || action == 'callend') {
-		console.debug("clickActionController: Call Data \n" + JSON.stringify(clickdata) + "\n");
+		console.log("clickActionController: Call Data \n" + JSON.stringify(clickdata) + "\n");
 		
 		if(clickdata.type == 'postNote') {
 			var newjson = JSON.parse('{"type":"saveNotes", "endtime" : "' + Date.now() + '" }');
@@ -80,7 +80,7 @@ utilityHandler.prototype.utilityActionController = function(action, clickdata) {
 			title = '';
 		}
 	} else if (action == 'clicktocall') {
-		console.debug("utilityActionController: Action == " + action + " " + JSON.stringify(clickdata, null, 2));
+		console.log("utilityActionController: Action == " + action + " " + JSON.stringify(clickdata, null, 2));
 		ctc.clickToCall(clickdata.phone);
 	} 
 
@@ -95,7 +95,7 @@ utilityHandler.prototype.utilityActionController = function(action, clickdata) {
 function contactsOpenWindow(title, idforwin) {
 
 	if ((lc.getCEType() == 'sfdcservicecloud') || (lc.getCEType() == 'sfdc')) {
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/' + idforwin;
 		shell.openExternal(openwinurl)
 		
@@ -104,7 +104,7 @@ function contactsOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'servicenow') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/nav_to.do?uri=sys_user.do?sys_id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/nav_to.do?uri=sys_user.do?sys_id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/nav_to.do?uri=sys_user.do?sys_id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -112,13 +112,13 @@ function contactsOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'zendesk') {
 
-		console.debug("openwindow == " +lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " +lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/agent/users/' + idforwin;
 		shell.openExternal(openwinurl)
 
 	} else if (lc.getCEType() == 'zohocrm') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Contacts&id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Contacts&id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Contacts&id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -126,7 +126,7 @@ function contactsOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'dynamicscrmadfs') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=contact&id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=contact&id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=contact&id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -154,7 +154,7 @@ function contactsOpenWindow(title, idforwin) {
 function incidentsOpenWindow (title, idforwin) {
 	if (lc.getCEType() == 'sfdcservicecloud') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -162,7 +162,7 @@ function incidentsOpenWindow (title, idforwin) {
 
 	} else if (lc.getCEType() == 'servicenow') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/nav_to.do?uri=incident.do?sys_id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/nav_to.do?uri=incident.do?sys_id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/nav_to.do?uri=incident.do?sys_id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -170,9 +170,9 @@ function incidentsOpenWindow (title, idforwin) {
 
 	} else if (lc.getCEType() == 'zendesk') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/agent/tickets/' + idforwin;
-		console.debug("openwindow == " + openwinurl );
+		console.log("openwindow == " + openwinurl );
 		shell.openExternal(openwinurl);
 		//var new_window = window.open(openwinurl, title + idforwin);
 		//new_window.focus();
@@ -188,7 +188,7 @@ function incidentsOpenWindow (title, idforwin) {
 function accountsOpenWindow(title, idforwin) {
 	if ((lc.getCEType() == 'sfdcservicecloud') || (lc.getCEType() == 'sfdc')) {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title);
@@ -196,7 +196,7 @@ function accountsOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'servicenow') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/nav_to.do?uri=core_company.do?sys_id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/nav_to.do?uri=core_company.do?sys_id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/nav_to.do?uri=core_company.do?sys_id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -204,7 +204,7 @@ function accountsOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'zendesk') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/agent/organizations/' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -212,7 +212,7 @@ function accountsOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'zohocrm') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Accounts&id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Accounts&id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Accounts&id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -220,7 +220,7 @@ function accountsOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'dynamicscrmadfs') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=account&id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=account&id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=account&id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -250,7 +250,7 @@ function accountsOpenWindow(title, idforwin) {
 function activityOpenWindow(title, idforwin, subtype) {
 	if (lc.getCEType() == 'sfdc') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -258,7 +258,7 @@ function activityOpenWindow(title, idforwin, subtype) {
 
 	} else if (lc.getCEType() == 'dynamicscrmadfs') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=' + subtype + '&id=' + idforwin);
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=' + subtype + '&id=' + idforwin);
 		var openwinurl = lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=' + subtype + '&id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -288,7 +288,7 @@ function activityOpenWindow(title, idforwin, subtype) {
 function opportunityOpenWindow(title, idforwin) {
 	if (lc.getCEType() == 'sfdc') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -296,7 +296,7 @@ function opportunityOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'zohocrm') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Potentials&id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Potentials&id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/crm/EntityInfo.do?module=Potentials&id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);
@@ -304,7 +304,7 @@ function opportunityOpenWindow(title, idforwin) {
 
 	} else if (lc.getCEType() == 'dynamicscrmadfs') {
 
-		console.debug("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=opportunity&id=' + idforwin );
+		console.log("openwindow == " + lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=opportunity&id=' + idforwin );
 		var openwinurl = lc.getCrmBaseUrl() + '/main.aspx?pagetype=entityrecord&etn=opportunity&id=' + idforwin;
 		shell.openExternal(openwinurl)
 		//var new_window = window.open(openwinurl, title + idforwin);

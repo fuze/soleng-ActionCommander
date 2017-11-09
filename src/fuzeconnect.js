@@ -10,34 +10,38 @@ const Bus = require('electron-eventbus');
 const eventBus = new Bus();
 
 // Make this available in all modules
-const log = require('./app/js/util/util.log')(global.pjson.productName || 'Fuze Connect')
+const log = require('./app/js/util/util.log')
+//(global.pjson.productName || 'Fuze Connect')
 
 require('electron-debug')({showDevTools: true});
 
-require('./lib/log')(pjson.productName || 'Fuze Connect')
+require('./lib/log')
+//(pjson.productName || 'Fuze Connect')
 app.setName(pjson.productName || 'Fuze Connect')
-
 
 // Manage unhandled exceptions as early as possible
 process.on('uncaughtException', (e) => {
 	console.error(`Caught unhandled exception: ${e}`)
-	Dialog.showErrorBox('Caught unhandled exception', e.message || 'Unknown error message')
+	// Dialog.showErrorBox('Caught unhandled exception', e.message || 'Unknown error message')
 	app.quit()
 })
 
 // Load build target configuration file
 try {
-	var config = require(process.cwd() +'/src/config/config.json')
+	//var config = require(process.cwd() +'/src/config/config.json')
+	var config = require('./config/config.json')
+	console.log(`config: ${config}`);
 	_.merge(global.pjson.config, config)
-	//console.debug('Config file loaded ==  ' + JSON.stringify(pjson.config, null, 2))
+	//console.log('Config file loaded ==  ' + JSON.stringify(pjson.config, null, 2))
 } catch (e) {
 	console.error(`Caught unhandled exception: ${e}`)
-	console.debug('No config file loadedPlease Contact Support')
+	console.log('No config file loadedPlease Contact Support')
 	app.quit()
 }
-//console.debug(JSON.stringify(pjson.config, null, 2))
+//console.log(JSON.stringify(pjson.config, null, 2))
 
 const isDev = (require('electron-is-dev') || pjson.config.debug)
+console.log()
 global.appSettings = pjson.config
 
 if (isDev) {
@@ -65,6 +69,7 @@ global.utilWindow = null;
 
 app.setName(pjson.productName || 'Fuze Connect')
 
+
 function initialize () {
 
 
@@ -78,7 +83,7 @@ function initialize () {
 		infoWindow = null;
 		passWindow = null;
 		utilWindow = null;
-		
+
 	}
 
 	// MainWindow Section
@@ -115,7 +120,7 @@ function initialize () {
 
 	// Remove file:// if you need to load http URLs
 	win.loadURL(`file://${__dirname}/${pjson.config.initurl}`, {})
-	
+
 	win.on('closed', onClosed)
 
 	// Then, when everything is loaded, show the window and focus it so it pops up for the user
@@ -156,10 +161,10 @@ function initialize () {
 	win.webContents.on('did-finish-load', () => {
 		win.webContents.send('contents-loaded', 'contents-loaded')
 	})
-	
+
 	//
-	
-	
+
+
 	return win
 	}
 
@@ -174,6 +179,7 @@ function initialize () {
 			mainWindow = createMainWindow()
 		}
 	})
+	
 	app.on('ready', () => {
 		Menu.setApplicationMenu(createMenu())
 		mainWindow = createMainWindow()
@@ -207,18 +213,18 @@ function initialize () {
 				})
 		} catch (e) {
 			console.error(e.message)
-			Dialog.showErrorBox('Update Error', e.message)
+			//Dialog.showErrorBox('Update Error', e.message)
 		}
 	})
 
 	app.on('will-quit', () => {})
-	
-	
+
+
 	//////////////////////////////////////////////////////////////////////////////////////
-	// Main  Window ipcRender Events 
+	// Main  Window ipcRender Events
 	//////////////////////////////////////////////////////////////////////////////////////
 	//MainWindow Menu Actions
-	// reinitialize after data update 
+	// reinitialize after data update
 	ipcMain.on('re-initialize', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
 	});
@@ -226,13 +232,13 @@ function initialize () {
 	ipcMain.on('reset-config', () => {
 		mainWindow.loadURL(`file://${__dirname}/${pjson.config.reseturl}`, {})
 	});
-	
+
 	//MainWindow Events From HandleUserData
 	//End Point is Valid -- This is checked after the Socket is Checked
 	ipcMain.on('end-point-validated', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
 	});
-	
+
 	//Invalid Socket
 	ipcMain.on('socket-invalid-auth', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
@@ -242,43 +248,43 @@ function initialize () {
 	ipcMain.on('complete-user-data', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
 	});
-	
+
 	//Prompt For User Name
 	//ipcMain.on('prompt-for-user-name', (event, arg) => {
 	//	//ipcRenderer.send('setup-window', 'setup');
 	//	//ipcRenderer.send('open-prompt-for-user-name', arg);
 	//	//mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
 	//});
-	
+
 	//No Settings Available Show Login
 	ipcMain.on('show-login-window', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
 		eventBus.emit('show-login-window', arg);
 	});
-	
+
 	//User Not Active
 	ipcMain.on('user-not-active', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
 	});
-	
+
 	//No Matching User
 	ipcMain.on('no-matching-user', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
 	});
-	
+
 	//No Matching User
 	ipcMain.on('too-many-matching-user', (event, arg) => {
 		console.error("Too Many Matching User");
 	});
-	
+
 	//Cannot Create User Settings
 	ipcMain.on('cannot-create-user-settings', (event, arg) => {
 		console.error("Cannot Create User Settings");
 	});
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Info Window
-	//////////////////////////////////////////////////////////////////////////////////////	
+	//////////////////////////////////////////////////////////////////////////////////////
 	// Info Window
 	ipcMain.on('open-info-window', () => {
 		if (infoWindow) {
@@ -296,7 +302,7 @@ function initialize () {
 			infoWindow = null
 		})
 	})
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Utility Window -- Call Notes and the like
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -305,7 +311,7 @@ function initialize () {
 		if (utilWindow) {
 			return
 		}
-		
+
 		utilWindow = new BrowserWindow({
 			"transparent" : false,
 			'width': 450,
@@ -328,7 +334,7 @@ function initialize () {
 			utilWindow = null
 		});
 	});
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Password Window -- Password Prompt for End-Point Creation and _prompt
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -336,7 +342,7 @@ function initialize () {
 		if (passWindow) {
 			return
 		}
-		
+
 		passWindow = new BrowserWindow({
 			"transparent" : false,
 			'width': 440,
@@ -351,16 +357,16 @@ function initialize () {
 			passWindow = null
 		})
 	});
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	// Password Window -- Password Prompt for End-Point Creation and _prompt
 	//////////////////////////////////////////////////////////////////////////////////////
 	ipcMain.on('prompt-for-user-name', (event, arg) => {
-		console.debug("Args == " + JSON.stringify(arg));
+		console.log("Args == " + JSON.stringify(arg));
 		if (passWindow) {
 			return
 		}
-		
+
 		passWindow = new BrowserWindow({
 			"transparent" : false,
 			'width': 440,
@@ -375,8 +381,8 @@ function initialize () {
 			passWindow = null
 		})
 	});
-	
-	
+
+
 }
 
 
@@ -402,4 +408,3 @@ function createMenu () {
 
 // Manage Squirrel startup event (Windows)
 require('./lib/auto-update/startup')(initialize)
-

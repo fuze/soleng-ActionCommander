@@ -7,8 +7,8 @@ const eventBus = new Bus();
 function connectivityCheck() {};
 //------------------------------------------------------------------------------------
 connectivityCheck.prototype.checkConnectivity = function(json, callback) {
-	const fuzeListener = require('../js/fuzelistener');
-	const endPointValidate = require('../js/validateEndPoint');
+	const fuzeListener = require('./fuzeListener');
+	const endPointValidate = require('./validateEndPoint');
 	var retObj = JSON.parse('{ "code": 200 }');
 	fuzeListener.startSocket(function(startObj) {
 		retObj = startObj;
@@ -30,16 +30,16 @@ connectivityCheck.prototype.checkConnectivity = function(json, callback) {
 					});
 				} else {
 					console.warn("Check Connectivity: Socket Close Failed" + JSON.stringify(stopObj));
-					eventBus.emit(stopObj.action, stopObj);	
+					eventBus.emit(stopObj.action, stopObj);
 					retObj = stopObj;
 				}
 			});
 		} else {
 			console.warn("Check Connectivity: Socket Open Failed" + JSON.stringify(startObj));
 			eventBus.emit(startObj.action, startObj);
-			retObj = JSON.parse('{ "code": 401 }');;	
+			retObj = JSON.parse('{ "code": 401 }');;
 		}
-	});	
+	});
 	callback(retObj);
 }
 

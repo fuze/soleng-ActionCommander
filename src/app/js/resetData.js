@@ -5,7 +5,7 @@ const mainWindow = remote.getGlobal('mainWindow')
 const pjson = remote.getGlobal('pjson')
 
 window.onload = function () {
-	console.debug("initialize Data: in window.onload " + 'bbbb');
+	console.log("initialize Data: in window.onload " + 'bbbb');
 	settings.resetSettings(function(json) {
 		//__dirname = __dirname.substring(0, __dirname.lastIndexOf('/'));
 		var url = pjson.config.loginurl;
