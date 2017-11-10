@@ -1,2 +1,0 @@
-require('minimist')
-module.exports = {}
