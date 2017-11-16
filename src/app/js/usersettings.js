@@ -170,7 +170,7 @@ function processUserData(obj, callback) {
 			console.warn("User Data getUserSettings" + JSON.stringify(pjson, null, 2));
 			callback(JSON.parse('{"code" : 202, "action" : 1001, "event" : "prompt-for-user-name",  "message" : "Prompt For User Name" }'));
 			console.log('getUserSettings: obj.userData.crmid ' + obj.userData.crmid);
-		} else if (obj.userData.integration_ce_id === '') {
+		} else if (obj.userData.integration_ce_id === '' || obj.userData.integration_ce_id == null) {
 			lc.setLocalUserData(obj.userData);
 			_.merge(pjson.config, obj)
 			console.warn("User Data getUserSettings" + JSON.stringify(pjson, null, 2));
