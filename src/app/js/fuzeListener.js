@@ -19,6 +19,8 @@ const 	_sockettimer = pjson.config.socketTimer
 var 	tmpUser =	pjson.config.userData.username;
 const   socketUser = lc.getTrimmedUsername();
 const 	socketPassword = lc.getPassword();
+const 	socketWardenToken = lc.getWardenToken();
+
 const 	socketTenant	= lc.getTenantId();
 var 	_lastHeartbeat = 0
 var 	_keepAlive = true;
@@ -39,6 +41,7 @@ console.log("This is the fuzeListener.js");
 	console.info("fuzeListener: _sockettimer " + _sockettimer)
 	console.info("fuzeListener: socketUser " + socketUser)
 	console.info("fuzeListener: socketPassword " + socketPassword)
+	console.info("fuzeListener: socketWardenToken " + socketWardenToken)
 	console.info("fuzeListener: socketTenant " + socketTenant)
 	__startSocket();
 }
@@ -52,7 +55,7 @@ console.log("This is the fuzeListener.js");
 ////////////////////////////////////////////////////////////////////////////////////////
 function __startSocket()  {
 	//var try2Open;
-	console.log('fuzeListener: username: ' + socketUser + ', password: ' +  socketPassword +' , tenantid: ' + socketTenant);
+	console.log('fuzeListener: username: ' + socketUser + ', password: ' +  socketPassword + ' , tenantid: ' + socketTenant);
 	console.log('fuzeListener: fuzeAuthenticationURL ' + fuzeAuthenticationURL);
 	console.log('fuzeListener: ws ' + ws);
 
@@ -93,8 +96,9 @@ function __openConnection() {
 	console.log ("__openConnection -- " + socketTenant);
 
 	xhr.open('POST', fuzeAuthenticationURL, true);
-	xhr.setRequestHeader('username', socketUser);
-	xhr.setRequestHeader('password', socketPassword);
+	//xhr.setRequestHeader("Authorization",  'Bearer ' + tempToken );
+
+	xhr.setRequestHeader('Authorization', 'Bearer ' + socketWardenToken);
 	xhr.onreadystatechange = function() {
 	
 	console.log('startSocket:readystate == changed.');

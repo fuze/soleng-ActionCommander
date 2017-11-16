@@ -7,10 +7,13 @@ const fs = require('fs');
 const _ = require('lodash');
 const remote = require('electron').remote;
 const pjson = remote.getGlobal('pjson')
+const mainWindow = remote.getGlobal('mainWindow')
+//const pjson = require('../../package.json');
 const crypt = require('./util/util.password');
 const Bus = require('electron-eventbus');
 const eventBus = new Bus();
 const lc = require('./localConfigSettings');
+const userhandler = require('./handleUserData');
 
 console.log(`pjson: ${pjson}`);
 var config = pjson.config;
@@ -50,8 +53,8 @@ function setCrmId(id, callback) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // setSettings
-function setSettings(results, passwd, callback) {
-	results['password'] = crypt.encryptPassword(passwd)
+function setSettings(results, wardenToken, callback) {
+	results['wardenToken'] = wardenToken;
 	results['CloudElementsId'] = results.company_ce_id + ", " + results.integration_ce_id + ", " + results.user_ce_id;
 	settings.setAll({ userData : results });
 	var obj = settings.getAll()
@@ -61,7 +64,7 @@ function setSettings(results, passwd, callback) {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // getUserData
- function getUserData(username, password, callback) {
+ function getUserData(username, wardenToken, callback) {
 
 	console.log('getUserData:  ' + JSON.stringify(config, null, 2));
 
@@ -84,13 +87,26 @@ function setSettings(results, passwd, callback) {
 		 		callback(JSON.parse('{"code" : 409, "action" : 1006, "event" : "too-many-matching-user",  "message" : "Too Many Matching User" }'));
       		} else  {
 				results = results[0];
-				setSettings(results, password, callback)
+				setSettings(results, wardenToken, callback)
       		}
   		}
 	}
 	xhr.send();
 };
+//////////////////////////////////////////////////////////////////////////////////////////
+// createUserSettings
+//UserSettings.prototype.createUserSettings = function (username, password, callback) {
+function createUserSettings(wardenData, callback) {
+	console.log('createUserSettings: global.appSettings == ' + JSON.stringify(pjson.config, null, 2));
+	getUserData(wardenData.data.entity.origin.id, wardenData.data.grant.token, function(obj) {
+		console.log('createUserSettings: Settings will be Refreshed or Created' );
+		processUserData(obj, function(ret) {
+			console.log('createUserSettings: ' + JSON.stringify(ret, null, 2));
+			callback(ret);
+		});
 
+	})
+}
 //////////////////////////////////////////////////////////////////////////////////////////
 // getUserSettings
 UserSettings.prototype.getUserSettings = function (callback) {
@@ -109,65 +125,30 @@ console.log('getUserSettings: global.appSettings == ' + JSON.stringify(pjson.con
 					callback(JSON.parse('{"code" :500, "action" : 1007, "event" : "cannot-create-user-settings",  "message" : "Cannot Create User Settings"}'));
         		} else {
   					var username = settings.get('userData.username');
-  					var password = crypt.decryptPassword(settings.get('userData.password'))
+  					var wardenToken = settings.get('userData.wardenToken')
   					console.log('getUserSettings: username == ' + username)
-  					console.log('getUserSettings: password == ' + password)
-					getUserData(username, password, function(obj) {
+  					console.log('getUserSettings: wardenToken == ' + wardenToken)
+					getUserData(username, wardenToken, function(obj) {
 						console.log('getUserSettings: Settings will be Refreshed or Created' );
 						processUserData(obj, function(ret) {
 							console.log('createUserSettings: ' + JSON.stringify(ret, null, 2));
 							callback(ret);
 						});
-						/*
-						console.warn(JSON.stringify(obj, null, 2));
-						//callback(obj);
-						if (!obj.hasOwnProperty('code')) {
-							console.warn('getUserSettings: No Code');
-							if (obj.userData.active !== 'Yes') {
-								_.merge(pjson.config, obj)
-								callback(JSON.parse('{"code" : 403, "action" : 1004, "event" : "user-not-active",  "message" : "User Not Active" }'));
-							} else if (obj.userData.crmid === '_prompt') {
-								lc.setLocalUserData(obj.userData);
-								_.merge(pjson.config, obj)
-								console.warn("User Data getUserSettings" + JSON.stringify(pjson, null, 2));
-								callback(JSON.parse('{"code" : 202, "action" : 1001, "event" : "prompt-for-user-name",  "message" : "Prompt For User Name" }'));
-								console.log('getUserSettings: obj.userData.crmid ' + obj.userData.crmid);
-							} else if (obj.userData.ce_id === '') {
-								lc.setLocalUserData(obj.userData);
-								_.merge(pjson.config, obj)
-								console.warn("User Data getUserSettings" + JSON.stringify(pjson, null, 2));
-								callback(JSON.parse('{"code" : 206, "action" : 1003, "event" : "no-end-point-defined",  "message" : "No End Point Defined" }'));
-								console.log('getUserSettings: obj.userData.crmid ' + obj.userData.crmid);
-							} else {
-								_.merge(pjson.config, obj)
-								lc.setLocalUserData(obj.userData);
-								callback(JSON.parse('{"code" : 200, "action" : 1000, "event" : "complete-user-data", "message" : "Complete User Data" }'));
-							}
-						} else {
-								callback(obj);
-						}
-						*/
+
 					})
 				}
 			})
 		} else {
 			console.log('getUserSettings: No Data ');
-			callback(JSON.parse('{"code" : 204, "action" : 1002, "event" : "show-login-window",  "message" : "No Settings Available Show Login"}'));
+			createUserSettings(mainWindow.wardenData, function(json) {
+				console.log("background: Action == "+ json.action + " event " + json.event + " message " + json.message);
+				console.log('initializeData:  ' + JSON.stringify(json, null, 2))
+				userhandler.userDataHandler(json, function(obj) {
+					console.warn("mainSetup UserHandler" + obj);
+				});
+			});
+			//callback(JSON.parse('{"code" : 204, "action" : 1002, "event" : "show-login-window",  "message" : "No Settings Available Show Login"}'));
 		}
-	})
-}
-//////////////////////////////////////////////////////////////////////////////////////////
-// createUserSettings
-//UserSettings.prototype.createUserSettings = function (username, password, callback) {
-UserSettings.prototype.createUserSettings = function (username, password, callback) {
-	console.log('createUserSettings: global.appSettings == ' + JSON.stringify(pjson.config, null, 2));
-	getUserData(username, password, function(obj) {
-		console.log('createUserSettings: Settings will be Refreshed or Created' );
-		processUserData(obj, function(ret) {
-			console.log('createUserSettings: ' + JSON.stringify(ret, null, 2));
-			callback(ret);
-		});
-
 	})
 }
 //////////////////////////////////////////////////////////////////////////////////////////

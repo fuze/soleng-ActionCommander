@@ -1,6 +1,7 @@
 'use strict'
 
 const { ipcRenderer } = require('electron');
+const remote = require('electron').remote;
 const mainWindow = remote.getGlobal('mainWindow')
 const pjson = remote.getGlobal('pjson')
 const app = remote.app;
@@ -13,7 +14,7 @@ const eventBus = new Bus();
 function userHandler() {};
 //////////////////////////////////////////////////////////////////////////////////////////
 // getUserSettings
-userHandler.prototype.userDataHandler = function (json, callback) {
+ userHandler.prototype.userDataHandler = function (json, callback) {
 
 	console.warn("userHandler: Object == " + JSON.stringify(json, null, 2));
 	console.warn("userHandler: code == " + json.code);

@@ -520,6 +520,16 @@ localConfigSettings.prototype.setRecordingField = function(vtrecfield) {
 console.log("vtrecfield: " + vtrecfield);
     localStorage.setItem('vtrecfield', vtrecfield);
 }
+////////////////////////////////////////////////////////////////////////////////////////
+// Warden Token Field
+localConfigSettings.prototype.getWardenToken = function() {
+    return localStorage.getItem('wardenToken');
+
+}
+localConfigSettings.prototype.setWardenToken = function(wardenToken) {
+    console.log("wardenToken: " + wardenToken);
+    localStorage.setItem('wardenToken', wardenToken);
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // getUserDataCallBack
@@ -569,6 +579,7 @@ localConfigSettings.prototype.setLocalUserData = function (userdata) {
 	this.setCrmUser(userdata.crmid);
 
 	this.setFullname(userdata.fname + ' ' + userdata.lname);
+    this.setWardenToken(userdata.wardenToken);
 
 }
 module.exports = new localConfigSettings();
