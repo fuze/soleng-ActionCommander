@@ -69,6 +69,10 @@ function setSettings(results, wardenToken, callback) {
 	console.log('getUserData:  ' + JSON.stringify(config, null, 2));
 
 	var url = config.getUserDataUrl + username;
+	if (localStorage.getItem('crmType')!=null && localStorage.getItem('crmType')!='undefined' && localStorage.getItem('crmType')!='')
+	{
+		url += ' ' + localStorage.getItem('crmType');
+	}
 	var resp;
 	console.log('getUserData:  ' + url);
 	// Get inbox entries

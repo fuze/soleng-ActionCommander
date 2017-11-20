@@ -63,6 +63,7 @@ global.loginWindow = null;
 let infoWindow = null;
 global.passWindow = null;
 global.utilWindow = null;
+global.crmTypeWindow = null;
 
 app.setName(pjson.productName || 'Fuze Connect')
 
@@ -77,6 +78,7 @@ function initialize () {
 		infoWindow = null;
 		passWindow = null;
 		utilWindow = null;
+		crmTypeWindow = null;
 	}
 
 
@@ -147,11 +149,11 @@ function initialize () {
 		// and restore the maximized or full screen state
 		mainWindowState.manage(win)
 
-		var openwinurl = "https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com";
+		var openwinurl = pjson.config.wardenUniversalLoginUrl;//"https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com";
 		win.loadURL(openwinurl, {})
 
 		win.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl, isMainFrame) {
-
+console.log("CRM type::" + loginWindow.crmType)
 			universalLogin.replaceToken(newUrl, function(results) {
 				mainWindow = createFconMainWindow(results);
 			});
@@ -348,12 +350,34 @@ function initialize () {
 	});
 	// Reset Configuration
 	ipcMain.on('reset-config', () => {
-		console.log("RESET CONFIS")
 		//mainWindow.loadURL(`file://${__dirname}/${pjson.config.reseturl}`, {})
 		resetSettings( function(){
 			mainWindow.close();
 			loginWindow  = createLoginWindow();
 		});
+	});
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	// Password Window -- Password Prompt for End-Point Creation and _prompt
+	//////////////////////////////////////////////////////////////////////////////////////
+	ipcMain.on('set-crmType', () => {
+		if (crmTypeWindow) {
+			return
+		}
+		console.log("YEAH")
+		crmTypeWindow = new BrowserWindow({
+		"transparent" : false,
+		'width': 440,
+		'height': 320,
+		'resizable': false,
+		'frame': false
+		})
+
+		crmTypeWindow.loadURL(`file://${__dirname}/app/html/crmType.html`, {})
+
+		crmTypeWindow.on('closed', () => {
+			crmTypeWindow = null
+		})
 	});
 
 	//MainWindow Events From HandleUserData
@@ -381,23 +405,32 @@ function initialize () {
 
 	//No Settings Available Show Login
 	ipcMain.on('show-login-window', (event, arg) => {
-		mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
+		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
+		mainWindow.close();
+		loginWindow  = createLoginWindow();
+
 		eventBus.emit('show-login-window', arg);
 	});
 
 	//User Not Active
 	ipcMain.on('user-not-active', (event, arg) => {
-		mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
+		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
+		mainWindow.close();
+		loginWindow  = createLoginWindow();
 	});
 
 	//No Matching User
 	ipcMain.on('no-matching-user', (event, arg) => {
-		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
+		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
+		mainWindow.close();
+		loginWindow  = createLoginWindow();
 	});
 
 	//No Matching User
 	ipcMain.on('too-many-matching-user', (event, arg) => {
 		console.error("Too Many Matching User");
+		mainWindow.close();
+		loginWindow  = createLoginWindow();
 	});
 
 	//Cannot Create User Settings

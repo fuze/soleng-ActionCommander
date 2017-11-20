@@ -13,5 +13,6 @@
 	"fuzeClick2CallURL" : 		"https://synapse.thinkingphones.com/tpn-webapi-broker/services/calls/preferredCall?",
 	"cloudElementsUrl" : 		"https://console.cloud-elements.com/elements/api-v2/hubs",
 	"cloudElementsApiUrl" : 	"https://api.cloud-elements.com/elements/api-v2/",
-	"cldElmntsProvUrl" : 		"https://console.cloud-elements.com/elements/api-v2/elements/"
+	"cldElmntsProvUrl" : 		"https://console.cloud-elements.com/elements/api-v2/elements/",
+	"wardenUniversalLoginUrl":  "https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com"
 }

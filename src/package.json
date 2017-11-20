@@ -32,6 +32,7 @@
     "callnotes" 	: "app/html/callnotes.html",
     "crmuserprompt" : "app/html/crmuserprompt.html",
     "focusurl" 		: "app/html/focusvison.html",
+    "crmtypeurl" 	: "app/html/crmType.html",
     "update": {
       "url": false
     }

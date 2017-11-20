@@ -64,6 +64,22 @@ var viewSubmenu = [
       }
     }
   },
+  {
+    type: 'separator'
+  },
+  {
+    type: 'separator'
+  },
+  {
+    label: 'Set Custom Type',
+    accelerator: 'CmdOrCtrl+T',
+    click: function (item, focusedWindow) {
+      if (focusedWindow) {
+        //focusedWindow.reload()
+        ipcMain.emit('set-crmType')
+      }
+    }
+  },
  
 ]
 
