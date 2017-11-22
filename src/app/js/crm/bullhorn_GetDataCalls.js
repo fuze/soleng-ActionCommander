@@ -59,7 +59,10 @@ function bullhorn__getCandidateByPhone(json) {
 	var header = lc.getCloudElementsId();
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
 
-	url +='/candidates?where=(phone=\'' +  internationalRawNumber + '\' or phone=\'%2B' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\')';
+	url +='/candidates?where=( phone=\'' +  internationalRawNumber + '\' or phone=\'%2B' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\' ';
+	url +='or phone2=\'' +  internationalRawNumber + '\' or phone2=\'%2B' +  internationalRawNumber + '\' or phone2=\'' +  nationalNumber + '\' or phone2=\'' +  nationalRawNumber + '\' ';
+	url +='or mobile=\'' +  internationalRawNumber + '\' or mobile=\'%2B' +  internationalRawNumber + '\' or mobile=\'' +  nationalNumber + '\' or mobile=\'' +  nationalRawNumber + '\')';
+
 	console.log("bullhorn__getCandidateByPhone: url == " + url); 
 
 	var xhr = new XMLHttpRequest();
@@ -117,9 +120,9 @@ function bullhorn__getContactByPhone(json) {
 	var header = lc.getCloudElementsId();
 	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
 
-	url +='/contacts?where=( phone=\'' +  internationalRawNumber + '\' or phone=\'%2B' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\' )';
-	// or phone=\'%2B' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\')';
-	//url +='or mobile=\'' +  internationalRawNumber + '\' or mobile=\'' +  nationalNumber + '\' or mobile=\'' +  nationalRawNumber + '\')';
+	url +='/contacts?where=( phone=\'' +  internationalRawNumber + '\' or phone=\'%2B' +  internationalRawNumber + '\' or phone=\'' +  nationalNumber + '\' or phone=\'' +  nationalRawNumber + '\' ';
+	url +='or phone2=\'' +  internationalRawNumber + '\' or phone2=\'%2B' +  internationalRawNumber + '\' or phone2=\'' +  nationalNumber + '\' or phone2=\'' +  nationalRawNumber + '\' ';
+	url +='or mobile=\'' +  internationalRawNumber + '\' or mobile=\'%2B' +  internationalRawNumber + '\' or mobile=\'' +  nationalNumber + '\' or mobile=\'' +  nationalRawNumber + '\')';
 
 	console.log("bullhorn__getContactByPhone: url == " + url);
 

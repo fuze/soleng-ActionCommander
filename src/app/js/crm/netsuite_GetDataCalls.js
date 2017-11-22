@@ -44,9 +44,57 @@ exports.netsuite__callHandler = function(callState, json) {
 	}
 
 };
-
 ////////////////////////////////////////////////////////////////////////////////////////
 function netsuite__getContactByPhone(json, callback) {
+
+	var callerId = bg.getRawCallId();
+	var internationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.International);
+	var internationalRawNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.InternationalRaw);
+	var nationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.National);
+	var nationalRawNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.NationalRaw);
+	var header = lc.getCloudElementsId();
+	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
+
+	url +='/contacts?where=(phone like \'' +  nationalNumber + '\')';
+	console.log("netsuite__getContactByPhoneDataCall: url == " + url);
+
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	xhr.open('GET', url, true);
+	xhr.setRequestHeader("authorization",  header );
+	xhr.setRequestHeader("cache-control", "no-cache");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			if ( xhr.status == 200 ) {
+				var results = JSON.parse( xhr.responseText );
+				if (results.length <= 0) {
+					console.log("netsuite__getContactByPhone: ");
+					netsuite__getContactByPhoneGeneric(json, netsuite__buildAccountListForGetContactByAccountId);
+				} else {
+					console.log("netsuite__getContactByPhone == " + JSON.stringify(results, null, 2));
+
+					bg.setCallerName(results[0].firstName + ' ' + results[0].lastName);
+					bg.setContactRole(results[0].salutation);
+					if (results.length == 1)
+						bg.setUserConnectorAcct(results[0].internalId);
+
+					bg.setAcctConnectorID(results[0].company.internalId);
+					netsuite__getAccountForContactResults(results, netsuite__dispatchAccountForContactResults);
+					bg.setCrmAuthStatus(true);
+				}
+			} else {
+				bg.setCrmAuthStatus(false);
+				console.log("xhr.responseText = " + xhr.responseText);
+				console.log("xhr.status = " + xhr.status);
+			}
+		}
+
+	}
+	xhr.send(null);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+function netsuite__getContactByPhoneGeneric(json, callback) {
 
 	var callerId = bg.getRawCallId();
 	var internationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.International);
