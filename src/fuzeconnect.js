@@ -153,12 +153,15 @@ function initialize () {
 		win.loadURL(openwinurl, {})
 
 		win.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl, isMainFrame) {
-console.log("CRM type::" + loginWindow.crmType)
-			universalLogin.replaceToken(newUrl, function(results) {
-				mainWindow = createFconMainWindow(results);
-			});
+console.log("Redirect URL::" + newUrl)
+			if (newUrl.substring(0, 28) == "http://ws.thinkingphones.com") {
 
-			win.close();
+				universalLogin.replaceToken(newUrl, function (results) {
+					mainWindow = createFconMainWindow(results);
+				});
+
+				win.close();
+			}
 		});
 
 		return win

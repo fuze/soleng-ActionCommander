@@ -69,10 +69,6 @@ function setSettings(results, wardenToken, callback) {
 	console.log('getUserData:  ' + JSON.stringify(config, null, 2));
 
 	var url = config.getUserDataUrl + username;
-	if (localStorage.getItem('crmType')!=null && localStorage.getItem('crmType')!='undefined' && localStorage.getItem('crmType')!='')
-	{
-		url += ' ' + localStorage.getItem('crmType');
-	}
 	var resp;
 	console.log('getUserData:  ' + url);
 	// Get inbox entries
@@ -102,7 +98,13 @@ function setSettings(results, wardenToken, callback) {
 //UserSettings.prototype.createUserSettings = function (username, password, callback) {
 function createUserSettings(wardenData, callback) {
 	console.log('createUserSettings: global.appSettings == ' + JSON.stringify(pjson.config, null, 2));
-	getUserData(wardenData.data.entity.origin.id, wardenData.data.grant.token, function(obj) {
+	var username = wardenData.data.entity.origin.id;
+	if (localStorage.getItem('crmType') && localStorage.getItem('crmType')!=null && localStorage.getItem('crmType')!='NULL' && localStorage.getItem('crmType')!='')
+	{
+		username += ' ' + localStorage.getItem('crmType');
+	}
+
+	getUserData(username, wardenData.data.grant.token, function(obj) {
 		console.log('createUserSettings: Settings will be Refreshed or Created' );
 		processUserData(obj, function(ret) {
 			console.log('createUserSettings: ' + JSON.stringify(ret, null, 2));
