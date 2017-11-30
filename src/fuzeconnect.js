@@ -353,8 +353,8 @@ function initialize () {
 	ipcMain.on('reset-config', () => {
 		//mainWindow.loadURL(`file://${__dirname}/${pjson.config.reseturl}`, {})
 		resetSettings( function(){
-			mainWindow.close();
 			loginWindow  = createLoginWindow();
+			mainWindow.close();
 		});
 	});
 
@@ -407,31 +407,30 @@ function initialize () {
 	//No Settings Available Show Login
 	ipcMain.on('show-login-window', (event, arg) => {
 		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
-		mainWindow.close();
 		loginWindow  = createLoginWindow();
-
+		mainWindow.close();
 		eventBus.emit('show-login-window', arg);
 	});
 
 	//User Not Active
 	ipcMain.on('user-not-active', (event, arg) => {
 		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
-		mainWindow.close();
 		loginWindow  = createLoginWindow();
+		mainWindow.close();
 	});
 
 	//No Matching User
 	ipcMain.on('no-matching-user', (event, arg) => {
 		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
-		mainWindow.close();
 		loginWindow  = createLoginWindow();
+		mainWindow.close();
 	});
 
 	//No Matching User
 	ipcMain.on('too-many-matching-user', (event, arg) => {
 		console.error("Too Many Matching User");
-		mainWindow.close();
 		loginWindow  = createLoginWindow();
+		mainWindow.close();
 	});
 
 	//Cannot Create User Settings
