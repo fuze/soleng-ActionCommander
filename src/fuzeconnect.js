@@ -153,14 +153,12 @@ function initialize () {
 		win.loadURL(openwinurl, {})
 
 		win.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl, isMainFrame) {
-console.log("Redirect URL::" + newUrl)
+			console.log("Redirect URL::" + newUrl)
 			if (newUrl.substring(0, 28) == "http://ws.thinkingphones.com") {
-
 				universalLogin.replaceToken(newUrl, function (results) {
 					mainWindow = createFconMainWindow(results);
+					win.close();
 				});
-
-				win.close();
 			}
 		});
 
