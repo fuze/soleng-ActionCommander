@@ -3,9 +3,10 @@
 const { remote} = require('electron');
 
 const lc = require('../localConfigSettings');
-const snowAuth 	= require('./buildServiceNowInstance');
-const msdAuth 	= require('./buildMSDInstance');
-const zohoAuth 	= require('./buildZoHoInstance');
+const snowAuth 		= require('./buildServiceNowInstance');
+const msdAuth 		= require('./buildMSDInstance');
+const zohoAuth 		= require('./buildZoHoInstance');
+const netsuiteAuth 	= require('./buildNetsuiteInstance');
 
 ////////////////////////////////////////////////////////////////////////////////////////
 exports.authPasswdController = function(user, password) {
@@ -29,6 +30,12 @@ exports.authPasswdController = function(user, password) {
     		thisWindow.close();
     	});
     	break;
+	case 'netsuitecrmv2' :
+		netsuiteAuth.buildNetsuiteInstance(user, password, function() {
+			var thisWindow = remote.getCurrentWindow();
+			thisWindow.close();
+		});
+		break;
     default :
     	return 'Unknown Connector';
     	break;

@@ -46,6 +46,10 @@ exports.authController = function() {
 		console.log("authController: URL == " + url);
 		oAuthUtils.authGetProxy(url, lc.getCrmBaseUrl());
 
+	} else if (lc.getCEType() == 'netsuitecrmv2') {
+
+		ipcRenderer.send('open-password-window', pjson.config.passwdurl);
+
 	}
 
 }
