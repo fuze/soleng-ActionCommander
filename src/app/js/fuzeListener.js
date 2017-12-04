@@ -440,7 +440,7 @@ function __unauthorizedMessage(eventData) {
 					 '- Username and/or password are Incorrect\r\n' +
 			    	 '- Your account may need the \r\n\"End-User Web Service Access\" role added';
 		console.log('__unauthorizedMessage: ' + emessg);		
-		_keepAlive = false;
+		//_keepAlive = false;
 		bg.setSocketStatus(false);
 		bg.setSocketMessage('Username and/or password are incorrect');
 		

@@ -21,29 +21,29 @@ window.onload = function () {
 		connect.checkConnectivity(json, function(retObj) {
 			console.warn("InitializeMainPage: Socket" + JSON.stringify(retObj));
 			if ( retObj.code == 200) {
-				// const fuzeListener = require('../js/fuzelistener');
-				// fuzeListener.startSocket(function(startObj) {
-				// 	if (startObj.code == 200) {
-				// 		console.warn("InitializeMainPage: Started Socket" + JSON.stringify(startObj));
-				// 		endPointValidate.validateEndPoint(function(epObj) {
-				// 			if(epObj.code == 200) {
-				// 				console.warn("CheckConnectivity: Validate End Point Success" + JSON.stringify(epObj));
-				// 				eventBus.emit(epObj.action, epObj);
-				// 				//retObj = epObj;
-				// 			} else {
-				// 				console.warn("CheckConnectivity: Validate End Point Failed Socket" + JSON.stringify(epObj));
-				// 				eventBus.emit(epObj.action, epObj);
-				// 				//retObj = epObj;
-				// 				//callback(epObj);
-				// 			}
-				// 		});
-                //
-				// 	} else {
-				// 		fuzeListener.stopSocket(function(stopObj) {
-				// 			console.warn("InitializeMainPage: Socket Open Failed" + JSON.stringify(startObj));
-				// 		});
-				// 	}
-				// });
+				const fuzeListener = require('../js/fuzelistener');
+				fuzeListener.startSocket(function(startObj) {
+					if (startObj.code == 200) {
+						console.warn("InitializeMainPage: Started Socket" + JSON.stringify(startObj));
+						endPointValidate.validateEndPoint(function(epObj) {
+							if(epObj.code == 200) {
+								console.warn("CheckConnectivity: Validate End Point Success" + JSON.stringify(epObj));
+								eventBus.emit(epObj.action, epObj);
+								//retObj = epObj;
+							} else {
+								console.warn("CheckConnectivity: Validate End Point Failed Socket" + JSON.stringify(epObj));
+								eventBus.emit(epObj.action, epObj);
+								//retObj = epObj;
+								//callback(epObj);
+							}
+						});
+
+					} else {
+						fuzeListener.stopSocket(function(stopObj) {
+							console.warn("InitializeMainPage: Socket Open Failed" + JSON.stringify(startObj));
+						});
+					}
+				});
 			}
 
 		});
