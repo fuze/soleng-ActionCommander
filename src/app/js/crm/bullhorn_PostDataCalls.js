@@ -51,16 +51,22 @@ exports.bullhorn__actionHandler = function(callState, json) {
 		// with the one that is associated with contact, canidate, lead that is clicked.
 		// else it stays false.
 		if (bg.getContactLeadId() != false) {
-			var personalRef = '{' + bg.getContactLeadId() + '}';
-			var obj = JSON.parse(personalRef);
-			console.log("PersonalRef " + personalRef)
 
-			var openwinurl = lc.getCrmBaseUrl() + '/BullhornStaffing/OpenWindow.cfm?entity=Note&view=Add'
-												+ '&action=Phone Call'
-												+ '&personReferenceID=' + obj.personReference.id;
-			shell.openExternal(openwinurl)
-			//var new_window = window.open(openwinurl, "Create Call Log" + obj.personReference.id );
-			reset.resetBackGroundData();
+			console.log("IsCallAnswered: " + bg.getIsCallAnswered() + " Direction: " + bg.getCallDirection() )
+			if( (bg.getIsCallAnswered() == 'false') && (bg.getCallDirection().toLowerCase() == 'inbound') ){
+				console.log("Inboung Call not answered -> Not call log")
+			} else {
+				var personalRef = '{' + bg.getContactLeadId() + '}';
+				var obj = JSON.parse(personalRef);
+				console.log("PersonalRef " + personalRef)
+
+				var openwinurl = lc.getCrmBaseUrl() + '/BullhornStaffing/OpenWindow.cfm?entity=Note&view=Add'
+					+ '&action=Phone Call'
+					+ '&personReferenceID=' + obj.personReference.id;
+				shell.openExternal(openwinurl)
+				//var new_window = window.open(openwinurl, "Create Call Log" + obj.personReference.id );
+				reset.resetBackGroundData();
+			}
 		}
 	}
 }
