@@ -51,6 +51,9 @@ function getEndPointType (type, prompt) {
     	case 'servicenow' :
     		return 'ServiceNow';
     		break;
+		case 'netsuitecrmv2' :
+			return 'Netsuite';
+			break;
     	default :
     		return 'Unknown Connector';
     		break;
