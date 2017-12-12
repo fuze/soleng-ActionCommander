@@ -28,7 +28,7 @@ phoneUtils.prototype.getPhonePatterns = function() {
 //===================================================================================//
 phoneUtils.prototype.getPhoneNumberPattern = function(rawphone, pattern){
 	var callid = false;
-console.log("getPhoneNumberPattern::pattern= " + pattern)
+	console.log("getPhoneNumberPattern::pattern= " + pattern)
 	if (rawphone != false) {
 		var extractLocale = function (lang) {
 			if (lang !== null && lang.indexOf("-") !== -1) {
@@ -40,16 +40,14 @@ console.log("getPhoneNumberPattern::pattern= " + pattern)
 		
 		var navigatorLanguage = (window.navigator.userLanguage || window.navigator.language);
 		var browserLang = extractLocale(navigatorLanguage);
-		
-console.debug("navigatorLanguage == " + navigatorLanguage);
-console.debug("browserLang == " + browserLang);
-	
 		var number = phoneLib.format(rawphone, browserLang);
-console.debug("number == " + JSON.stringify(number));
+
+		console.debug("navigatorLanguage == " + navigatorLanguage);
+		console.debug("browserLang == " + browserLang);
+		console.debug("number == " + JSON.stringify(number));
+
 		if (phoneLib.isValid(number)) {
-			//var phoneNumber = phoneLib.parse(rawphone);
-			//var countryCode = phoneNumber.getCountryCode();
-			
+
 			switch(pattern) {
 				case phoneNumberPattern.International:
 					callid = phoneLib.format(number, "global");
@@ -76,6 +74,10 @@ console.debug("number == " + JSON.stringify(number));
 					callid = callid.replace(/\D/g,'');
 					break;
 			}
+		}
+		else
+		{
+			callid = rawphone;
 		}
 	}
 	console.log("getPhoneNumberPattern::callid= " + callid)
