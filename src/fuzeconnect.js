@@ -136,7 +136,7 @@ function initialize () {
 			'x': mainWindowState.x,
 			'y': mainWindowState.y,
 			'title': app.getName(),
-			'icon': path.join(__dirname, '/src/app/images/Fuze-icon-purple-128.png'),
+			'icon': path.join(__dirname, '/src/assets/icons/png/64x64.png'),
 			'show': true, // Hide your application until your page has loaded
 			'webPreferences': {
 				'nodeIntegration': false, // Disabling node integration allows to use libraries such as jQuery/React, etc
@@ -149,15 +149,26 @@ function initialize () {
 		// and restore the maximized or full screen state
 		mainWindowState.manage(win)
 
-		var openwinurl = pjson.config.wardenUniversalLoginUrl;//"https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com";
+		var openwinurl = pjson.config.wardenUniversalLoginUrlLive;//"https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com";
 		win.loadURL(openwinurl, {})
 
 		win.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl, isMainFrame) {
 			console.log("Redirect URL::" + newUrl)
 			if (newUrl.substring(0, 28) == "http://ws.thinkingphones.com") {
-				universalLogin.replaceToken(newUrl, function (results) {
-					mainWindow = createFconMainWindow(results);
+				if (process.platform !== 'win32') {
+					console.log("NOT Win32")
 					win.close();
+				}
+				universalLogin.replaceToken(newUrl, function (results) {
+					if (process.platform !== 'win32') {
+						console.log("NOT Win32")
+						//win.close();
+						mainWindow = createFconMainWindow(results);
+					} else {
+						console.log("Win32")
+						mainWindow = createFconMainWindow(results);
+						win.close();
+					}
 				});
 			}
 		});
@@ -184,7 +195,7 @@ function initialize () {
 			'x': mainWindowState.x,
 			'y': mainWindowState.y,
 			'title': app.getName(),
-			'icon': path.join(__dirname, '/src/app/images/Fuze-icon-purple-128.png'),
+			'icon': path.join(__dirname, '/src/assets/icons/png/64x64.png'),
 			'show': true, // Hide your application until your page has loaded
 			'webPreferences': {
 				'nodeIntegration': pjson.config.nodeIntegration || true, // Disabling node integration allows to use libraries such as jQuery/React, etc
@@ -271,15 +282,28 @@ function initialize () {
 
 
 	app.on('window-all-closed', () => {
-		if (process.platform !== 'darwin') {
-			app.quit()
-		}
+		// if (process.platform !== 'darwin') {
+		// 	app.quit()
+		// }
 	})
 
 	app.on('activate', () => {
-		if (!loginWindow) {
-			loginWindow = createLoginWindow()
-		}
+		isUserAuthenticated(function (res) {
+			if (res == true)
+			{
+				if (mainWindow === null) {
+					console.log("User is authenticated!!!!")
+					mainWindow = createFconMainWindow();
+				}
+			}
+			else
+			{
+				if (loginWindow === null) {
+					console.log("User is NOT authenticated!!!!")
+					loginWindow = createLoginWindow()
+				}
+			}
+		});
 	})
 
 	app.on('ready', () => {
