@@ -86,11 +86,15 @@
       "private": true,
       "provider": "github"
     },
-    "directories": {
-      "buildResources": [
-        "src/assets/icons/mac",
-        "src/assets/icons/win"
-      ]
+
+    "mac": {
+      "icon": "src/assets/icons/mac/icon.icns"
+    },
+    "win": {
+      "icon": "src/assets/icons/win/icon.ico"
+    },
+    "linux": {
+      "icon": "build/icons"
     }
   },
   "devDependencies": {
