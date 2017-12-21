@@ -2,7 +2,7 @@
   "name": "FuzeConnect",
   "productName": "Fuze Connect",
   "description": "Fuze Installable",
-  "version": "2.8.12.961",
+  "version": "2.0.0.972",
   "homepage": "https://www.fuze.com",
   "author": {
     "name": "Fuze - Solution Engineering",
@@ -30,11 +30,12 @@
     "loginurl"		: "app/html/setup.html",
     "passwdurl" 	: "app/html/passwd.html",
     "callnotes" 	: "app/html/callnotes.html",
+    "fvCallnotes" 	: "app/html/focusvisionCallnotes.html",
     "crmuserprompt" : "app/html/crmuserprompt.html",
     "focusurl" 		: "app/html/focusvison.html",
     "crmtypeurl" 	: "app/html/crmType.html",
     "update": {
-      "url": false
+      "url": "http://ec2-52-205-122-97.compute-1.amazonaws.com:9000/fcon/"
     }
   }
 }
