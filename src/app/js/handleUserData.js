@@ -102,7 +102,7 @@ eventBus.on('1001', function(json, code, action, event, message) {
 //"action" : 1002, "event" : "show-login-window",  "message" : "No Settings Available Show Login"
 eventBus.on('1002', function(json, code, action, event, message) {
 	console.warn("Event 1002");
-	ipcRenderer.send(json.event, pjson.config.wardenUniversalLoginUrl);
+	ipcRenderer.send(json.event, pjson.config.wardenUniversalLoginUrlLive);
 });
 
 //------------------------------------------------------------------------------------
