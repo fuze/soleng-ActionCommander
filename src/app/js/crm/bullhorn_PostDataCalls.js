@@ -39,10 +39,10 @@ exports.bullhorn__actionHandler = function(callState, json) {
 	} else if (json.type == 'logcall') {
 		console.log("bullhorn__actionHandler : end of call");
 
-       if (bg.getHistoryFlag() == 'true') {
+		if (bg.getHistoryFlag()) {
 			console.log("bg.getHistoryFlag() == true");
 			ch.createCallHistory();
-			bg.setHistoryFlag('false');
+			bg.setHistoryFlag(false);
 		}
         bg.setCallState('CALL_END');
 

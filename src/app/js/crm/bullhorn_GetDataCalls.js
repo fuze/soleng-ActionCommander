@@ -78,7 +78,7 @@ function bullhorn__getCandidateByPhone(json) {
 					console.log("bullhorn__getCandidateByPhone: No match")
 
 				} else {
-					console.log("bullhorn__getCandidateByPhone: Candidate found!!")
+					console.log("bullhorn__getCandidateByPhone: Candidate found!! " + results[0].name)
 
 					var personalRef = '"personReference": {'+
 						'"firstName": "' + results[0].firstName + '",'+
