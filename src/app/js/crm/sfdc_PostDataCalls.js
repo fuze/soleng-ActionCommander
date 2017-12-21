@@ -43,7 +43,11 @@ exports.sfdc__actionHandler = function (callState, json) {
 		
         if ((lc.getWrapUpCode() !== false || lc.getCallNotes() !== false ) && (bg.getWrapUpValue() == '__blank__' || !bg.getNoteValue() == '__blank__' )) {
 			console.log("sfdc__actionHandler: Wrap Up Codes or Call Notes Required");
-			var json ={pageUrl: pjson.config.callnotes, callerName: bg.getCallerName()}
+			if ( lc.getCrmType() == "Custom" && lc.getCrmJSPackage() == 'FocusVision'){
+				var json ={pageUrl: pjson.config.fvCallnotes, callerName: bg.getCallerName()}
+			} else {
+				var json ={pageUrl: pjson.config.callnotes, callerName: bg.getCallerName()}
+			}
 			ipcRenderer.send('open-utility-window', json);
         } 
     } else if (json.type == 'saveNotes') {
@@ -63,7 +67,7 @@ exports.sfdc__actionHandler = function (callState, json) {
     			thisWindow.close()
     		});
 		} else if (lc.getCrmType() == "Custom" && lc.getCrmJSPackage() == 'FocusVision') {
-			sfdc__createCallLogBigPayload(json.endtime, function() {
+			sfdc__createCallLogFocusvisionPayload(json.endtime, function() {
 				reset.resetBackGroundData()
 				var thisWindow = remote.getCurrentWindow();
     			thisWindow.close()
@@ -292,7 +296,11 @@ function sfdc__createCallLog(endtime, postData, successCallback, failCallback) {
 		postUrl += '/' + lc.getContentPrimary() +'/' + bg.getActivityId() + '/tasks';
 	} else if ((bg.getUserConnectorAcct() != 'false') &&  (bg.getUserConnectorAcct() != null)) {
 		console.log("sfdc__createCallLog: Call log against the Contact " + bg.getUserConnectorAcct())
-		postUrl += '/contacts/' + bg.getUserConnectorAcct() + '/tasks';
+		if (bg.getAcctConnectorID() == 'lead') {
+			postUrl += '/leads/' + bg.getUserConnectorAcct() + '/tasks';
+		} else {
+			postUrl += '/contacts/' + bg.getUserConnectorAcct() + '/tasks';
+		}
 		//entityId = '"WhoId": "' + bg.getUserConnectorAcct() + '" ,';
 	} else if ((bg.getAcctConnectorID() != 'false') &&  (bg.getAcctConnectorID() != null)) {
 		console.log("sfdc__createCallLog: Call log against the Account " +  bg.getAcctConnectorID() )
@@ -496,6 +504,74 @@ function sfdc__createCallLogHouzzPayload(endtime, successCallback) {
 		postData += 'Caller Number : ' + bg.getCallIdforUI() + '\\r\\n';
 	}
 	
+	if (lc.getWrapUpCode() !== 'false') {
+		postData += 'Wrap-up Code: ' + bg.getWrapUpValue() + '\\r\\n\\r\\n';
+	}
+	if (lc.getCallNotes() !== 'false') {
+		postData += 'Notes: ' + bg.getNoteValue() + '\\r\\n\\r\\n';
+	}
+	if (lc.getRecordingLinkBase()) {
+		postData += 'Call Record Link:  '+ recLink + '?userID=' + lc.getTrimmedUsername() + '&callId=' + bg.getCallIdFromSocket();
+	}
+	postData +=  '\\r\\n"}';
+
+	sfdc__createCallLog(endtime, postData, successCallback, sfdc__createCallLogSmallgPayload);
+}
+
+///////////////////////////////////////////////////////////////
+function sfdc__createCallLogFocusvisionPayload(endtime, successCallback) {
+
+	var recLink = lc.getRecordingLinkBase();
+
+	console.log("sfdc__createCallLog: recLink   " + recLink);
+	console.log("sfdc__createCallLog: ID        " + bg.getActivityId());
+	console.log("sfdc__createCallLog: Direction " + bg.getCallDirection());
+	console.log("sfdc__createCallLog: starttime " + bg.getRawStartTime());
+	console.log("sfdc__createCallLog: endtime   " + endtime);
+	console.log("sfdc__createCallLog: wrap code " + lc.getWrapUpCode());
+	console.log("sfdc__createCallLog: notes     " + lc.getCallNotes());
+	if (lc.getWrapUpCode() !== 'false') {
+		console.log("sfdc__createCallLog: Wrap Code " + bg.getWrapUpValue());
+	}
+	if (lc.getCallNotes() !== 'false') {
+		console.log("sfdc__createCallLog: CallNotes " + bg.getNoteValue());
+	}
+
+	var duration = Math.round((endtime - bg.getRawStartTime()) / 1000);
+	console.log("sfdc__createCallLog: duration   " + duration);
+	console.log("sfdc__createCallLog: starttime   " + bg.getStarttime());
+	console.log("sfdc__createCallLog: endtime   " + bg.getFormattedDate('mdy'));
+
+	var postData = '';
+
+	if (bg.getIsCallAnswered() == 'false'){
+		postData += '{ "Subject" : "No Answer" , ';
+	} else {
+		postData += '{ "Subject" : "' + bg.getCallSubjectValue() + '" , ';
+	}
+
+	postData += '"CallType" : "' + bg.getCallDirection() + '", ';
+	postData += '"CallDurationInSeconds" : "'+ duration +'", ';
+	if (((bg.getActivityId() === 'false') ||  (bg.getActivityId() == null)) && ((bg.getUserConnectorAcct() === 'false') ||  (bg.getUserConnectorAcct() == null))) {
+		if (bg.getIsCallAnswered() == 'false'){
+			postData += '"Status": "Completed" ,';
+		} else {
+			postData += '"Status": "In Progress" ,';
+		}
+	} else {
+		postData += '"Status": "Completed" ,';
+	}
+	postData += '"Type" : "' + bg.getCallDirection() + ' Call", ';
+	postData += '"ActivityDate" : "' + bg.getFormattedDate('date') + '", ';
+	postData += '"Description" : "Phone Call: Start Time = ' + bg.getStarttime() + '\\r\\n';
+	postData += 'End Time = ' + bg.getFormattedDate('mdy') + '\\r\\n';
+	if (((bg.getActivityId()  === 'false') ||  (bg.getActivityId() == null)) && ((bg.getUserConnectorAcct()  === 'false') ||  (bg.getUserConnectorAcct() == null))) {
+
+		postData += '\\r\\n';
+		postData += 'Caller Name : ' + bg.getCallerName() + '\\r\\n';
+		postData += 'Caller Number : ' + bg.getCallIdforUI() + '\\r\\n';
+	}
+
 	if (lc.getWrapUpCode() !== 'false') {
 		postData += 'Wrap-up Code: ' + bg.getWrapUpValue() + '\\r\\n\\r\\n';
 	}

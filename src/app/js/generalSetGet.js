@@ -76,6 +76,16 @@ console.log("setupSetGet: setNoteValue notenotes: " + notenotes);
     localStorage.setItem('notenotes', notenotes);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+// Call Subject
+backgroundSettings.prototype.getCallSubjectValue = function() {
+	return localStorage.getItem('notesubject');
+}
+backgroundSettings.prototype.setCallSubjectValue = function(notesubject) {
+	console.log("setupSetGet: setCallSubjectValue notesubject: " + notesubject);
+
+	localStorage.setItem('notesubject', notesubject);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // getUnSubscribeID/setUnSubscribeID
@@ -216,7 +226,7 @@ backgroundSettings.prototype.getCallerName = function() {
     return localStorage.getItem('callername');
 }
 backgroundSettings.prototype.setCallerName = function(callername) {
-	console.log("callername: " + callername);
+	console.log("setCallerName name: " + callername);
 
 	var fullName;
 	if (callername.indexOf(',') > -1) {
@@ -226,11 +236,23 @@ console.log("setCallerName callername : " + callername);
 		this.setCallerLastName(name[0]);
 		fullName = name[1] + " " + name[0];
 	} else if (callername.indexOf(' ') > -1) {
+
+		var spaceCount = (callername.split(" ").length - 1);
 		var name = callername.split(' ');
-		fullName = name[0] + " " + name[1];
-		this.setCallerFirstName(name[1]);
-		this.setCallerLastName(name[0]);
-		fullName = name[0] + " " + name[1];
+		if(spaceCount == 1) {
+			fullName = name[0] + " " + name[1];
+			this.setCallerFirstName(name[1]);
+			this.setCallerLastName(name[0]);
+		} else if (spaceCount == 2) {
+			fullName = name[0] + " " + name[1] + " " + name[2];
+			this.setCallerFirstName(name[0] + " " + name[1]);
+			this.setCallerLastName(name[s]);
+		} else {
+			fullName = name[0] + " " + name[1];
+			this.setCallerFirstName(name[1]);
+			this.setCallerLastName(name[0]);
+		}
+
 	} else {
 		fullName = callername;
 	}

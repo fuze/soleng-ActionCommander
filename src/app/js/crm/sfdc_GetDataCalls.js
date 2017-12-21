@@ -74,7 +74,7 @@ function sfdc__getContactByPhone(json, callback) {
     			var results = JSON.parse( xhr.responseText );
     			if (results.length <= 0) {
     				console.log("sfdc__getContactByPhone: ");
-    				sfdc__getAccountByPhone(json, sfdc__buildAccountListForGetContactByAccountId); 
+					sfdc__getContactByLead(json, sfdc__buildAccountListForGetContactByAccountId);
     			} else {
     				bg.setCallerName(results[0].Name);
     				bg.setContactRole(results[0].Title);
@@ -91,6 +91,57 @@ function sfdc__getContactByPhone(json, callback) {
       		}
       	}  
   		
+	}
+	xhr.send(null);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+function sfdc__getContactByLead(json, callback) {
+
+	var callerId = bg.getRawCallId();
+	var internationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.International);
+	var internationalRawNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.InternationalRaw);
+	var nationalNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.National);
+	var nationalRawNumber = ph.getPhoneNumberPattern(callerId, phoneNumberPattern.NationalRaw);
+	var header = lc.getCloudElementsId();
+
+	var url = cloudElementsUrl +  '/' + lc.getRoutePath();
+	url +='/leads?where=(Phone like \'%25' + internationalNumber + '\' or Phone like \'%25' +  internationalRawNumber + '\' or Phone=\'' +  nationalNumber + '\' or Phone=\'' +  nationalRawNumber + '\'';
+	url +=' or MobilePhone like \'%25' + internationalNumber + '\' or MobilePhone like \'%25' +  internationalRawNumber + '\' or MobilePhone=\'' +  nationalNumber + '\' or MobilePhone=\'' +  nationalRawNumber + '\')';
+
+	console.debug("sfdc__getContactByLead: url == " + url);
+
+
+	var xhr = new XMLHttpRequest();
+	xhr.withCredentials = true;
+	xhr.open('GET', url, true);
+	xhr.setRequestHeader("authorization",  header );
+	xhr.setRequestHeader("cache-control", "no-cache");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			if ( xhr.status == 200 ) {
+				var results = JSON.parse( xhr.responseText );
+				if (results.length <= 0) {
+					console.log("sfdc__getContactByLead: ");
+					sfdc__getAccountByPhone(json, sfdc__buildAccountListForGetContactByAccountId);
+				} else {
+					bg.setCallerName(results[0].Name);
+					bg.setContactRole(results[0].Title);
+					if (results.length == 1) {
+						bg.setUserConnectorAcct(results[0].Id);
+					}
+					bg.setAcctConnectorID("lead");
+					//sfdc__getAccountForContactResults(results, sfdc__dispatchAccountForContactResults);
+					sfdc__handleCallResults('incident', results, null);
+
+					bg.setCrmAuthStatus(true);
+				}
+			} else {
+				console.error("xhr.responseText = " + xhr.responseText);
+				console.error("xhr.status = " + xhr.status);
+			}
+		}
+
 	}
 	xhr.send(null);
 }
@@ -172,14 +223,22 @@ acctCount = 0;
 	var achorString = {};
 	anchorHead.dataRows = new Array();
 	achorString.dataRows = new Array();
-	
+
+	var h3;
+	if ( (lc.getCrmType() == "Custom" && lc.getCrmJSPackage() == 'FocusVision') || (accounts == null)) {
+		h3 = '<td></td>';
+	} else {
+		h3 = '<th id="anchor-head-3" class="contacts-table">Create</td>';
+	}
+
 	if (contacts.length) {
     	anchorHead.dataRows.push({
     		"rowstart" : 	'<tr id="remove-' + (contacts.length + 1) + '">',
 			"cell_1"   : 	'<th id="anchor-head-1" class="contacts-table">Caller</td>',
         	"cell_2"   : 	'<th id="anchor-head-2" class="contacts-table">Organization</td>',
-       		"cell_3"   : 	'<th id="anchor-head-3" class="contacts-table">Create</td>',
-       		"rowend"   : 	'</tr>'
+       		//"cell_3"   : 	'<th id="anchor-head-3" class="contacts-table">Create</td>',
+			"cell_3"   : 	h3,
+			"rowend"   : 	'</tr>'
 	    });
 	}
 	
@@ -188,14 +247,26 @@ acctCount = 0;
 		var acctId = contacts[i].AccountId;
 		var id = contacts[i].Id;
 		var userUrl = lc.getCrmBaseUrl() + '/' + id;
-		var acctname = accounts[i].accountName;
+		if(accounts!=null) {
+			var acctname = accounts[i].accountName;
+		} else {
+			var acctname = contacts[i].Company;
+		}
 		nameDict[id] = name;
+		var c3;
+		if ( (lc.getCrmType() == "Custom" && lc.getCrmJSPackage() == 'FocusVision') || (accounts == null)) {
+			c3 = '<td> </td>';
+		} else {
+			c3 = '<td action="create" type="' + lc.getContentPrimary()+ '"  uid="'+ id + '" acctid="' + acctId +'">' + bg.getCreateNewString() + '</td>';
+		}
+
     	achorString.dataRows.push({
 			"rowstart" : 	'<tr id="remove-' + i + '">',
 			"cell_1"   : 	'<td action="openwindow" type="contacts" uid="'+ id + '" class="contacts-table-name">' + name + '</td>',
         	"cell_2"   : 	'<td action="openwindow" type="accounts" acctid="' + acctId +'" >' + acctname + '</td>',
-       		"cell_3"   : 	'<td action="create" type="' + lc.getContentPrimary()+ '"  uid="'+ id + '" acctid="' + acctId +'">' + bg.getCreateNewString() + '</td>',
-       		"rowend"   : 	'</tr>'
+       		//"cell_3"   : 	'<td action="create" type="' + lc.getContentPrimary()+ '"  uid="'+ id + '" acctid="' + acctId +'">' + bg.getCreateNewString() + '</td>',
+			"cell_3"   : c3,
+			"rowend"   : 	'</tr>'
     	});
     }
     bg.setAnchorTheadData(JSON.stringify(anchorHead));
@@ -365,7 +436,7 @@ console.log('sfdc__handleContentResults nameDict == ' + JSON.stringify(nameDict,
 	    	});
 	    } else if (lc.getContentPrimary() == 'opportunities') {
 	    		var c3;
-	    		if ( lc.getCrmType() == "Custom" && bg.getCrmJSPackage() == 'FocusVision') {
+	    		if ( lc.getCrmType() == "Custom" && lc.getCrmJSPackage() == 'FocusVision') {
    					c3 = '<th id="content-head-3" class="contacts-table">Value</th>';
    				} else {
    					c3 = '<th id="content-head-3" class="contacts-table">MRR</th>';
@@ -399,7 +470,7 @@ console.log('sfdc__handleContentResults nameDict == ' + JSON.stringify(nameDict,
 		} else if (lc.getContentPrimary() == 'opportunities') {
 			var col1 = content[i].StageName || 'Not Defined';  			//Stage
 			var col2 = content[i].Name;	
-			if ( lc.getCrmType() == "Custom" && bg.getCrmJSPackage() == 'FocusVision') {								//Name
+			if ( lc.getCrmType() == "Custom" && lc.getCrmJSPackage() == 'FocusVision') {								//Name
 				var col3 = content[i].Net_Calculated__c || '0';
 			} else {
 				var col3 = content[i].Amount || '0';
