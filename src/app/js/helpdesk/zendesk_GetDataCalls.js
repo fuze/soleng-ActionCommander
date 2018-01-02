@@ -204,7 +204,7 @@ function zendesk__handleIncidentResults(incidents) {
 	for ( var i = 0; i <= (incidents.length - 1);  i++) {
 		var status = incidents[i].status;
 		var casenumber = incidents[i].id;
-		var subject = incidents[i].subject;
+		var subject = (incidents[i].subject)?(incidents[i].subject):(incidents[i].description);
 		var id = incidents[i].id;
 		incidentUrl = lc.getCrmBaseUrl() + '/agent/tickets/' + id;
 
