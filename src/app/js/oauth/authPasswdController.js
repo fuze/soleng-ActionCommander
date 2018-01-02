@@ -5,7 +5,7 @@ const { remote} = require('electron');
 const lc = require('../localConfigSettings');
 const snowAuth 		= require('./buildServiceNowInstance');
 const msdAuth 		= require('./buildMSDInstance');
-const zohoAuth 		= require('./buildZoHoInstance');
+const zohoAuth 		= require('./buildZoHoinstance');
 const netsuiteAuth 	= require('./buildNetsuiteInstance');
 
 ////////////////////////////////////////////////////////////////////////////////////////
