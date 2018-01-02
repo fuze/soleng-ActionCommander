@@ -492,11 +492,22 @@ function initialize () {
 			return
 		}
 
-		if (arg.pageUrl == pjson.config.fvCallnotes){
-			var height = 500;
-		} else {
-			var height = 450;
+
+		if (process.platform !== 'win32') {
+			if (arg.pageUrl == pjson.config.fvCallnotes){
+				var height = 475;
+			} else {
+				var height = 425;
+			}
+		} else  {
+			if (arg.pageUrl == pjson.config.fvCallnotes){
+				var height = 520;
+			} else {
+				var height = 475;
+			}
 		}
+
+
 		utilWindow = new BrowserWindow({
 			"transparent" : false,
 			'width': 450,
