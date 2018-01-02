@@ -21,7 +21,7 @@ window.onload = function () {
 		connect.checkConnectivity(json, function(retObj) {
 			console.warn("InitializeMainPage: Socket" + JSON.stringify(retObj));
 			if ( retObj.code == 200) {
-				const fuzeListener = require('../js/fuzelistener');
+				const fuzeListener = require('../js/fuzeListener');
 				fuzeListener.startSocket(function(startObj) {
 					if (startObj.code == 200) {
 						console.warn("InitializeMainPage: Started Socket" + JSON.stringify(startObj));

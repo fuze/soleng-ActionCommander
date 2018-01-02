@@ -493,9 +493,9 @@ function initialize () {
 		}
 
 		if (arg.pageUrl == pjson.config.fvCallnotes){
-			var height = 475;
+			var height = 500;
 		} else {
-			var height = 425;
+			var height = 450;
 		}
 		utilWindow = new BrowserWindow({
 			"transparent" : false,

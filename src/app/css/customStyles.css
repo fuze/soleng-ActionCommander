@@ -554,7 +554,7 @@ input[type=submit] {
 }
 
 .activities-table {
-	width: 400px;  }
+	width: 350px;  }
 
 .activities-table th {
 	text-align: left;
@@ -727,7 +727,7 @@ input[type=submit] {
 }
 
 #incoming-content-tbody {
-	height: 140px;
+	height: 125px;
 	overflow-y: auto;
 	display: block;
 	width: 100%;

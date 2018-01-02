@@ -108,4 +108,7 @@ input[type=button] {
 	display: block;
 	font-weight: bold;
 }
+
+#wrapup-notes {
+	width:400px;
 }
