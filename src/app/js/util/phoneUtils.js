@@ -101,6 +101,8 @@ phoneUtils.prototype.getPhoneNumberForUI = function(rawphone) {
 				break;
 		}
 	}
+	if (callid == null)
+		callid = rawphone;
 	console.debug("getPhoneNumberForUI  == " + callid);
 	return callid;
 

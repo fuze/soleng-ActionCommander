@@ -7,6 +7,8 @@ const fuzeClick2CallURL = pjson.config.fuzeClick2CallURL;
 
 const   username = lc.getTrimmedUsername();
 const 	password = lc.getPassword();
+const 	socketWardenToken = lc.getWardenToken();
+
 ////////////////////////////////////////////////////////////////////////////////////////
 exports.clickToCall = function(phone) {
 
@@ -19,8 +21,9 @@ exports.clickToCall = function(phone) {
 	var xhr = new XMLHttpRequest();
                                                                
     xhr.open('POST', url, true);
-    xhr.setRequestHeader("username",  username ); 
-    xhr.setRequestHeader("password",  password );
+    //xhr.setRequestHeader("username",  username );
+    //xhr.setRequestHeader("password",  password );
+	xhr.setRequestHeader('Authorization', 'Bearer ' + socketWardenToken);
 
     xhr.setRequestHeader("cache-control", "no-cache");   
     xhr.onreadystatechange = function() {
