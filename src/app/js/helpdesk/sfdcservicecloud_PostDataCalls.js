@@ -105,7 +105,22 @@ function sfdcservicecloud__createCallLog(endtime, callback) {
 	var recLink = lc.getRecordingLinkBase();
 	
 	var postUrl = cloudElementsUrl + '/' + lc.getRoutePath();
-	    postUrl += '/' + lc.getContentPrimary() +'/' + bg.getActivityId() + '/tasks';
+
+	if ((bg.getActivityId() != 'false') &&  (bg.getActivityId() != null)) {
+		console.log("sfdcservicecloud__createCallLog: Call log against the " + lc.getContentPrimary() +  "  "+ lc.getContentPrimary() + ' ' + bg.getActivityId())
+		postUrl += '/' + lc.getContentPrimary() +'/' + bg.getActivityId() + '/tasks';
+	} else if ((bg.getUserConnectorAcct() != 'false') &&  (bg.getUserConnectorAcct() != null)) {
+		console.log("sfdcservicecloud__createCallLog: Call log against the Contact " + bg.getUserConnectorAcct())
+		postUrl += '/contacts/' + bg.getUserConnectorAcct() + '/tasks';
+		//entityId = '"WhoId": "' + bg.getUserConnectorAcct() + '" ,';
+	} else if ((bg.getAcctConnectorID() != 'false') &&  (bg.getAcctConnectorID() != null)) {
+		console.log("sfdcservicecloud__createCallLog: Call log against the Account " +  bg.getAcctConnectorID() )
+		postUrl += '/accounts/' + bg.getAcctConnectorID() + '/tasks';
+	} else {
+		console.log("Call log against the agent")
+		postUrl += '/tasks';
+	}
+
 	var header = lc.getCloudElementsId();
 	
 	console.log("sfdcservicecloud__createCallLog: recLink   " + recLink);
