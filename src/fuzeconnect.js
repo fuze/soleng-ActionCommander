@@ -11,7 +11,8 @@ const settings 			= require('electron-settings');
 const universalLogin 	= require('./app/js/util/universalLogin')
 // Make this available in all modules
 const log 				= require('./app/js/util/util.log')
-//
+const XMLHttpRequest    = require('xmlhttprequest').XMLHttpRequest
+
 require('electron-debug')({showDevTools: true});
 require('./lib/log')
 global.pjson = require('./package.json');
@@ -269,6 +270,23 @@ function initialize () {
 	//Reset Settings
 	function resetSettings(callback)
 	{
+		if (settings.get('userData.ce_type') == 'bullhorn') {
+			var url = pjson.config.resetUserDataUrl + settings.get('userData.username');
+			console.log('url == ' + url);
+			// Get inbox entries
+			var xhr = new XMLHttpRequest();
+			xhr.open('PUT', url);
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState == 4) {
+					if ( xhr.status == 200 ) {
+						console.log("Successfully cleared the elementId")
+					} else {
+						console.log("Error on clearing the elementId")
+					}
+				}
+			}
+			xhr.send();
+		}
 		var settingsFilePath = settings.file();
 		console.log('\n settingsFilePath : ' + settingsFilePath)
 		try {
@@ -279,7 +297,6 @@ function initialize () {
 		settings.clearPath();
 		callback();
 	}
-
 
 	app.on('window-all-closed', () => {
 		// if (process.platform !== 'darwin') {
@@ -389,7 +406,6 @@ function initialize () {
 		if (crmTypeWindow) {
 			return
 		}
-		console.log("YEAH")
 		crmTypeWindow = new BrowserWindow({
 		"transparent" : false,
 		'width': 440,

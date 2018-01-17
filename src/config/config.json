@@ -2,6 +2,7 @@
 	"fuzeUrl": 						"https://fcon.gts.fuze.com",
 	"getUserDataUrl": 				"https://fcon.gts.fuze.com/dbapiuser/users/byname?name=",
 	"updateUserDataUrl": 			"https://fcon.gts.fuze.com/dbapiuser/users/byname?name=",
+	"resetUserDataUrl":				"https://fcon.gts.fuze.com/dbapiuser/users/resetbyname?name=",
 	"updateTempKeys": 				"https://fcon.gts.fuze.com/dbapitmpkeys/token/update?state=",
 	"getTempKeys": 					"https://fcon.gts.fuze.com/dbapitmpkeys/token/get?state=",
 	"fuzeoAuthCallBack": 			"https://fcon.gts.fuze.com/oauth/oauthproxy",
