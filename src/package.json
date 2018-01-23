@@ -23,10 +23,11 @@
   },
   "config": {
   	"debug"			: true,
+    "backgroundProcess" : "./app/js/presenceCommander.js",
   	"infourl"		: "app/html/info.html",
   	"reseturl"		: "app/html/reset.html",
   	"initurl"		: "app/html/index.html",
-    "mainurl"		: "app/html/mainpage.html",
+    "mainurl"		: "app/html/presenceCommander.html",
     "loginurl"		: "app/html/setup.html",
     "passwdurl" 	: "app/html/passwd.html",
     "callnotes" 	: "app/html/callnotes.html",

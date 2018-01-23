@@ -13,14 +13,14 @@
     "type": "git",
     "url": "https://github.com/fuze/coe-electron-fuze-connect.git"
   },
-  "main": "./src/fuzeconnect.js",
+  "main": "./src/fuzeApp.js",
   "scripts": {
     "test": "standard && mocha --recursive",
     "unit": "standard && mocha test/unit --recursive",
     "integration": "standard && mocha test/integration --recursive",
     "coverage": "istanbul cover node_modules/.bin/_mocha -- --recursive",
-    "depcheck": "dependency-check app --entry fuzeconnect.js --unused --no-dev",
-    "start": "electron ./src/fuzeconnect",
+    "depcheck": "dependency-check app --entry fuzeApp.js --unused --no-dev",
+    "start": "electron ./src/fuzeApp",
     "clean:linux": "rimraf dist/linux* dist/*.deb dist/*.AppImage",
     "clean:osx": "rimraf dist/mac",
     "clean:win": "rimraf dist/win*",

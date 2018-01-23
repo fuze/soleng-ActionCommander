@@ -1,0 +1,15 @@
+<html>
+<head>
+<script>
+	const { remote } = require('electron');
+	const { ipcRenderer } = require('electron');
+	const mainWindow = remote.getGlobal('mainWindow')
+	require('../js/presenceCommanderRender.js');
+</script>
+</head>
+<body>
+<div id="text">Current status:</div>
+<div id="status">unknown</div>
+<div id="settings-button"></div>
+</body>
+</html>
