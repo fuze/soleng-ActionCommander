@@ -14,25 +14,13 @@ function sendAction (action) {
 
 const editSubmenu = [
   {
-    role: 'undo'
-  },
-  {
-    role: 'redo'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    role: 'cut'
-  },
-  {
-    role: 'copy'
-  },
-  {
-    role: 'paste'
-  },
-  {
-    role: 'selectall'
+    label: 'Settings',
+    click: function (item, focusedWindow) {
+      if (focusedWindow) {
+        //focusedWindow.reload()
+        ipcMain.emit('open settings')
+      }
+    }
   }
 ]
 
@@ -51,10 +39,7 @@ var viewSubmenu = [
   {
     type: 'separator'
   },
-   {
-    type: 'separator'
-  },
-   {
+  {
     label: 'Reset Configuration',
     accelerator: 'CmdOrCtrl+L',
     click: function (item, focusedWindow) {
@@ -63,24 +48,7 @@ var viewSubmenu = [
         ipcMain.emit('reset-config')
       }
     }
-  },
-  {
-    type: 'separator'
-  },
-  {
-    type: 'separator'
-  },
-  {
-    label: 'Set Custom Type',
-    accelerator: 'CmdOrCtrl+T',
-    click: function (item, focusedWindow) {
-      if (focusedWindow) {
-        //focusedWindow.reload()
-        ipcMain.emit('set-crmType')
-      }
-    }
-  },
- 
+  } 
 ]
 
 const helpSubmenu = [
