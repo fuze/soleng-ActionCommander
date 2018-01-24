@@ -1,0 +1,18 @@
+<html>
+<head>
+<link rel="stylesheet" href="../css/settings.css">
+<script>
+	const { remote } = require('electron');
+	const { ipcRenderer } = require('electron');
+	const mainWindow = remote.getGlobal('mainWindow')
+	require('../js/settingsRender.js');
+</script>
+</head>
+<body>
+	<div id="text">Settings:</div>
+	<div id="trigger-pane"></div>
+	<div id="navigation-buttons">
+		<div id="cancle-button">Cancle</div><div id="save-button">Save</div>
+	</div>
+</body>
+</html>

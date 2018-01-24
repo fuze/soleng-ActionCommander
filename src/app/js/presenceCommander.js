@@ -5,15 +5,17 @@ module.exports = {}
 let contents
 let currentStatus = {}
 fuzePresence = require('./fuzePresence.js')
+const { ipcMain } = require('electron');
+let thisWindow
 
 module.exports.onReady = function onReady(browserWindow){
   console.log("starting background process")
+  thisWindow = browserWindow
   contents = browserWindow.webContents
   let wardenData = browserWindow.wardenData
   //console.log(wardenData)
   scheduler(5000,()=>{
   	fuzePresence.getPresence(wardenData, (err, response)=>{
-  		console.log("err: " + err)
   		//console.log("res: " + JSON.stringify(response))
   		if (err){
   			throw ("error: " + err + response)
@@ -42,3 +44,25 @@ function handlePresenceData(presenceData){
 		contents.send('new status',currentStatus.status)
 	}
 }
+
+///////////////////
+// extra windows //
+///////////////////
+const settingsURL = `file://${__dirname}/../html/settings.html`
+const mainURL = `file://${__dirname}/../../${pjson.config.initurl}`
+
+ipcMain.on('open settings', () => {
+	thisWindow.loadURL(settingsURL, {})
+
+	//thisWindow.on('closed', () => {
+		//crmTypeWindow = null
+	//})
+});
+
+ipcMain.on('close settings', () => {
+	thisWindow.loadURL(mainURL, {})
+
+	//thisWindow.on('closed', () => {
+		//crmTypeWindow = null
+	//})
+});
