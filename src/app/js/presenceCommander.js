@@ -49,7 +49,7 @@ function handlePresenceData(presenceData){
 // extra windows //
 ///////////////////
 const settingsURL = `file://${__dirname}/../html/settings.html`
-const mainURL = `file://${__dirname}/../../${pjson.config.initurl}`
+const mainURL = `file://${__dirname}/../../${pjson.config.mainurl}`
 
 ipcMain.on('open settings', () => {
 	thisWindow.loadURL(settingsURL, {})

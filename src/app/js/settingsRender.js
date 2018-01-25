@@ -1,25 +1,28 @@
-const { icpRenderer } = require('electron')
+const { ipcRenderer } = require('electron')
 const settings = require('electron-settings')
 console.log('something else entirely')
 window.onload = function () {
 	console.log("settings page loaded!")
   let cancleButton = document.getElementById("cancle-button")
   let saveButton = document.getElementById("save-button")
-  cancleButton.setAttribute("onclick", "cancle()")
-  saveButton.setAttribute("onclick", "saveSettings()")
+  cancleButton.addEventListener("click", cancle)
+  saveButton.addEventListener("click", saveSettings)
+  //cancleButton.setAttribute("onclick", "cancle()")
+  //saveButton.setAttribute("onclick", "saveSettings()")
   let triggerPane = document.getElementById("trigger-pane")
   loadTriggerList(triggerPane)
 
 }
 
 function cancle(){
-  icpRenderer.send('close settings')
+	ipcRenderer.send('close settings')
 }
 
 function saveSettings(){
 	//icpRenderer.send('save settings', getTriggerList())
+	let triggerList = getTriggerList()
 	settings.set('triggers', triggerList)
-	icpRenderer.send('close settings')
+	ipcRenderer.send('close settings')
 }
 
 
