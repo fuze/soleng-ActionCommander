@@ -4,11 +4,12 @@ window.onload = function () {
 	console.log("settings page loaded!")
   let cancleButton = document.getElementById("cancle-button")
   let saveButton = document.getElementById("save-button")
+  let addTriggerButton = document.getElementById("add-trigger")
   cancleButton.addEventListener("click", cancle)
   saveButton.addEventListener("click", saveSettings)
-  //cancleButton.setAttribute("onclick", "cancle()")
-  //saveButton.setAttribute("onclick", "saveSettings()")
-  let triggerPane = document.getElementById("trigger-pane")
+  addTriggerButton.addEventListener("click", addTriggerRow)
+  
+  let triggerPane = document.getElementById("trigger-list")
   loadTriggerList(triggerPane)
 
 }
@@ -29,9 +30,9 @@ function saveSettings(){
 function loadTriggerList(triggerPane){ //loads trigger list from settings
 	let triggerList = settings.get('triggers', []) //get the list of triggers that are saved. If the setting does not exist, initize an array
   for (i in triggerList){
-  	addTriggerRow(triggerPane, triggerList[i])
+  	addTriggerRow(triggerList[i])
   }
-  addTriggerRow(triggerPane)
+  addTriggerRow()
 }
 
 class TriggerRow {
@@ -64,22 +65,30 @@ class TriggerRow {
   	}
   	return input
   }
-
+  createTrash(){
+  	let trash = document.createElement('img')
+  	trash.setAttribute('src', '../images/delete.png')
+  	//trash.setAttribute('onclick', 'removeTriggerRow(this)')
+  	trash.addEventListener('click', function (event){removeTriggerRow(event.target)})
+  	return trash
+  }
   get createElement() {
   	let row = document.createElement('div')
   	row.setAttribute('class', 'trigger-row')
   	let stateChangeInput = this.createSelect("stateChange", this.stateChange, ["to","from"])
   	let presenceValueInput = this.createSelect("presenceValue", this.presenceValue, ["available","busy"]) //add more values
   	let cmdInput = this.createInput("cmd", this.cmd)
-  	
+  	let trash  = this.createTrash()
   	row.appendChild(stateChangeInput)
   	row.appendChild(presenceValueInput)
   	row.appendChild(cmdInput)
+  	row.appendChild(trash)
   	return (row)
   }
 }
 
-function addTriggerRow(triggerPane, values){ //adds row of UI elements to the end of the trigger list
+function addTriggerRow(values){ //adds row of UI elements to the end of the trigger list
+	let triggerPane = document.getElementById("trigger-list")
 	if (values === undefined){
 		values = {stateChange: "to", presenceValue: "busy", cmd: undefined}
 	}
@@ -87,10 +96,15 @@ function addTriggerRow(triggerPane, values){ //adds row of UI elements to the en
 	triggerPane.appendChild(triggerRow.createElement)
 }
 
+function removeTriggerRow(buttonElement){
+	let row = buttonElement.parentElement
+	row.parentElement.removeChild(row)
+	return null
+}
 
 function getTriggerList(){ //reads the list of triggers from the UI and returns an array
 	let triggerList = []
-	let triggerPane = document.getElementById("trigger-pane")
+	let triggerPane = document.getElementById("trigger-list")
 	let rowList = triggerPane.children
 	for (var i=0; i<rowList.length; i++){  //save each triggerRow in the UI as an object in the triggerList
 		let thisRow = rowList.item(i)
