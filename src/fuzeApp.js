@@ -385,29 +385,6 @@ function initialize () {
 		});
 	});
 
-	//////////////////////////////////////////////////////////////////////////////////////
-	// Password Window -- Password Prompt for End-Point Creation and _prompt
-	//////////////////////////////////////////////////////////////////////////////////////
-	ipcMain.on('set-crmType', () => {
-		if (crmTypeWindow) {
-			return
-		}
-		console.log("YEAH")
-		crmTypeWindow = new BrowserWindow({
-		"transparent" : false,
-		'width': 440,
-		'height': 320,
-		'resizable': false,
-		'frame': false
-		})
-
-		crmTypeWindow.loadURL(`file://${__dirname}/app/html/crmType.html`, {})
-
-		crmTypeWindow.on('closed', () => {
-			crmTypeWindow = null
-		})
-	});
-
 	//MainWindow Events From HandleUserData
 	//End Point is Valid -- This is checked after the Socket is Checked
 	ipcMain.on('end-point-validated', (event, arg) => {
@@ -417,52 +394,6 @@ function initialize () {
 	//Invalid Socket
 	ipcMain.on('socket-invalid-auth', (event, arg) => {
 		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
-	});
-
-	//Complete User Data
-	ipcMain.on('complete-user-data', (event, arg) => {
-		mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
-	});
-
-	//Prompt For User Name
-	//ipcMain.on('prompt-for-user-name', (event, arg) => {
-	//	//ipcRenderer.send('setup-window', 'setup');
-	//	//ipcRenderer.send('open-prompt-for-user-name', arg);
-	//	//mainWindow.loadURL(`file://${__dirname}/${arg}`, {})
-	//});
-
-	//No Settings Available Show Login
-	ipcMain.on('show-login-window', (event, arg) => {
-		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
-		loginWindow  = createLoginWindow();
-		mainWindow.close();
-		eventBus.emit('show-login-window', arg);
-	});
-
-	//User Not Active
-	ipcMain.on('user-not-active', (event, arg) => {
-		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
-		loginWindow  = createLoginWindow();
-		mainWindow.close();
-	});
-
-	//No Matching User
-	ipcMain.on('no-matching-user', (event, arg) => {
-		//mainWindow.loadURL(`file://${__dirname}/${arg}`, {});
-		loginWindow  = createLoginWindow();
-		mainWindow.close();
-	});
-
-	//No Matching User
-	ipcMain.on('too-many-matching-user', (event, arg) => {
-		console.error("Too Many Matching User");
-		loginWindow  = createLoginWindow();
-		mainWindow.close();
-	});
-
-	//Cannot Create User Settings
-	ipcMain.on('cannot-create-user-settings', (event, arg) => {
-		console.error("Cannot Create User Settings");
 	});
 
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -485,101 +416,6 @@ function initialize () {
 			infoWindow = null
 		})
 	})
-
-	//////////////////////////////////////////////////////////////////////////////////////
-	// Utility Window -- Call Notes and the like
-	//////////////////////////////////////////////////////////////////////////////////////
-	ipcMain.on('open-utility-window', (event, arg) => {
-		console.log("Args == " + JSON.stringify(arg));
-		if (utilWindow) {
-			return
-		}
-
-
-		if (process.platform !== 'win32') {
-			if (arg.pageUrl == pjson.config.fvCallnotes){
-				var height = 475;
-			} else {
-				var height = 425;
-			}
-		} else  {
-			if (arg.pageUrl == pjson.config.fvCallnotes){
-				var height = 520;
-			} else {
-				var height = 475;
-			}
-		}
-
-
-		utilWindow = new BrowserWindow({
-			"transparent" : false,
-			'width': 450,
-			'height': height,
-			'resizable': false,
-			'frame': true
-		})
-
-
-		utilWindow.loadURL(`file://${__dirname}/${arg.pageUrl}`, {})
-
-		utilWindow.webContents.on('did-finish-load', () => {
-			utilWindow.webContents.send('utility-loaded', arg.callerName)
-		})
-
-		utilWindow.on('closed', () => {
-			utilWindow = null
-		})
-		utilWindow.webContents.on('utility-close', () => {
-			utilWindow = null
-		});
-	});
-
-	//////////////////////////////////////////////////////////////////////////////////////
-	// Password Window -- Password Prompt for End-Point Creation and _prompt
-	//////////////////////////////////////////////////////////////////////////////////////
-	ipcMain.on('open-password-window', (event, arg) => {
-		if (passWindow) {
-			return
-		}
-
-		passWindow = new BrowserWindow({
-			"transparent" : false,
-			'width': 440,
-			'height': 320,
-			'resizable': false,
-			'frame': false
-		})
-
-		passWindow.loadURL(`file://${__dirname}/${arg}`, {})
-
-		passWindow.on('closed', () => {
-			passWindow = null
-		})
-	});
-
-	//////////////////////////////////////////////////////////////////////////////////////
-	// Password Window -- Password Prompt for End-Point Creation and _prompt
-	//////////////////////////////////////////////////////////////////////////////////////
-	ipcMain.on('prompt-for-user-name', (event, arg) => {
-		console.log("Args == " + JSON.stringify(arg));
-		if (passWindow) {
-			return
-		}
-
-		passWindow = new BrowserWindow({
-			"transparent" : false,
-			'width': 440,
-			'height': 400,
-			'resizable': false,
-			'frame': false
-		})
-
-		passWindow.loadURL(`file://${__dirname}/${arg}`, {})
-
-		passWindow.on('closed', () => {
-			passWindow = null
-		})
-	});
 
 
 }
