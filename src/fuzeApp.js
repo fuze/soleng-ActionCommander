@@ -212,11 +212,7 @@ function initialize () {
 		mainWindowState.manage(fWin)
 
 		// Remove file:// if you need to load http URLs
-		//win.loadURL(`file://${__dirname}/${pjson.config.initurl}`, {})
-		//var openwinurl = "https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com";
-		//shell.openExternal(openwinurl)
-		//win.loadURL(openwinurl, {})
-		fWin.loadURL(`file://${__dirname}/${pjson.config.initurl}`, {})
+		fWin.loadURL(`file://${__dirname}/${pjson.config.mainurl}`, {})
 
 		//var new_window = window.open('https://auth.thinkingphones.com?accessToken=2.M9G01Num4hZ08KQ.YXBwbGljYXRpb246dmh5NE5MMUU4UToyMU5VUk5Cd2NQ&redirectUri=https%3A%2F%2Fwblogin.gts.fuze.com');
 		//new_window.focus();
