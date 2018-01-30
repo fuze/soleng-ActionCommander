@@ -76,7 +76,7 @@ class TriggerRow {
   	let row = document.createElement('div')
   	row.setAttribute('class', 'trigger-row')
   	let stateChangeInput = this.createSelect("stateChange", this.stateChange, ["to","from"])
-  	let presenceValueInput = this.createSelect("presenceValue", this.presenceValue, ["available","busy"]) //add more values
+  	let presenceValueInput = this.createSelect("presenceValue", this.presenceValue, ["available", "away", "busy", "out", "dnd", "meeting", "call"]) //add more values
   	let cmdInput = this.createInput("cmd", this.cmd)
   	let trash  = this.createTrash()
   	row.appendChild(stateChangeInput)
