@@ -1,6 +1,3 @@
-# Fuze Connect Installable
+#Presence Commander
 
-~~~ console
-$ BUILD_TARGET=debug npm run build:osx
-~~~
-
+Lets you set up triggers to run programs when your fuze presence changes
