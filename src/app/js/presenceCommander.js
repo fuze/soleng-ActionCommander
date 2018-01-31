@@ -20,7 +20,8 @@ module.exports.onReady = function onReady(browserWindow){
   		if (err){
   			throw ("error: " + err + response)
   		}else{
-  			handlePresenceData(response.data)
+  			handlePresenceData(response.data) //the old way
+  			userPresence.updatePresence(response.data)
   		}
   	})
   })
@@ -41,9 +42,65 @@ function scheduler(rate,callback){
 function handlePresenceData(presenceData){
 	if (currentStatus.changedAt !== presenceData.changedAt){
 		currentStatus = presenceData
-		contents.send('new status',currentStatus.status)
+		contents.send('new status',currentStatus)
 	}
 }
+
+//////////////////////////////
+// presence event handeling //
+//////////////////////////////
+const EventEmitter = require('events')
+class Presence extends EventEmitter {
+	constructor(){
+		super()
+		this.state = {status: undefined, tags: undefined}
+	}
+
+	updatePresence (newState){
+		if (typeof this.state.status !== "undefined"){
+			if(this.state.status != newState.status){
+				this.presenceEmitter("from", this.state.status)
+				this.presenceEmitter("to", newState.status)
+			}
+		}
+		this.state.status = newState.status
+
+		if (typeof this.state.tags !== "undefined"){
+			this.parseTags(this.state.tags, newState.tags)
+		}
+		this.state.tags = newState.tags
+		return this.state
+	}
+	parseTags(oldTags, newTags){
+		for (let i of oldTags){
+			if (newTags.indexOf(i) == -1){
+				this.presenceEmitter("from", i) //if the old tag is not found in newTags, emit an event for it
+			}
+		}
+		for (let i of newTags){
+			if (oldTags.indexOf(i) == -1){
+				this.presenceEmitter("to", i) //if the new tag is not found in oldTags, emit an event for it
+			}
+		}
+	}
+	presenceEmitter(direction, state){
+		console.log("squeezing out an emit: " + direction + ", " + state)
+		this.emit("presenceUpdate", direction, state)
+
+	}
+}
+userPresence = new Presence()
+
+userPresence.on('presenceUpdate', (direction, state) => {
+	//some examples
+	if (direction == "to" && state == "busy"){
+		console.log("too busy!")
+	}
+	if (direction == "from" && state == "dnd"){
+		console.log("disturb me!")
+	}
+
+})
 
 ///////////////////
 // extra windows //

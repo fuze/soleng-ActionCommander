@@ -5,7 +5,7 @@ const mainWindow = electron.remote.getGlobal('mainWindow')
 
 window.onload = function () {
   ipc.on('new status', (event, message) => {
-  	document.getElementById("status").innerHTML = message //set status to the value of message
+  	document.getElementById("status").innerHTML = message.status //set status to the value of message
   	console.log(message)
   })
 
