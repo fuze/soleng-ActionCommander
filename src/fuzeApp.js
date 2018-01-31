@@ -161,6 +161,8 @@ function initialize () {
 					win.close();
 				}
 				universalLogin.replaceToken(newUrl, function (results) {
+					//settings.set('userData.wardenToken', results.data.grant.token)
+					settings.set('userData.wardenToken', results)
 					if (process.platform !== 'win32') {
 						console.log("NOT Win32")
 						//win.close();
@@ -203,7 +205,6 @@ function initialize () {
 				'preload': path.resolve(path.join(__dirname, 'preload.js'))
 			}
 		})
-
 		fWin.wardenData = wardenData;
 
 		// Let us register listeners on the window, so we can update the state
@@ -290,7 +291,7 @@ function initialize () {
 			{
 				if (mainWindow === null) {
 					console.log("User is authenticated!!!!")
-					mainWindow = createFconMainWindow();
+					mainWindow = createFconMainWindow(settings.get('userData.wardenToken'));
 				}
 			}
 			else
@@ -315,7 +316,7 @@ function initialize () {
 			if (res == true)
 			{
 				console.log("User is authenticated!!!!")
-				mainWindow = createFconMainWindow();
+				mainWindow = createFconMainWindow(settings.get('userData.wardenToken'));
 			}
 			else
 			{

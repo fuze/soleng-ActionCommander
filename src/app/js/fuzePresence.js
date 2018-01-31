@@ -2,9 +2,7 @@ const https = require("https")
 const url = require('url')
 
 module.exports = {}
-module.exports.getPresence = function getPresence(wardenData, callback){
-
-  let wardenToken = wardenData.data.grant.token
+module.exports.getPresence = function getPresence(wardenToken, callback){
   let options = url.parse('https://presence.fuze.com/api/v1/entities/me/presence?')
   options.headers = {
     Authorization: "Bearer " + wardenToken
