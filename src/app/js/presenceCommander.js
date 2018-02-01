@@ -22,6 +22,16 @@ module.exports.onReady = function onReady(browserWindow){
   		}else{
   			handlePresenceData(response.data) //the old way
   			userPresence.updatePresence(response.data)
+  		try {
+	  		if (err){
+	  			throw ("error: " + err + JSON.stringify(response))
+	  		}else{
+	  			handlePresenceData(response.data) //the old way
+	  			userPresence.updatePresence(response.data)
+	  		}
+  		} catch (err){
+  			console.log("error getting updated presence")
+  			console.log(err)
   		}
   	})
   })
