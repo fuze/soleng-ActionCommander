@@ -20,7 +20,7 @@ module.exports.onReady = function onReady(browserWindow){
   	setUpTriggers(newTriggers)
   })
   scheduler(5000,()=>{
-  	fuzePresence.getPresence(wardenData, (err, response)=>{
+  	fuzePresence.getPresence(wardenData.data.grant.token, (err, response)=>{
   		try {
 	  		if (err){
 	  			throw ("error: " + err + JSON.stringify(response))
