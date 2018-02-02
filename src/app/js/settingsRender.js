@@ -1,5 +1,5 @@
 const { ipcRenderer } = require('electron')
-const settings = require('electron-settings')
+const settings = require('electron').remote.require('electron-settings')
 window.onload = function () {
 	console.log("settings page loaded!")
   let cancleButton = document.getElementById("cancle-button")
@@ -19,7 +19,6 @@ function cancle(){
 }
 
 function saveSettings(){
-	//icpRenderer.send('save settings', getTriggerList())
 	let triggerList = getTriggerList()
 	settings.set('triggers', triggerList)
 	ipcRenderer.send('close settings')
