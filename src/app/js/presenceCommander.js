@@ -7,6 +7,7 @@ let currentStatus = {}
 fuzePresence = require('./fuzePresence.js')
 const { ipcMain } = require('electron');
 const settings = require('electron-settings')
+const { exec } = require('child_process')
 let thisWindow
 
 module.exports.onReady = function onReady(browserWindow){
@@ -93,7 +94,6 @@ class Presence extends EventEmitter {
 		}
 	}
 	presenceEmitter(direction, state){
-		console.log("squeezing out an emit: " + direction + ", " + state)
 		this.emit("presenceUpdate", direction, state)
 
 	}
@@ -102,22 +102,21 @@ userPresence = new Presence()
 
 function setUpTriggers(triggerList){
 	userPresence.removeAllListeners()
-	for (i of triggerList){
+	for (let thisTrigger of triggerList){
 		console.log('setting up trigger:')
-		console.log(i)
+		console.log(thisTrigger)
+		userPresence.on('presenceUpdate', (direction, state) => {
+			//console.log("got event: " + direction + ", " + state)
+			//console.log("looking for: " + thisTrigger.stateChange + ", " + thisTrigger.presenceValue)
+			//if (direction == thisTrigger.stateChange){console.log("direction matches")}
+			//if (state == thisTrigger.presenceValue){console.log("state matches")}
+			if (direction == thisTrigger.stateChange && state == thisTrigger.presenceValue){ //if the presence update meets the trigger conditions, run the command
+				console.log("triggered trigger! Executing command: '" + thisTrigger.cmd + "'")
+				exec(thisTrigger.cmd)
+			}
+		})
 	}
 }
-
-userPresence.on('presenceUpdate', (direction, state) => {
-	//some examples
-	if (direction == "to" && state == "busy"){
-		console.log("too busy!")
-	}
-	if (direction == "from" && state == "dnd"){
-		console.log("disturb me!")
-	}
-
-})
 
 ///////////////////
 // extra windows //
