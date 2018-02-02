@@ -6,6 +6,7 @@ let contents
 let currentStatus = {}
 fuzePresence = require('./fuzePresence.js')
 const { ipcMain } = require('electron');
+const settings = require('electron-settings')
 let thisWindow
 
 module.exports.onReady = function onReady(browserWindow){
@@ -14,14 +15,12 @@ module.exports.onReady = function onReady(browserWindow){
   contents = browserWindow.webContents
   let wardenData = browserWindow.wardenData
   //console.log(wardenData)
+  setUpTriggers(settings.get('triggers', []))
+  settings.watch('triggers', (newTriggers) => {
+  	setUpTriggers(newTriggers)
+  })
   scheduler(5000,()=>{
   	fuzePresence.getPresence(wardenData, (err, response)=>{
-  		//console.log("res: " + JSON.stringify(response))
-  		if (err){
-  			throw ("error: " + err + response)
-  		}else{
-  			handlePresenceData(response.data) //the old way
-  			userPresence.updatePresence(response.data)
   		try {
 	  		if (err){
 	  			throw ("error: " + err + JSON.stringify(response))
@@ -100,6 +99,14 @@ class Presence extends EventEmitter {
 	}
 }
 userPresence = new Presence()
+
+function setUpTriggers(triggerList){
+	userPresence.removeAllListeners()
+	for (i of triggerList){
+		console.log('setting up trigger:')
+		console.log(i)
+	}
+}
 
 userPresence.on('presenceUpdate', (direction, state) => {
 	//some examples
