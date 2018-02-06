@@ -31,7 +31,9 @@ function loadTriggerList(triggerPane){ //loads trigger list from settings
   for (i in triggerList){
   	addTriggerRow(triggerList[i])
   }
-  addTriggerRow()
+  if (triggerList.length == 0){
+   addTriggerRow()
+  }
 }
 
 class TriggerRow {
@@ -67,7 +69,7 @@ class TriggerRow {
   createTrash(){
   	let trash = document.createElement('img')
   	trash.setAttribute('src', '../images/delete.png')
-  	//trash.setAttribute('onclick', 'removeTriggerRow(this)')
+  	trash.setAttribute('class', 'delete-button')
   	trash.addEventListener('click', function (event){removeTriggerRow(event.target)})
   	return trash
   }
