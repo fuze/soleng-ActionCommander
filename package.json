@@ -109,7 +109,7 @@
     "electron-debug": "^1",
     "electron-eventbus": "^1",
     "electron-is-dev": "^0.1",
-    "electron-prebuilt": "^1.4.13",
+    "electron": "^1.7.12",
     "electron-settings": "^3",
     "electron-window-state": "^3",
     "events": "^1",
