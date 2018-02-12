@@ -5,6 +5,9 @@ window.onload = function () {
   let cancleButton = document.getElementById("cancle-button")
   let saveButton = document.getElementById("save-button")
   let addTriggerButton = document.getElementById("add-trigger")
+  let generalSettings = document.getElementById("general-settings")
+
+  createGeneralSettings(generalSettings)
   cancleButton.addEventListener("click", cancle)
   saveButton.addEventListener("click", saveSettings)
   addTriggerButton.addEventListener("click", addTriggerRow)
@@ -20,14 +23,30 @@ function cancle(){
 
 function saveSettings(){
 	let triggerList = getTriggerList()
-	settings.set('triggers', triggerList)
+  let triggerOnStartup = document.getElementById("trigger-on-startup").checked
+	settings.set('appSettings.triggers', triggerList)
+  settings.set('appSettings.triggerOnStartup', triggerOnStartup)
+
 	ipcRenderer.send('close settings')
 }
 
+function createGeneralSettings(settingsPane){
+  let triggerOnStartup = document.createElement('input')
+  let label = document.createElement('label')
 
+  triggerOnStartup.id = "trigger-on-startup"
+  triggerOnStartup.type = "checkbox"
+  triggerOnStartup.checked = settings.get('appSettings.triggerOnStartup', false) //read the saved value. Default to false
+  
+  label.for = "trigger-on-startup"
+  label.innerHTML = "Proccess triggers on startup"
+
+  settingsPane.appendChild(triggerOnStartup)
+  settingsPane.appendChild(label)
+}
 
 function loadTriggerList(triggerPane){ //loads trigger list from settings
-	let triggerList = settings.get('triggers', []) //get the list of triggers that are saved. If the setting does not exist, initize an array
+	let triggerList = settings.get('appSettings.triggers', []) //get the list of triggers that are saved. If the setting does not exist, initize an array
   for (i in triggerList){
   	addTriggerRow(triggerList[i])
   }

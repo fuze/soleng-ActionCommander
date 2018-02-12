@@ -9,34 +9,43 @@ const { ipcMain } = require('electron');
 const settings = require('electron-settings')
 const { exec } = require('child_process')
 let thisWindow
-
+let wardenData
 module.exports.onReady = function onReady(browserWindow){
   console.log("starting background process")
   thisWindow = browserWindow
   contents = browserWindow.webContents
-  let wardenData = browserWindow.wardenData
+  wardenData = browserWindow.wardenData
   //console.log(wardenData)
-  setUpTriggers(settings.get('triggers', []))
-  settings.watch('triggers', (newTriggers) => {
+  setUpTriggers(settings.get('appSettings.triggers', []))
+  settings.watch('appSettings.triggers', (newTriggers) => {
   	setUpTriggers(newTriggers)
   })
-  scheduler(5000,()=>{
-  	fuzePresence.getPresence(wardenData.data.grant.token, (err, response)=>{
-  		try {
-	  		if (err){
-	  			throw ("error: " + err + JSON.stringify(response))
-	  		}else{
-	  			handlePresenceData(response.data) //the old way
-	  			userPresence.updatePresence(response.data)
-	  		}
-  		} catch (err){
-  			console.log("error getting updated presence")
-  			console.log(err)
-  		}
-  	})
+  scheduler(5000, getPresence, ()=>{
+  	//if settings show proccess triggers on startup
+  	console.log("presence initialized")
+  	if (settings.get('appSettings.triggerOnStartup', false) == true){ //read the saved value. Default to false
+  		console.log("proccessing startup triggers")
+  		userPresence.forceEmit()	
+  	}
   })
 }
 
+function getPresence(callback){
+	fuzePresence.getPresence(wardenData.data.grant.token, (err, response)=>{
+		try {
+			if (err){
+				throw ("error: " + err + JSON.stringify(response))
+			}else{
+				handlePresenceData(response.data) //the old way
+				userPresence.updatePresence(response.data)
+				if(callback){callback()}
+			}
+		} catch (err){
+			console.log("error getting updated presence")
+			console.log(err)
+		}
+	})
+}
 
 module.exports.stop = function stop (){
 	for (i in intervals){
@@ -45,8 +54,10 @@ module.exports.stop = function stop (){
 }
 
 let intervals = []
-function scheduler(rate,callback){
-	intervals.push(setInterval(callback, rate))
+function scheduler(rate, job, callback){
+	job(callback) //run the job right away
+	intervals.push(setInterval(job, rate))
+	
 }
 
 function handlePresenceData(presenceData){
@@ -91,6 +102,13 @@ class Presence extends EventEmitter {
 			if (oldTags.indexOf(i) == -1){
 				this.presenceEmitter("to", i) //if the new tag is not found in oldTags, emit an event for it
 			}
+		}
+	}
+
+	forceEmit(){ //forces the emitting of 'to' events for the current presence. Used for proccessing startup triggers
+		this.presenceEmitter("to", this.state.status)
+		for (let i of this.state.tags){
+			this.presenceEmitter("to", i)
 		}
 	}
 	presenceEmitter(direction, state){
