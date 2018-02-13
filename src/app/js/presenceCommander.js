@@ -1,6 +1,5 @@
 //app script
 module.exports = {}
-//const {ipcMain} = require('electron')
 
 let contents
 let currentStatus = {}
@@ -15,7 +14,6 @@ module.exports.onReady = function onReady(browserWindow){
   thisWindow = browserWindow
   contents = browserWindow.webContents
   wardenData = browserWindow.wardenData
-  //console.log(wardenData)
   setUpTriggers(settings.get('appSettings.triggers', []))
   settings.watch('appSettings.triggers', (newTriggers) => {
   	setUpTriggers(newTriggers)
@@ -124,10 +122,6 @@ function setUpTriggers(triggerList){
 		console.log('setting up trigger:')
 		console.log(thisTrigger)
 		userPresence.on('presenceUpdate', (direction, state) => {
-			//console.log("got event: " + direction + ", " + state)
-			//console.log("looking for: " + thisTrigger.stateChange + ", " + thisTrigger.presenceValue)
-			//if (direction == thisTrigger.stateChange){console.log("direction matches")}
-			//if (state == thisTrigger.presenceValue){console.log("state matches")}
 			if (direction == thisTrigger.stateChange && state == thisTrigger.presenceValue){ //if the presence update meets the trigger conditions, run the command
 				console.log("triggered trigger! Executing command: '" + thisTrigger.cmd + "'")
 				exec(thisTrigger.cmd)
@@ -139,8 +133,7 @@ function setUpTriggers(triggerList){
 ///////////////////
 // window events //
 ///////////////////
-
-ipcMain.on('main loaded', () => {
+ipcMain.on('main loaded', () => { //when the main page is loaded send the current presence to be displayed
 	sendPresenceData(userPresence.state)
 });
 
@@ -149,16 +142,8 @@ const mainURL = `file://${__dirname}/../../${pjson.config.mainurl}`
 
 ipcMain.on('open settings', () => {
 	thisWindow.loadURL(settingsURL, {})
-
-	//thisWindow.on('closed', () => {
-		//crmTypeWindow = null
-	//})
-});
+})
 
 ipcMain.on('close settings', () => {
 	thisWindow.loadURL(mainURL, {})
-
-	//thisWindow.on('closed', () => {
-		//crmTypeWindow = null
-	//})
-});
+})
