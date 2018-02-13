@@ -36,7 +36,7 @@ function getPresence(callback){
 			if (err){
 				throw ("error: " + err + JSON.stringify(response))
 			}else{
-				handlePresenceData(response.data) //the old way
+				sendPresenceData(response.data) //the old way
 				userPresence.updatePresence(response.data)
 				if(callback){callback()}
 			}
@@ -60,7 +60,7 @@ function scheduler(rate, job, callback){
 	
 }
 
-function handlePresenceData(presenceData){
+function sendPresenceData(presenceData){
 	if (currentStatus.changedAt !== presenceData.changedAt){
 		currentStatus = presenceData
 		contents.send('new status',currentStatus)
@@ -137,8 +137,13 @@ function setUpTriggers(triggerList){
 }
 
 ///////////////////
-// extra windows //
+// window events //
 ///////////////////
+
+ipcMain.on('main loaded', () => {
+	sendPresenceData(userPresence.state)
+});
+
 const settingsURL = `file://${__dirname}/../html/settings.html`
 const mainURL = `file://${__dirname}/../../${pjson.config.mainurl}`
 
