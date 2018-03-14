@@ -61,8 +61,8 @@
     "boilerplate"
   ],
   "build": {
-    "appId": "com.soleng-fuze-connect-electron",
-    "productName": "Fuze Connect",
+    "appId": "com.soleng-presence-commander",
+    "productName": "Fuze Presence Commander",
     "asar": true,
     "compression": "maximum",
     "win": {
@@ -84,11 +84,10 @@
       "runAfterFinish": false
     },
     "publish": {
-      "repo": "soleng-fuze-connect-electron",
+      "repo": "soleng-presenceCommander",
       "owner": "fuze",
       "private": true,
-      "provider": "github",
-      "token": "512ee5fdf14c0afee7a46904fbc45477ddf1b702"
+      "provider": "github"
     },
     "linux": {
       "icon": "build/icons"
