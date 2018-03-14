@@ -56,9 +56,9 @@
   },
   "pre-commit": [],
   "keywords": [
-    "electron-app",
-    "electron",
-    "boilerplate"
+    "presence-commander",
+    "presence",
+    "fuze"
   ],
   "build": {
     "appId": "com.soleng-presence-commander",
