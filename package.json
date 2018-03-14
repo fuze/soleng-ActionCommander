@@ -89,7 +89,6 @@
       "private": true,
       "provider": "github",
       "token": "512ee5fdf14c0afee7a46904fbc45477ddf1b702"
-
     },
     "linux": {
       "icon": "build/icons"
