@@ -66,7 +66,7 @@ global.passWindow = null;
 global.utilWindow = null;
 global.crmTypeWindow = null;
 
-app.setName(pjson.productName || 'Fuze Connect')
+app.setName(pjson.productName);
 
 function initialize () {
 	var shouldQuit = makeSingleInstance()
@@ -143,7 +143,7 @@ function initialize () {
 				'nodeIntegration': false, // Disabling node integration allows to use libraries such as jQuery/React, etc
 				'preload': path.resolve(path.join(__dirname, 'preload.js'))
 			}
-		})
+		});
 
 		// Let us register listeners on the window, so we can update the state
 		// automatically (the listeners will be removed when the window is closed)
