@@ -13,6 +13,7 @@
     "type": "git",
     "url": "https://github.com/fuze/soleng-presenceCommander.git"
   },
+  "private": true,
   "main": "./src/fuzeApp.js",
   "scripts": {
     "test": "standard && mocha --recursive",
