@@ -1,41 +1,43 @@
-//app script
-module.exports = {}
 
-let contents
-let currentStatus = {}
-fuzePresence = require('./fuzePresence.js')
 const { ipcMain } = require('electron');
-const settings = require('electron-settings')
-const { exec } = require('child_process')
-let thisWindow
-let wardenData
-module.exports.onReady = function onReady(browserWindow){
-  console.log("starting background process")
-  thisWindow = browserWindow
-  contents = browserWindow.webContents
-  wardenData = browserWindow.wardenData
-  setUpTriggers(settings.get('appSettings.triggers', []))
+const settings = require('electron-settings');
+const { exec } = require('child_process');
+const EventEmitter = require('events')
+
+const settingsURL = `file://${__dirname}/../html/settings.html`
+const mainURL = `file://${__dirname}/../../${pjson.config.mainurl}`
+
+let contents;
+let currentStatus = {};
+let intervals = [];
+let thisWindow;
+let wardenData;
+
+const userPresence = new Presence();
+
+function onReady(browserWindow){
+  console.log("starting background process");
+
+  localStorage.getItem()
+
+  thisWindow = browserWindow;
+  contents = browserWindow.webContents;
+  wardenData = browserWindow.wardenData;
+
+  setUpTriggers(settings.get('appSettings.triggers', []));
   settings.watch('appSettings.triggers', (newTriggers) => {
   	setUpTriggers(newTriggers)
   })
-  scheduler(5000, getPresence, ()=>{
-  	//if settings show proccess triggers on startup
-  	console.log("presence initialized")
-  	if (settings.get('appSettings.triggerOnStartup', false) == true){ //read the saved value. Default to false
-  		console.log("proccessing startup triggers")
-  		userPresence.forceEmit()	
-  	}
-  })
 }
 
-function getPresence(callback){
+function getPresence(callback) {
 	fuzePresence.getPresence(wardenData.data.grant.token, (err, response)=>{
 		try {
 			if (err){
 				throw ("error: " + err + JSON.stringify(response))
 			}else{
-				sendPresenceData(response.data) //the old way
-				userPresence.updatePresence(response.data)
+				sendPresenceData(response.data); //the old way
+				userPresence.updatePresence(response.data);
 				if(callback){callback()}
 			}
 		} catch (err){
@@ -43,19 +45,6 @@ function getPresence(callback){
 			console.log(err)
 		}
 	})
-}
-
-module.exports.stop = function stop (){
-	for (i in intervals){
-		clearInterval(intervals[i])
-	}
-}
-
-let intervals = []
-function scheduler(rate, job, callback){
-	job(callback) //run the job right away
-	intervals.push(setInterval(job, rate))
-	
 }
 
 function sendPresenceData(presenceData){
@@ -68,7 +57,7 @@ function sendPresenceData(presenceData){
 //////////////////////////////
 // presence event handeling //
 //////////////////////////////
-const EventEmitter = require('events')
+
 class Presence extends EventEmitter {
 	constructor(){
 		super()
@@ -114,7 +103,7 @@ class Presence extends EventEmitter {
 
 	}
 }
-userPresence = new Presence()
+
 
 function setUpTriggers(triggerList){
 	userPresence.removeAllListeners()
@@ -137,9 +126,6 @@ ipcMain.on('main loaded', () => { //when the main page is loaded send the curren
 	sendPresenceData(userPresence.state)
 });
 
-const settingsURL = `file://${__dirname}/../html/settings.html`
-const mainURL = `file://${__dirname}/../../${pjson.config.mainurl}`
-
 ipcMain.on('open settings', () => {
 	thisWindow.loadURL(settingsURL, {})
 })
@@ -147,3 +133,5 @@ ipcMain.on('open settings', () => {
 ipcMain.on('close settings', () => {
 	thisWindow.loadURL(mainURL, {})
 })
+
+module.exports = { onReady };
