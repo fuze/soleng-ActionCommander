@@ -22,11 +22,11 @@
     "ws" : "^2"
   },
   "config": {
-  	"debug"			: true,
+  	"debug" : true,
     "backgroundProcess" : "./app/js/presenceCommander.js",
-  	"infourl"		: "app/html/info.html",
-  	"reseturl"		: "app/html/reset.html",
-  	"initurl"		: "app/html/index.html",
-    "mainurl"		: "app/html/presenceCommander.html"
+  	"infourl" : "app/html/info.html",
+  	"reseturl" : "app/html/reset.html",
+  	"initurl" : "app/html/index.html",
+    "mainurl" : "app/html/presenceCommander.html"
   }
 }

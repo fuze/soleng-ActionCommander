@@ -12,9 +12,7 @@ const eventBus = new Bus();
 
 console.log("initializeMainPage " + JSON.stringify(pjson, null, 2));
 
-
 window.onload = function () {
-	reset.resetBackGroundData();
 	console.log("in InitializeMainPage ");
 	settings.getUserSettings(function(json) {
 		console.log("in InitializeMainPage " + JSON.stringify(json, null, 2));

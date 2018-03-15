@@ -3,7 +3,6 @@
 const np = require('printer')
 const fs = require('fs')
 const path = require('path')
-
 const ipc = require('electron').ipcMain
 
 // Manage renderer requests
