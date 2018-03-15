@@ -1,11 +1,10 @@
 {
   "name": "fuze-presence-commander",
-  "description": "Fuze Presence Commander",
+  "description": "Presence Commander",
   "version": "0.0.1",
   "target": "electron",
   "author": {
-    "name": "Fuze Solution Engineering",
-    "email": "coe@fuze.com",
+    "name": "Fuze <support@fuze.com>",
     "url": "https://www.fuze.com/"
   },
   "license": "UNLICENSED",
