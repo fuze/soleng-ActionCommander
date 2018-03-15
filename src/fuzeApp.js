@@ -24,7 +24,6 @@ require("electron-debug")({ showDevTools: true });
 require("./lib/log");
 
 global.pjson = require("./package.json");
-const backgroundProcess = require(pjson.config.backgroundProcess);
 
 app.setName(pjson.productName);
 
@@ -37,8 +36,7 @@ process.on("uncaughtException", e => {
 
 // Load build target configuration file
 try {
-  letconfig = require("./config/config.json");
-  console.log(`config: ${config}`);
+  const config = require("./config/config.json");
   _.merge(global.pjson.config, config);
 
 } catch (e) {
@@ -75,7 +73,7 @@ let infoWindow = null;
 app.setName(pjson.productName);
 
 function initialize() {
-  letshouldQuit = makeSingleInstance();
+  const shouldQuit = makeSingleInstance();
   if (shouldQuit) return app.quit();
 
   function onClosed() {
@@ -84,7 +82,7 @@ function initialize() {
   }
 
   function isUserAuthenticated(callback) {
-    letfilename = settings.file();
+    const filename = settings.file();
     console.log("is this where I would check for settings " + filename);
 
     fs.exists(filename, function(exists) {
@@ -97,7 +95,7 @@ function initialize() {
             callback(false);
           } else {
             //Verify Token
-            letwardenToken = settings.get("userData.wardenToken");
+            const wardenToken = settings.get("userData.wardenToken");
             console.log("getUserSettings: wardenToken == " + wardenToken);
 
             if (wardenToken != null && wardenToken != "undefined") {
@@ -145,7 +143,7 @@ function initialize() {
     // and restore the maximized or full screen state
     mainWindowState.manage(win);
 
-    letopenwinurl = pjson.config.wardenUniversalLoginUrlLive; //"https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com";
+    const openwinurl = pjson.config.wardenUniversalLoginUrlLive; //"https://auth.thinkingphones.com?accessToken=2.FEV--FcAJnKvcGB.YXBwbGljYXRpb246NlJzampuV0RpUjpOM0NKdlZtQ2lS&redirectUri=http%3A%2F%2Fws.thinkingphones.com";
     win.loadURL(openwinurl, {});
 
     win.webContents.on("did-get-redirect-request", function(
@@ -196,14 +194,15 @@ function initialize() {
       x: mainWindowState.x,
       y: mainWindowState.y,
       title: app.getName(),
-      icon: path.join(__dirname, "/src/assets/icons/png/64x64.png"),
+      icon: path.join(__dirname, "src/assets/icons/png/64x64.png"),
       show: true, // Hide your application until your page has loaded
       webPreferences: {
         nodeIntegration: pjson.config.nodeIntegration || true, // Disabling node integration allows to use libraries such as jQuery/React, etc
         preload: path.resolve(path.join(__dirname, "preload.js"))
       }
     });
-    fWin.wardenData = wardenData;
+
+    //fWin.wardenData = wardenData;
 
     // Let us register listeners on the window, so we can update the state
     // automatically (the listeners will be removed when the window is closed)
@@ -212,6 +211,7 @@ function initialize() {
 
     // Remove file:// if you need to load http URLs
     fWin.loadURL(`file://${__dirname}/${pjson.config.mainurl}`, {});
+    console.log(pjson.config.mainurl);
 
     //letnew_window = window.open('https://auth.thinkingphones.com?accessToken=2.M9G01Num4hZ08KQ.YXBwbGljYXRpb246dmh5NE5MMUU4UToyMU5VUk5Cd2NQ&redirectUri=https%3A%2F%2Fwblogin.gts.fuze.com');
     //new_window.focus();
@@ -232,7 +232,9 @@ function initialize() {
     fWin.webContents.on(
       "did-fail-load",
       (error, errorCode, errorDescription) => {
-        leterrorMessage;
+
+        console.log('Failed to load...' + error + " " + errorCode + " " + errorDescription);
+        let errorMessage;
 
         if (errorCode === -105) {
           errorMessage =
@@ -262,13 +264,12 @@ function initialize() {
     });
 
     //
-    backgroundProcess.onReady(fWin);
     return fWin;
   }
 
   //Reset Settings
   function resetSettings(callback) {
-    letsettingsFilePath = settings.file();
+    const settingsFilePath = settings.file();
     console.log("\n settingsFilePath : " + settingsFilePath);
     try {
       fs.unlinkSync(settingsFilePath);
@@ -283,6 +284,7 @@ function initialize() {
 
   app.on("activate", () => {
     isUserAuthenticated(function(res) {
+      console.log(res);
       if (res == true) {
         if (mainWindow === null) {
           mainWindow = createFconMainWindow(
@@ -364,3 +366,5 @@ function makeSingleInstance() {
 function createMenu() {
   return Menu.buildFromTemplate(require("./lib/menu"));
 }
+
+initialize();
