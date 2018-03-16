@@ -136,6 +136,7 @@
     "pre-commit": "^1",
     "rimraf": "^2",
     "shelljs": "^0.7",
+    "soleng-presence-client": "git+https://github.com/fuze/soleng-presence-client.git",
     "spectron": "^3",
     "standard": "^8.6.0",
     "xmlhttprequest": "^1"
