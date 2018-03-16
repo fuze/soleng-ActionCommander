@@ -5,13 +5,18 @@ const { ipcMain } = require("electron");
 const settings = require("electron-settings");
 const { exec } = require("child_process");
 const EventEmitter = require("events");
+const presenceClient = require('soleng-presence-client');
+const cjson = require('../../../config/config.json');
 
 let contents;
 let currentStatus = {};
 let intervals = [];
 let thisWindow;
-let wardenData;
+let _wardenData;
 
+const status = document.getElementById('status');
+
+/*
 const userPresence = new Presence();
 
 function onReady(browserWindow) {
@@ -28,7 +33,6 @@ function onReady(browserWindow) {
     setUpTriggers(newTriggers);
   });
 }
-
 function getPresence(callback) {
   fuzePresence.getPresence(wardenData.data.grant.token, (err, response) => {
     try {
@@ -124,21 +128,22 @@ function setUpTriggers(triggerList) {
     });
   }
 }
+*/
 
-///////////////////
-// window events //
-///////////////////
-ipcMain.on("main loaded", () => {
-  //when the main page is loaded send the current presence to be displayed
-  sendPresenceData(userPresence.state);
+function handlePresenceUpdate(result) {
+  status.innerHTML = result;
+  // TODO: update busylight or whatever, from here 
+}
+
+function pushDataToConfObject(confObject, authDetails) {
+  confObject.username = authDetails.data.entity.origin.id;
+  confObject.tenantId = authDetails.data.entity.tenantKey;
+  confObject.wardenToken = authDetails.data.grant.token;
+
+  return confObject;
+}
+
+ipcRenderer.on('contents-loaded', (event, data) => {
+  let configuration = pushDataToConfObject(cjson, data);
+  presenceClient.start(configuration, handlePresenceUpdate);
 });
-
-ipåcMain.on("open settings", () => {
-  thisWindow.loadURL(settingsURL, {});
-});
-
-ipcMain.on("close settings", () => {
-  thisWindow.loadURL(mainURL, {});
-});
-
-module.exports = { onReady };

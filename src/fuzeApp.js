@@ -158,6 +158,7 @@ function initialize() {
           console.log("NOT Win32");
           win.close();
         }
+
         universalLogin.replaceToken(newUrl, function(results) {
           settings.set("userData.wardenToken", results);
           if (process.platform !== "win32") {
@@ -201,8 +202,6 @@ function initialize() {
         preload: path.resolve(path.join(__dirname, "preload.js"))
       }
     });
-
-    //fWin.wardenData = wardenData;
 
     // Let us register listeners on the window, so we can update the state
     // automatically (the listeners will be removed when the window is closed)
@@ -259,8 +258,7 @@ function initialize() {
     });
 
     fWin.webContents.on("did-finish-load", () => {
-      console.log("Finish load");
-      fWin.webContents.send("contents-loaded", "contents-loaded");
+      fWin.webContents.send("contents-loaded", wardenData);
     });
 
     //
