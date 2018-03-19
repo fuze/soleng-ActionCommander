@@ -1,18 +1,18 @@
 {
-  "name": "Fuze_Connect",
-  "description": "Fuze Connect Installable",
-  "version": "2.0.1",
+  "name": "fuze-presence-commander",
+  "description": "Presence Commander",
+  "version": "0.0.1",
   "target": "electron",
   "author": {
-    "name": "Fuze Solution Engineering",
-    "email": "coe@fuze.com",
+    "name": "Fuze <support@fuze.com>",
     "url": "https://www.fuze.com/"
   },
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fuze/coe-electron-fuze-connect.git"
+    "url": "https://github.com/fuze/soleng-presenceCommander.git"
   },
+  "private": true,
   "main": "./src/fuzeApp.js",
   "scripts": {
     "test": "standard && mocha --recursive",
@@ -55,25 +55,27 @@
   },
   "pre-commit": [],
   "keywords": [
-    "electron-app",
-    "electron",
-    "boilerplate"
+    "presence-commander",
+    "presence",
+    "fuze"
   ],
   "build": {
-    "appId": "com.soleng-fuze-connect-electron",
-    "productName": "Fuze Connect",
+    "appId": "com.soleng-presence-commander",
+    "productName": "Fuze Presence Commander",
     "asar": true,
     "compression": "maximum",
     "win": {
       "target": [
         "squirrel"
-      ]
+      ],
+      "icon": "src/assets/icons/win/icon.ico"
     },
     "mac": {
       "target": [
         "dir",
         "dmg"
-      ]
+      ],
+      "icon": "src/assets/icons/mac/icon.icns"
     },
     "nsis": {
       "oneClick": false,
@@ -81,19 +83,10 @@
       "runAfterFinish": false
     },
     "publish": {
-      "repo": "soleng-fuze-connect-electron",
+      "repo": "soleng-presenceCommander",
       "owner": "fuze",
       "private": true,
-      "provider": "github",
-      "token": "512ee5fdf14c0afee7a46904fbc45477ddf1b702"
-
-    },
-
-    "mac": {
-      "icon": "src/assets/icons/mac/icon.icns"
-    },
-    "win": {
-      "icon": "src/assets/icons/win/icon.ico"
+      "provider": "github"
     },
     "linux": {
       "icon": "build/icons"
@@ -143,6 +136,7 @@
     "pre-commit": "^1",
     "rimraf": "^2",
     "shelljs": "^0.7",
+    "soleng-presence-client": "git+https://github.com/fuze/soleng-presence-client.git",
     "spectron": "^3",
     "standard": "^8.6.0",
     "xmlhttprequest": "^1"

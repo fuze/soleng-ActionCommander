@@ -1,8 +1,8 @@
 'use strict'
 
-const expect = require('chai').expect
+const expect = require('chai').expect; 
 
-describe('(unit) example suite', () => {
+describe('fuze web socket listener', () => {
   // Before test suite
   before((done) => {
     return done()

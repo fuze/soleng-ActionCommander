@@ -1,4 +1,5 @@
 dist
 node_modules
 src/node_modules
-package-lock.json
+src/config/config.original.json
+
