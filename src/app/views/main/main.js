@@ -14,7 +14,7 @@ let intervals = [];
 let thisWindow;
 let _wardenData;
 
-const status = document.getElementById('status');
+const statusLabel = document.getElementById('status');
 
 /*
 const userPresence = new Presence();
@@ -130,9 +130,15 @@ function setUpTriggers(triggerList) {
 }
 */
 
-function handlePresenceUpdate(result) {
-  status.innerHTML = result;
-  // TODO: update busylight or whatever, from here 
+function handlePresenceUpdate(status, result) {
+
+  if (status) {
+    console.log('Received a status message ' + status);
+  }
+
+  if (result) {
+    statusLabel.innerHTML = 'New status : ' + result.status.presence;
+  }
 }
 
 function pushDataToConfObject(confObject, authDetails) {
