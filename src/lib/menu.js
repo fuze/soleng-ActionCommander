@@ -18,7 +18,7 @@ const editSubmenu = [
     click: function (item, focusedWindow) {
       if (focusedWindow) {
         //focusedWindow.reload()
-        ipcMain.emit('open settings')
+        ipcMain.emit('open-settings')
       }
     }
   }

@@ -67,6 +67,7 @@ console.info("User Locale ==  " + app.getLocale());
 
 global.mainWindow = null;
 global.loginWindow = null;
+global.settingsWindow = null;
 
 let infoWindow = null;
 
@@ -79,6 +80,7 @@ function initialize() {
   function onClosed() {
     mainWindow = null;
     infoWindow = null;
+    settingsWindow = null;
   }
 
   function isUserAuthenticated(callback) {
@@ -265,6 +267,49 @@ function initialize() {
     return fWin;
   }
 
+    // MainWindow Section
+    function createSettingsWindow() {
+      const mainWindowState = windowStateKeeper({
+        defaultWidth: 440,
+        defaultHeight: 680
+      });
+  
+      const settingsWindow = new BrowserWindow({
+        transparent: false,
+        width: 440,
+        height: 680,
+        resizable: false,
+        frame: true,
+        x: mainWindowState.x,
+        y: mainWindowState.y,
+        title: app.getName(),
+        icon: path.join(__dirname, "src/assets/icons/png/64x64.png"),
+        show: true
+      });
+
+      mainWindowState.manage(settingsWindow);
+      settingsWindow.loadURL(`file://${__dirname}/${pjson.config.settingsurl}`, {});
+  
+      // Then, when everything is loaded, show the window and focus it so it pops up for the user
+      settingsWindow.on("ready-to-show", () => {
+        settingsWindow.show();
+        settingsWindow.focus();
+      });
+  
+      settingsWindow.on("unresponsive", function() {
+        console.warn("The windows is not responding");
+      });
+  
+      settingsWindow.webContents.on("crashed", () => {
+        console.error("The browser window has just crashed");
+      });
+  
+      settingsWindow.webContents.on("did-finish-load", () => {
+      });
+  
+      return settingsWindow;
+    }
+
   //Reset Settings
   function resetSettings(callback) {
     const settingsFilePath = settings.file();
@@ -343,6 +388,20 @@ function initialize() {
       infoWindow = null;
     });
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  // Settings Window
+  //////////////////////////////////////////////////////////////////////////////////////
+
+  ipcMain.on('open-settings', () => {
+    settingsWindow = createSettingsWindow();
+  });
+
+  ipcMain.on('close-settings', () => {
+    settingsWindow.close();
+  })
+
+
 }
 
 // Make this app a single instance app.
