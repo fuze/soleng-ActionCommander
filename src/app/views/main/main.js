@@ -130,6 +130,28 @@ function setUpTriggers(triggerList) {
 }
 */
 
+////////////////////////
+// UI event handeling //
+////////////////////////
+document.getElementById('save-button').addEventListener("click", saveSettings);
+document.getElementById('reload-button').addEventListener("click", reload);
+document.getElementById('logout-button').addEventListener("click", logout);
+
+document.getElementById('ringtone-test-button').addEventListener("click", testRingtone);
+
+function testRingtone(){
+  let ringtone = document.getElementById('ringtone').value
+  let volume = document.getElementById('volume').value
+  //send command to main proccess to ring
+}
+
+
+function saveSettings(){}
+function reload(){}
+function logout(){}
+
+
+
 function handlePresenceUpdate(result) {
   status.innerHTML = result;
   // TODO: update busylight or whatever, from here 

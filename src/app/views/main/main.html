@@ -5,10 +5,46 @@
 </head>
 
 <body>
-	<div id="status-text">Current status:</div>
-	<div id="status">unknown</div>
-	<div id="tags-text">Current tags:</div>
-	<div id="tags">unknown</div>
+	<div id="state-display">
+		<div id="status-text">Current status:</div>
+		<div id="status">unknown</div>
+		<div id="tags-text">Current tags:</div>
+		<div id="tags">unknown</div>
+		<div>Device Status:</div>
+		<div id="device-status">unknown</div>
+		<div>Call event status:</div>
+		<div id="websocket-status">unknown</div>
+	</div>
+	<div id="settings-box">
+		<div>Ringtone</div>
+		<select id="ringtone">
+			<option>OpenOffice</option>
+			<option>Quiet</option>
+			<option>Funky</option>
+			<option>FairyTale</option>
+			<option>KuandoTrain</option>
+			<option>TelephoneNordic</option>
+			<option>TelephoneOriginal</option>
+			<option>TelephonePickMeUp</option>
+			<option>Buzz</option>
+		</select>
+		<div>Volume</div>
+		<select id="volume">
+			<option>0</option>
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+			<option>5</option>
+			<option>6</option>
+			<option>7</option>
+		</select>
+		<div id='ringtone-test-button'>Test</div>
+		<div id='save-button'>Save</div>
+		<div id='reload-button'>Reload</div>
+		<div id='logout-button'>Log Out</div>
+		
+	</div>
 	<div id="settings-button"></div>
 	<script>
 		require('./main.js');
