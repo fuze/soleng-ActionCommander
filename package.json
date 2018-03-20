@@ -116,6 +116,7 @@
     "shelljs": "^0.7",
     "spectron": "^3",
     "standard": "^8.6.0",
+    "busylight": "0.3.2",
     "xmlhttprequest": "^1"
   },
   "dependencies": {
@@ -139,6 +140,7 @@
     "soleng-presence-client": "git+https://github.com/fuze/soleng-presence-client.git",
     "spectron": "^3",
     "standard": "^8.6.0",
+    "busylight": "0.3.2",
     "xmlhttprequest": "^1"
   }
 }

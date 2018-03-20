@@ -2,7 +2,8 @@ const { remote } = require('electron');
 const { ipcRenderer } = require('electron');
 const mainWindow = remote.getGlobal('mainWindow');
 const { ipcMain } = require("electron");
-const settings = require("electron-settings");
+//const settings = require("electron-settings");
+const settings = require('electron').remote.require('electron-settings')
 const { exec } = require("child_process");
 const EventEmitter = require("events");
 const presenceClient = require('soleng-presence-client');
@@ -141,21 +142,28 @@ document.getElementById('ringtone-test-button').addEventListener("click", testRi
 
 function testRingtone(){
   let ringtone = document.getElementById('ringtone').value
-  let volume = document.getElementById('volume').value
+  let volume = parseInt(document.getElementById('volume').value)
   //send command to main proccess to ring
+  ipcRenderer.send('busylight-ring-test', ringtone, volume)
+
 }
 
 
-function saveSettings(){}
+function saveSettings(){
+  settings.set('appSettings.ringtone', document.getElementById('ringtone').value)
+  settings.set('appSettings.volume', parseInt(document.getElementById('volume').value))
+}
 function reload(){}
 function logout(){}
 
 
 
 function handlePresenceUpdate(result) {
+  ipcRenderer.send('presence-update', result)
   status.innerHTML = result;
   // TODO: update busylight or whatever, from here 
 }
+
 
 function pushDataToConfObject(confObject, authDetails) {
   confObject.username = authDetails.data.entity.origin.id;
