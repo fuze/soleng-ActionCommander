@@ -19,10 +19,10 @@ const settings = require("electron-settings");
 const universalLogin = require("./app/js/util/universalLogin");
 // Make this available in all modules
 const log = require("./app/js/util/util.log");
-var backgroundProccess = require("./app/js/background.js")
+
 require("electron-debug")({ showDevTools: true });
 require("./lib/log");
-
+var backgroundProccess = require("./app/js/background.js")
 global.pjson = require("./package.json");
 
 app.setName(pjson.productName);
@@ -211,6 +211,7 @@ function initialize() {
     // Remove file:// if you need to load http URLs
     fWin.loadURL(`file://${__dirname}/${pjson.config.mainurl}`, {});
     console.log(pjson.config.mainurl);
+    backgroundProccess.start()
     
 
     //letnew_window = window.open('https://auth.thinkingphones.com?accessToken=2.M9G01Num4hZ08KQ.YXBwbGljYXRpb246dmh5NE5MMUU4UToyMU5VUk5Cd2NQ&redirectUri=https%3A%2F%2Fwblogin.gts.fuze.com');
