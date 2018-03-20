@@ -6,8 +6,10 @@ const { ipcMain } = require("electron");
 const settings = require('electron').remote.require('electron-settings')
 const { exec } = require("child_process");
 const EventEmitter = require("events");
-const presenceClient = require('soleng-presence-client');
 const cjson = require('../../../config/config.json');
+const presenceClient = require('soleng-presence-client');
+const presenceWatcher = new presenceClient.PresenceWatcher.PresenceWatcher(cjson, 5000);
+
 
 let contents;
 let currentStatus = {};
@@ -158,7 +160,7 @@ function logout(){}
 
 
 
-function handlePresenceUpdate(result) {
+function handlePresenceUpdate(status, result) {
   ipcRenderer.send('presence-update', result)
   status.innerHTML = result;
   // TODO: update busylight or whatever, from here 
@@ -175,5 +177,5 @@ function pushDataToConfObject(confObject, authDetails) {
 
 ipcRenderer.on('contents-loaded', (event, data) => {
   let configuration = pushDataToConfObject(cjson, data);
-  presenceClient.start(configuration, handlePresenceUpdate);
+  presenceWatcher.start(handlePresenceUpdate);
 });
