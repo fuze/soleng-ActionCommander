@@ -23,7 +23,7 @@ function start(wardenData){
 
 
 function handlePresenceUpdate(data){
-	console.log(data)
+	console.log(data.status.platformData.data)
 	//testing lines
 	if (data == "busy"){
 		startRing()

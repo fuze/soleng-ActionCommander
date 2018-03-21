@@ -166,7 +166,9 @@ function logout(){}
 
 function handlePresenceUpdate(status, result) {
   ipcRenderer.send('presence-update', result)
-  //status.innerHTML = result;
+  document.getElementById('status').innerHTML = result.status.presence;
+  document.getElementById('tags').innerHTML = result.status.platformData.data.tags;
+  conosle.log(result.status.presence)
   // TODO: update busylight or whatever, from here 
 }
 function handleCallUpdate(status, result) {
@@ -177,6 +179,7 @@ function handleCallUpdate(status, result) {
   if (result) {
     console.log('New call event: ' + result.status.presence);
     ipcRenderer.send('new-call-event', result.status.presence)
+    document.getElementById('call-event').innerHTML = result.status.presence;
   }
 }
 
