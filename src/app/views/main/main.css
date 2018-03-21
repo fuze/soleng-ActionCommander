@@ -9,13 +9,19 @@
 #state-display {
 	display: grid;
 	grid-template-columns: 150px 1fr;
-	grid-template-rows: repeat(4, 25px);
+	grid-template-rows: 50px repeat(5, 25px);
+}
+
+.header-text{
+	grid-column: 1 / span 2;
+	text-align: center;
+	font-size: 25px;
 }
 
 #settings-box {
 	display: grid;
 	grid-template-columns: [label] 150px [input] 1fr;
-	grid-template-rows: repeat(3, 30px);
+	grid-template-rows: 50px repeat(3, 30px);
 }
 
 #app-controlls {
