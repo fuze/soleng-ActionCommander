@@ -7,8 +7,12 @@ const settings = require('electron').remote.require('electron-settings')
 const { exec } = require("child_process");
 const EventEmitter = require("events");
 const cjson = require('../../../config/config.json');
-const presenceClient = require('soleng-presence-client');
-const presenceWatcher = new presenceClient.PresenceWatcher.PresenceWatcher(cjson, 5000);
+
+//const presenceClient = require('soleng-presence-client');
+const { PresenceWatcher, CallEventsWatcher } = require('soleng-presence-client');
+//const presenceWatcher = new presenceClient.PresenceWatcher.PresenceWatcher(cjson, 5000);
+
+
 
 
 let contents;
@@ -162,8 +166,18 @@ function logout(){}
 
 function handlePresenceUpdate(status, result) {
   ipcRenderer.send('presence-update', result)
-  status.innerHTML = result;
+  //status.innerHTML = result;
   // TODO: update busylight or whatever, from here 
+}
+function handleCallUpdate(status, result) {
+  console.log("XXXXXXXXXXXXXXX NEW CALL EVENT XXXXXXXXXXXXXXX")
+  //if (status) {
+  //  console.log('Received a status message' + JSON.stringify(status.presence));
+  //}
+  if (result) {
+    console.log('New call event: ' + result.status.presence);
+    ipcRenderer.send('new-call-event', result.status.presence)
+  }
 }
 
 
@@ -177,5 +191,13 @@ function pushDataToConfObject(confObject, authDetails) {
 
 ipcRenderer.on('contents-loaded', (event, data) => {
   let configuration = pushDataToConfObject(cjson, data);
+  //presenceWatcher.start(handlePresenceUpdate);
+  //const callEventsWatcher = new CallEventsWatcher(cjson);
+  //callEventsWatcher.start(handleCallUpdate);
+
+  //const presenceWatcher = new PresenceWatcher.PresenceWatcher(cjson, 5000);
+  const presenceWatcher = new PresenceWatcher(cjson, 5000);
+  const callEventsWatcher = new CallEventsWatcher(cjson);
+  callEventsWatcher.start(handleCallUpdate);
   presenceWatcher.start(handlePresenceUpdate);
 });
