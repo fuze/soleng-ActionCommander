@@ -1,0 +1,43 @@
+#wrapper {
+	height: 100%;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 2fr 2fr 1fr;
+	font-family: "HelveticaNeue",Helvetica,Arial,sans-serif;
+}
+
+#state-display {
+	display: grid;
+	grid-template-columns: 150px 1fr;
+	grid-template-rows: repeat(4, 25px);
+}
+
+#settings-box {
+	display: grid;
+	grid-template-columns: [label] 150px [input] 1fr;
+	grid-template-rows: repeat(3, 30px);
+}
+
+#app-controlls {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr [bottom] 30px;
+}
+
+#app-controlls .button {
+	grid-row-start: bottom;
+}
+
+.button {
+	
+	text-align: center;
+	border-radius: 5px;
+	padding: 5px 0;
+	margin: 1px; 
+	background: #6b3586;
+	color: white;
+}
+#ringtone-test-button {
+	background: #3abdc0;
+}
+
