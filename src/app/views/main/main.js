@@ -1,12 +1,11 @@
 const { ipcRenderer } = require('electron');
 const settings = require("electron-settings");
-const { PresenceWatcher, PresenceUpdateRate, CallEventsWatcher } = require('soleng-presence-client')
+const { PresenceWatcher, PresenceUpdateRate, CallEventsWatcher } = require('soleng-presence-client');
 const cjson = require('../../../config/config.json');
 const statusLabel = document.getElementById('status');
 const callStatusLabel = document.getElementById('call-status');
 
 function handlePresenceUpdate(status, result) {
-  //1. Check current-settings to see what action to take according to the previous and current presence
   if (status) {
     console.log('Received a status message ' + status);
   }
