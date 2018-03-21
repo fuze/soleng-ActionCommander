@@ -31,6 +31,12 @@ function handlePresenceUpdate(data){
 		stopRing()
 	}
 }
+function handleCallEvent(callEvent){
+	if (callEvent == "call_ring"){startRing()}
+	if (callEvent == "call_connected"){stopRing()}
+	if (callEvent == "call_end"){stopRing()}
+
+}
 /*
 function pushDataToConfObject(confObject, authDetails) {
   confObject.username = authDetails.data.entity.origin.id;
@@ -42,6 +48,10 @@ function pushDataToConfObject(confObject, authDetails) {
 */
 ipcMain.on('presence-update', (event, data) => {
   handlePresenceUpdate(data)
+})
+ipcMain.on('new-call-event', (event, data) => {
+  handleCallEvent(data)
+  console.log(data)
 })
 
 function startRing(){
@@ -59,7 +69,7 @@ function setColor(color){
 }
 
 ipcMain.on('busylight-ring-test', (event, tone, volume) => {
-  busylight.ring(tone, volume).blink()
+  busylight.ring(tone, volume)
   setTimeout(()=>{busylight.ring(false)}, 8000);
 })
 
