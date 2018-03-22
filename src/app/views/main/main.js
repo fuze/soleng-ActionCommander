@@ -140,11 +140,24 @@ function setUpTriggers(triggerList) {
 ////////////////////////
 // UI event handeling //
 ////////////////////////
+
 document.getElementById('save-button').addEventListener("click", saveSettings);
 document.getElementById('reload-button').addEventListener("click", reload);
 document.getElementById('logout-button').addEventListener("click", logout);
 
 document.getElementById('ringtone-test-button').addEventListener("click", testRingtone);
+
+//load settings to UI
+setSelect(document.getElementById('ringtone'), settings.get("appSettings.ringtone", 'OpenOffice'))
+setSelect(document.getElementById('volume'), settings.get("appSettings.volume", 4))
+
+function setSelect(element,value){
+  for (option of element.options){
+    if (option.value ==  value){
+      option.selected = true
+    }
+  }
+}
 
 function testRingtone(){
   let ringtone = document.getElementById('ringtone').value
