@@ -216,6 +216,11 @@ function initialize() {
 
     //letnew_window = window.open('https://auth.thinkingphones.com?accessToken=2.M9G01Num4hZ08KQ.YXBwbGljYXRpb246dmh5NE5MMUU4UToyMU5VUk5Cd2NQ&redirectUri=https%3A%2F%2Fwblogin.gts.fuze.com');
     //new_window.focus();
+    fWin.on('close', (event)=> {
+      event.preventDefault()
+      fWin.hide()
+    })
+
     fWin.on("closed", onClosed);
 
     // Then, when everything is loaded, show the window and focus it so it pops up for the user
@@ -324,6 +329,13 @@ function initialize() {
       mainWindow.close();
     });
   });
+
+  ipcMain.on("show", ()=> {
+    mainWindow.show();
+  })
+  ipcMain.on("exit", ()=> {
+    app.exit()
+  })
 
   //////////////////////////////////////////////////////////////////////////////////////
   // Info Window

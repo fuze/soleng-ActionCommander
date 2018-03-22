@@ -1,12 +1,14 @@
-const { remote } = require('electron');
-const { ipcRenderer } = require('electron');
+//const { remote } = require('electron');
+const { ipcRenderer, remote } = require('electron');
 const mainWindow = remote.getGlobal('mainWindow');
-const { ipcMain } = require("electron");
+//const { ipcMain } = require("electron");
 //const settings = require("electron-settings");
-const settings = require('electron').remote.require('electron-settings')
+const settings = remote.require('electron-settings')
+const {Tray, Menu} = remote;
 const { exec } = require("child_process");
 const EventEmitter = require("events");
 const cjson = require('../../../config/config.json');
+const path = require("path");
 
 //const presenceClient = require('soleng-presence-client');
 const { PresenceWatcher, CallEventsWatcher } = require('soleng-presence-client');
@@ -136,6 +138,28 @@ function setUpTriggers(triggerList) {
   }
 }
 */
+
+
+///////////////////////
+// Tray interactions //
+///////////////////////
+
+//trayIcon = new Tray('../../../assets/icons/png/16x16.png')
+console.log(path.join(__dirname, "../../../assets/icons/png/64x64.png"))
+let trayIcon = new Tray(path.join(__dirname, "../../../assets/icons/png/64x64.png"))
+const trayMenuTemplate = [
+  {
+    label: 'settings',
+    click: ()=>{ipcRenderer.send('show')}
+  },
+  {
+    label: 'exit',
+    click: ()=>{ipcRenderer.send('exit')}
+  }
+]
+let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
+trayIcon.setContextMenu(trayMenu)
+
 
 ////////////////////////
 // UI event handeling //
