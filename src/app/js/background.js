@@ -54,6 +54,10 @@ ipcMain.on('new-call-event', (event, data) => {
   console.log(data)
 })
 
+ipcMain.on('get-device-status', (event)=>{
+	event.sender.send('device-status', busylight.connected)
+})
+
 function startRing(){
 	busylight.ring().blink() //ring and blink using the default values for color, tone, and volume
 }

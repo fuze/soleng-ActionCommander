@@ -240,4 +240,15 @@ ipcRenderer.on('contents-loaded', (event, data) => {
   const callEventsWatcher = new CallEventsWatcher(cjson);
   callEventsWatcher.start(handleCallUpdate);
   presenceWatcher.start(handlePresenceUpdate);
+  ipcRenderer.send('get-device-status')
 });
+
+ipcRenderer.on('device-status', (event, arg)=>{
+  let deviceState
+  if (arg == true){
+    deviceState = "Connected"
+  } else {
+    deviceState = "Not connected"
+  }
+  document.getElementById('device-status').innerHTML = deviceState;
+})
