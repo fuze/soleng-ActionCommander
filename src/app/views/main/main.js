@@ -159,25 +159,25 @@ function saveSettings(){
   settings.set('appSettings.ringtone', document.getElementById('ringtone').value)
   settings.set('appSettings.volume', parseInt(document.getElementById('volume').value))
 }
+
 function reload(){}
 function logout(){}
 
-
+///////////////////////////////////////
+// Presence and call event handeling //
+///////////////////////////////////////
 
 function handlePresenceUpdate(status, result) {
   ipcRenderer.send('presence-update', result)
   document.getElementById('status').innerHTML = result.status.presence;
   document.getElementById('tags').innerHTML = result.status.platformData.data.tags;
-  conosle.log(result.status.presence)
   // TODO: update busylight or whatever, from here 
 }
 function handleCallUpdate(status, result) {
-  console.log("XXXXXXXXXXXXXXX NEW CALL EVENT XXXXXXXXXXXXXXX")
-  //if (status) {
-  //  console.log('Received a status message' + JSON.stringify(status.presence));
-  //}
+  if (status) {
+    document.getElementById('websocket-status').innerHTML = status.event;
+  }
   if (result) {
-    console.log('New call event: ' + result.status.presence);
     ipcRenderer.send('new-call-event', result.status.presence)
     document.getElementById('call-event').innerHTML = result.status.presence;
   }
