@@ -23,12 +23,19 @@ function start(wardenData){
 
 
 function handlePresenceUpdate(data){
-	console.log(data.status.platformData.data)
+	console.log(data.status.presence)
 	//testing lines
-	if (data == "busy"){
-		startRing()
-	} else {
-		stopRing()
+	//if (data.status.presence == "busy" && data.status.platformData.data.tags.indexOf('call') != -1){
+	if (data.status.platformData.data.tags.indexOf('dnd') != -1){
+		setColor('pink')
+	}	else if (data.status.platformData.data.tags.indexOf('call') != -1 || data.status.presence == 'busy'){
+		setColor('red')
+	} else if (data.status.presence == 'available'){
+		setColor('green')
+	} else if (data.status.presence == 'away'){
+		setColor('yellow')
+	} else if (data.status.presence == 'offline'){
+		setColor('black')
 	}
 }
 function handleCallEvent(callEvent){
