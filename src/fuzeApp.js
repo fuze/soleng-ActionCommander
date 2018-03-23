@@ -329,7 +329,10 @@ function initialize() {
       mainWindow.close();
     });
   });
-
+  ipcMain.on("reload", ()=> {
+    mainWindow.close();
+    mainWindow = createFconMainWindow(settings.get("userData.wardenToken"));
+  })
   ipcMain.on("show", ()=> {
     mainWindow.show();
   })

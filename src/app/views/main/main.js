@@ -13,6 +13,8 @@ const path = require("path");
 //const presenceClient = require('soleng-presence-client');
 const { PresenceWatcher, CallEventsWatcher } = require('soleng-presence-client');
 //const presenceWatcher = new presenceClient.PresenceWatcher.PresenceWatcher(cjson, 5000);
+const presenceWatcher = new PresenceWatcher(cjson, 5000);
+const callEventsWatcher = new CallEventsWatcher(cjson);
 
 
 
@@ -154,7 +156,10 @@ const trayMenuTemplate = [
   },
   {
     label: 'exit',
-    click: ()=>{ipcRenderer.send('exit')}
+    click: ()=>{
+      stopListeners()
+      ipcRenderer.send('exit')
+    }
   }
 ]
 let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
@@ -197,8 +202,11 @@ function saveSettings(){
   settings.set('appSettings.volume', parseInt(document.getElementById('volume').value))
 }
 
-function reload(){}
-function logout(){}
+function reload(){
+  stopListeners()
+  ipcRenderer.send('reload')
+}
+function logout(){ipcRenderer.send('reset-config')}
 
 ///////////////////////////////////////
 // Presence and call event handeling //
@@ -220,6 +228,10 @@ function handleCallUpdate(status, result) {
   }
 }
 
+function stopListeners(){
+  callEventsWatcher.stop(()=>{})
+  presenceWatcher.stop()
+}
 
 function pushDataToConfObject(confObject, authDetails) {
   confObject.username = authDetails.data.entity.origin.id;
@@ -231,13 +243,6 @@ function pushDataToConfObject(confObject, authDetails) {
 
 ipcRenderer.on('contents-loaded', (event, data) => {
   let configuration = pushDataToConfObject(cjson, data);
-  //presenceWatcher.start(handlePresenceUpdate);
-  //const callEventsWatcher = new CallEventsWatcher(cjson);
-  //callEventsWatcher.start(handleCallUpdate);
-
-  //const presenceWatcher = new PresenceWatcher.PresenceWatcher(cjson, 5000);
-  const presenceWatcher = new PresenceWatcher(cjson, 5000);
-  const callEventsWatcher = new CallEventsWatcher(cjson);
   callEventsWatcher.start(handleCallUpdate);
   presenceWatcher.start(handlePresenceUpdate);
   ipcRenderer.send('get-device-status')
