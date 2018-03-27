@@ -147,8 +147,9 @@ function setUpTriggers(triggerList) {
 ///////////////////////
 
 //trayIcon = new Tray('../../../assets/icons/png/16x16.png')
-console.log(path.join(__dirname, "../../../assets/icons/png/64x64.png"))
-let trayIcon = new Tray(path.join(__dirname, "../../../assets/icons/png/64x64.png"))
+let iconSize = "../../../assets/icons/png/16x16.png";
+console.log(path.join(__dirname, iconSize));
+let trayIcon = new Tray(path.join(__dirname, iconSize));
 const trayMenuTemplate = [
   {
     label: 'settings',
@@ -216,7 +217,7 @@ function handlePresenceUpdate(status, result) {
   ipcRenderer.send('presence-update', result)
   document.getElementById('status').innerHTML = result.status.presence;
   document.getElementById('tags').innerHTML = result.status.platformData.data.tags;
-  // TODO: update busylight or whatever, from here 
+  // TODO: update busylight or whatever, from here
 }
 function handleCallUpdate(status, result) {
   if (status) {
