@@ -1,6 +1,6 @@
 {
-  "name": "fuze-presence-commander",
-  "description": "Presence Commander",
+  "name": "fuze-busylight-integration",
+  "description": "Fuze Busylight Integration",
   "version": "0.0.1",
   "target": "electron",
   "author": {
@@ -65,9 +65,6 @@
     "asar": true,
     "compression": "maximum",
     "win": {
-      "target": [
-        "squirrel"
-      ],
       "icon": "src/assets/icons/win/icon.ico"
     },
     "mac": {
