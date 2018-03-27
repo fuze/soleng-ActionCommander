@@ -97,6 +97,7 @@ function initialize() {
             //Verify Token
             const wardenToken = settings.get("userData.wardenToken");
             console.log("getUserSettings: wardenToken == " + wardenToken);
+            console.log(wardenToken);
 
             if (wardenToken != null && wardenToken != "undefined") {
               console.log("Warden token exists");
@@ -212,13 +213,22 @@ function initialize() {
     fWin.loadURL(`file://${__dirname}/${pjson.config.mainurl}`, {});
     console.log(pjson.config.mainurl);
     backgroundProccess.start()
-    
+
 
     //letnew_window = window.open('https://auth.thinkingphones.com?accessToken=2.M9G01Num4hZ08KQ.YXBwbGljYXRpb246dmh5NE5MMUU4UToyMU5VUk5Cd2NQ&redirectUri=https%3A%2F%2Fwblogin.gts.fuze.com');
     //new_window.focus();
     fWin.on('close', (event)=> {
       event.preventDefault()
       fWin.hide()
+      try {
+        app.dock.hide();
+      } catch (e) { }
+    })
+
+    fWin.on('show', (event) => {
+      try {
+        app.dock.show();
+      } catch (e) { }
     })
 
     fWin.on("closed", onClosed);
@@ -327,11 +337,13 @@ function initialize() {
     resetSettings(function() {
       loginWindow = createLoginWindow();
       mainWindow.close();
+      try {
+        app.dock.hide()
+      } catch (e) { }
     });
   });
   ipcMain.on("reload", ()=> {
     mainWindow.close();
-    mainWindow = createFconMainWindow(settings.get("userData.wardenToken"));
   })
   ipcMain.on("show", ()=> {
     mainWindow.show();

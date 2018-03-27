@@ -1,7 +1,7 @@
 {
   "name": "fuze-busylight-integration",
   "description": "Fuze Busylight Integration",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "target": "electron",
   "author": {
     "name": "Fuze <support@fuze.com>",
