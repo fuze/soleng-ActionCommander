@@ -1,7 +1,7 @@
 {
-  "name": "soleng-presence-commander-internal",
-  "productName": "Presence Commander",
-  "description": "Presence Commander Installable",
+  "name": "fuze-busylight-integration-internal",
+  "productName": "Fuze Busylight Integration",
+  "description": "Fuze Busylight Integration Installable",
   "version": "0.0.1",
   "homepage": "https://www.fuze.com",
   "author": {

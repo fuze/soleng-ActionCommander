@@ -60,8 +60,8 @@
     "fuze"
   ],
   "build": {
-    "appId": "com.soleng-presence-commander",
-    "productName": "Fuze Presence Commander",
+    "appId": "com.fuze-busylight-integration",
+    "productName": "Fuze Busylight Integration",
     "asar": true,
     "compression": "maximum",
     "win": {
