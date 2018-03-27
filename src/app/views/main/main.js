@@ -1,6 +1,8 @@
 const { ipcRenderer } = require('electron');
 const settings = require("electron-settings");
+const { exec } = require("child_process");
 const { PresenceWatcher, PresenceUpdateRate, CallEventsWatcher } = require('soleng-presence-client');
+const { TriggerManager } = require('../../js/triggerManager.js')
 const cjson = require('../../../config/config.json');
 const statusLabel = document.getElementById('status');
 const callStatusLabel = document.getElementById('call-status');
@@ -33,7 +35,39 @@ function pushDataToConfObject(confObject, authDetails) {
   return confObject;
 }
 
+function setUpCallEventTriggers(triggerManager, triggerList){
+  for (trigger of triggerList){
+    trigger.callback = (platformData)=>{exec(commandSubsitution(trigger.cmd, platformData))}
+    triggerManager.addPresenceTrigger(trigger)
+  }
+}
+
+function commandSubsitution(command, platformData){
+  //parses the command for data to subsitute from platformData
+  //clid
+  //clidname
+  //etc
+  return command
+}
+
+function setUpPresenceTriggers(triggerManager, triggerList){
+  for (trigger of triggerList){
+    trigger.callback = ()=>{exec(trigger.cmd)}
+    triggerManager.addPresenceTrigger(trigger)
+  }
+}
+
 ipcRenderer.on('contents-loaded', (event, data) => {
+  const triggerManager = new TriggerManager()
+  setUpCallEventTriggers(triggerManager, settings.get("appSettings.triggers.callEventTriggers", []))
+  setUpPresenceTriggers(triggerManager, settings.get("appSettings.triggers.presenceTriggers", []))
+  settings.watch("appSettings.triggers", newTriggers => { //if the trigger settings change, clear the triggers and load the new ones
+    triggerManager.clearAllTriggers()
+    setUpCallEventTriggers(triggerManager, settings.get("appSettings.triggers.callEventTriggers", []))
+    setUpPresenceTriggers(triggerManager, settings.get("appSettings.triggers.presenceTriggers", []))
+  });
+
+
   let configuration = pushDataToConfObject(cjson, data);
 
   const presenceWatcher = new PresenceWatcher(cjson, PresenceUpdateRate);
