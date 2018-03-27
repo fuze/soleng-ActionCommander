@@ -15,9 +15,9 @@
 	"cloudElementsUrl" : 			"https://console.cloud-elements.com/elements/api-v2/hubs",
 	"cloudElementsApiUrl" : 		"https://api.cloud-elements.com/elements/api-v2/",
 	"cldElmntsProvUrl" : 			"https://console.cloud-elements.com/elements/api-v2/elements/",
-	"wardenUniversalLoginUrlQtw":  	"https://auth.thinkingphones.com?accessToken=2.cH48V89dAChdeLy.YXBwbGljYXRpb246Sk1FRnRMTXJoUjphcVlNQUpNcmhS&redirectUri=http%3A%2F%2Fws.thinkingphones.com",
-	"wardenUniversalLoginUrlStage":	"https://auth.thinkingphones.com?accessToken=2.NfUpVBos2A7KV7r.YXBwbGljYXRpb246dDJmTDZnV0NIWjpDcnVMdzhYQUha&redirectUri=http%3A%2F%2Fws.thinkingphones.com",
-	"wardenUniversalLoginUrlLive":  "https://auth.thinkingphones.com?accessToken=2.XrolkZUvAxXmKI2.YXBwbGljYXRpb246YUtxcFphV2hyWDo2N3BiWHVxaVla&redirectUri=http%3A%2F%2Fws.thinkingphones.com", 
+	"wardenUniversalLoginUrlQtw":  	"https://auth.thinkingphones.com?accessToken=2.gSfJ4hyBhG6P29q.YXBwbGljYXRpb246clRWa0dRRGk3ZTpwR0ZLaU5EaTdl&redirectUri=http%3A%2F%2Fws.thinkingphones.com",
+	"wardenUniversalLoginUrlStage":	"https://auth.thinkingphones.com?accessToken=2.97ewhOqhWYxVJzL.YXBwbGljYXRpb246SlBWRFFvam9WTDpBMWVSNm9qb1ZM&redirectUri=http%3A%2F%2Fws.thinkingphones.com",
+	"wardenUniversalLoginUrlLive":  "https://auth.thinkingphones.com?accessToken=2.EcTIM7bedO37GWN.YXBwbGljYXRpb246a3RydzFkVGMyWjprTlBOSHNzcE1l&redirectUri=http%3A%2F%2Fws.thinkingphones.com", 
 	"presenceApiUrl": 				"https://presence.fuze.com/api/v1/entities/me/presence",
 	"presenceUpdateRate":			"5000"
 }
