@@ -1,141 +1,87 @@
-const { ipcRenderer } = require('electron')
-const settings = require('electron').remote.require('electron-settings')
-window.onload = function () {
-	console.log("settings page loaded!")
-  let cancleButton = document.getElementById("cancle-button")
-  let saveButton = document.getElementById("save-button")
-  let addTriggerButton = document.getElementById("add-trigger")
-  let generalSettings = document.getElementById("general-settings")
+const { ipcRenderer, remote } = require("electron");
+const settings = remote.require("electron-settings");
+const { TriggerRow } = require("./TriggerRow");
 
-  createGeneralSettings(generalSettings)
-  cancleButton.addEventListener("click", cancle)
-  saveButton.addEventListener("click", saveSettings)
-  addTriggerButton.addEventListener("click", addTriggerRow)
-  
-  let triggerPane = document.getElementById("trigger-list")
-  loadTriggerList(triggerPane)
+const cancelButton = document.getElementById("cancle-button");
+const saveButton = document.getElementById("save-button");
+const addTriggerButton = document.getElementById("add-trigger");
+const generalSettings = document.getElementById("general-settings");
+const triggerPane = document.getElementById("trigger-list");
 
-}
-
-function cancle(){
-	ipcRenderer.send('close settings')
-}
-
-function saveSettings(){
-	let triggerList = getTriggerList()
-  let triggerOnStartup = document.getElementById("trigger-on-startup").checked
-	settings.set('appSettings.triggers', triggerList)
-  settings.set('appSettings.triggerOnStartup', triggerOnStartup)
-
-	ipcRenderer.send('close settings')
-}
-
-function createGeneralSettings(settingsPane){
-  let triggerOnStartup = document.createElement('input')
-  let label = document.createElement('label')
-
-  triggerOnStartup.id = "trigger-on-startup"
-  triggerOnStartup.type = "checkbox"
-  triggerOnStartup.checked = settings.get('appSettings.triggerOnStartup', false) //read the saved value. Default to false
-  
-  label.for = "trigger-on-startup"
-  label.innerHTML = "Proccess triggers on startup"
-
-  settingsPane.appendChild(triggerOnStartup)
-  settingsPane.appendChild(label)
-}
-
-function loadTriggerList(triggerPane){ //loads trigger list from settings
-	let triggerList = settings.get('appSettings.triggers', []) //get the list of triggers that are saved. If the setting does not exist, initize an array
-  for (i in triggerList){
-  	addTriggerRow(triggerList[i])
+function addTriggerRow(values) {
+  if (values === undefined) {
+    values = { stateChange: "to", presenceValue: "busy", cmd: undefined };
   }
-  if (triggerList.length == 0){
-   addTriggerRow()
+  const triggerRow = new TriggerRow(values);
+  triggerPane.appendChild(triggerRow.createElement);
+}
+
+function removeTriggerRow(buttonElement) {
+  let row = buttonElement.parentElement;
+  row.parentElement.removeChild(row);
+  return null;
+}
+
+function getTriggerList() {
+  const triggerList = [];
+  const rowList = triggerPane.children;
+  for (let i = 0; i < rowList.length; i++) {
+    const thisRow = rowList.item(i);
+    const triggerObject = {};
+    triggerObject.stateChange = thisRow.querySelector(".stateChange").value;
+    triggerObject.presenceValue = thisRow.querySelector(".presenceValue").value;
+    triggerObject.cmd = thisRow.querySelector(".cmd").value;
+    if (triggerObject.cmd) {
+      triggerList.push(triggerObject);
+    }
+  }
+  return triggerList;
+}
+
+function loadTriggerList(triggerPane) {
+  const triggerList = settings.get("appSettings.triggers", []); //get the list of triggers that are saved. If the setting does not exist, initize an array
+  for (i in triggerList) {
+    addTriggerRow(triggerList[i]);
+  }
+  if (triggerList.length == 0) {
+    addTriggerRow();
   }
 }
 
-class TriggerRow {
-  constructor(values) {
-  	this.stateChange = values.stateChange
-  	this.presenceValue = values.presenceValue
-  	this.cmd = values.cmd
-  }
-
-  createSelect(className, value, list){
-  	let input = document.createElement('select')
-  	input.setAttribute('class', className)
-  	for (var i in list){
-  		let option = document.createElement('option')
-  		option.setAttribute('value', list[i])
-  		option.innerHTML = list[i]
-  		//if (list[i] == value){input.selectedIndex = option.index} //Sets the default state of the dropdown
-
-  		input.appendChild(option)
-  	}
-  	if (value){input.value = value}
-  	return input
-  }
-  createInput(className, value){
-  	let input = document.createElement('input')
-  	input.setAttribute('class', className)
-  	input.setAttribute('type', 'text')
-  	if (value !== undefined){
-  		input.setAttribute('value', value)
-  	}
-  	return input
-  }
-  createTrash(){
-  	let trash = document.createElement('img')
-  	trash.setAttribute('src', '../images/delete.png')
-  	trash.setAttribute('class', 'delete-button')
-  	trash.addEventListener('click', function (event){removeTriggerRow(event.target)})
-  	return trash
-  }
-  get createElement() {
-  	let row = document.createElement('div')
-  	row.setAttribute('class', 'trigger-row')
-  	let stateChangeInput = this.createSelect("stateChange", this.stateChange, ["to","from"])
-  	let presenceValueInput = this.createSelect("presenceValue", this.presenceValue, ["available", "away", "busy", "out", "dnd", "meeting", "call"]) //add more values
-  	let cmdInput = this.createInput("cmd", this.cmd)
-  	let trash  = this.createTrash()
-  	row.appendChild(stateChangeInput)
-  	row.appendChild(presenceValueInput)
-  	row.appendChild(cmdInput)
-  	row.appendChild(trash)
-  	return (row)
-  }
+function cancel() {
+  ipcRenderer.send("close-settings");
 }
 
-function addTriggerRow(values){ //adds row of UI elements to the end of the trigger list
-	let triggerPane = document.getElementById("trigger-list")
-	if (values === undefined){
-		values = {stateChange: "to", presenceValue: "busy", cmd: undefined}
-	}
-	let triggerRow = new TriggerRow(values)
-	triggerPane.appendChild(triggerRow.createElement)
+function saveSettings() {
+  const triggerList = getTriggerList();
+  const triggerOnStartup = document.getElementById("trigger-on-startup").checked;
+  settings.set("appSettings.triggers", triggerList);
+  settings.set("appSettings.triggerOnStartup", triggerOnStartup);
+
+  ipcRenderer.send("close-settings");
 }
 
-function removeTriggerRow(buttonElement){
-	let row = buttonElement.parentElement
-	row.parentElement.removeChild(row)
-	return null
+function createGeneralSettings(settingsPane) {
+  const triggerOnStartup = document.createElement("input");
+  const label = document.createElement("label");
+
+  triggerOnStartup.id = "trigger-on-startup";
+  triggerOnStartup.type = "checkbox";
+  triggerOnStartup.checked = settings.get(
+    "appSettings.triggerOnStartup",
+    false
+  ); //read the saved value. Default to false
+
+  label.for = "trigger-on-startup";
+  label.innerHTML = "Proccess triggers on startup";
+
+  settingsPane.appendChild(triggerOnStartup);
+  settingsPane.appendChild(label);
 }
 
-function getTriggerList(){ //reads the list of triggers from the UI and returns an array
-	let triggerList = []
-	let triggerPane = document.getElementById("trigger-list")
-	let rowList = triggerPane.children
-	for (var i=0; i<rowList.length; i++){  //save each triggerRow in the UI as an object in the triggerList
-		let thisRow = rowList.item(i)
-		let tirggerObject = {}
-		tirggerObject.stateChange = thisRow.querySelector('.stateChange').value
-		tirggerObject.presenceValue = thisRow.querySelector('.presenceValue').value
-		tirggerObject.cmd = thisRow.querySelector('.cmd').value
-		if (tirggerObject.cmd){
-			triggerList.push(tirggerObject)
-		}
-	}
-	return triggerList
+cancelButton.addEventListener("click", cancel);
+saveButton.addEventListener("click", saveSettings);
+addTriggerButton.addEventListener("click", addTriggerRow);
 
-}
+createGeneralSettings(generalSettings);
+loadTriggerList(triggerPane);
