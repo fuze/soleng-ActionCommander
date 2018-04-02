@@ -21,6 +21,10 @@ function start(wardenData){
 
 }
 
+function stop(){
+	busylight.close()
+}
+
 
 function handlePresenceUpdate(data){
 	console.log(data.status.presence)
@@ -92,5 +96,6 @@ ipcMain.on('contents-loaded', (event, data) => {
 });
 */
 module.exports = {
-  start: start
+  start: start,
+  stop: stop
 }
