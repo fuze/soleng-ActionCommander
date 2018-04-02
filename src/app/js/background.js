@@ -69,13 +69,22 @@ ipcMain.on('get-device-status', (event)=>{
 	event.sender.send('device-status', busylight.connected)
 })
 
+let ringTimeout = null
+
 function startRing(){
 	busylight.ring().blink() //ring and blink using the default values for color, tone, and volume
+	clearTimeout(ringTimeout)
+	ringTimeout = setTimeout(stopRing, 50000) //stop the ringing after 50 seconds in case we dont get a call event
 }
 
 function stopRing(){
 	busylight.ring(false).blink(false)
 	busylight.light() //set the light back to the color set in defualts (current color)
+
+	if (ringTimeout){
+		clearTimeout(ringTimeout)
+		ringTimeout = null
+	}
 }
 
 function setColor(color){
@@ -85,7 +94,8 @@ function setColor(color){
 
 ipcMain.on('busylight-ring-test', (event, tone, volume) => {
   busylight.ring(tone, volume)
-  setTimeout(()=>{busylight.ring(false)}, 8000);
+  clearTimeout(ringTimeout)
+  ringTimeout = setTimeout(stopRing, 8000);
 })
 
 
