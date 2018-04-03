@@ -4,7 +4,7 @@ const mainWindow = remote.getGlobal('mainWindow');
 //const { ipcMain } = require("electron");
 //const settings = require("electron-settings");
 const settings = remote.require('electron-settings')
-const {Tray, Menu} = remote;
+//const {Tray, Menu} = remote;
 const { exec } = require("child_process");
 const EventEmitter = require("events");
 const cjson = require('../../../config/config.json');
@@ -141,7 +141,7 @@ function setUpTriggers(triggerList) {
 }
 */
 
-
+/*
 ///////////////////////
 // Tray interactions //
 ///////////////////////
@@ -164,7 +164,7 @@ const trayMenuTemplate = [
 ]
 let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
 trayIcon.setContextMenu(trayMenu)
-
+*/
 
 ////////////////////////
 // UI event handeling //

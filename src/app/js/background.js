@@ -1,8 +1,11 @@
 let busylight
-const { ipcMain } = require('electron');
+const { app, Tray, Menu, ipcMain } = require('electron');
+const path = require("path");
 const settings = require('electron-settings');
 //const presenceClient = require('soleng-presence-client');
 //const cjson = require('../../config/config.json');
+
+
 
 function start(wardenData){
 	busylight = require('busylight').get()
@@ -18,7 +21,35 @@ function start(wardenData){
 
 	settings.watch("appSettings.ringtone", (newRingtone)=>{busylight.defaults({'tone': newRingtone})})
 	settings.watch("appSettings.volume", (newVolume)=>{busylight.defaults({'volume': newVolume})})
+	createTrayMenu()
+}
+let tray = null
+function createTrayMenu(){
+	///////////////////////
+	// Tray interactions //
+	///////////////////////
 
+	//trayIcon = new Tray('../../../assets/icons/png/16x16.png')
+	//console.log(path.join(__dirname, "../../assets/icons/png/64x64.png"))
+	trayIcon = new Tray(path.join(__dirname, "../../assets/icons/png/64x64.png"))
+	const trayMenuTemplate = [
+	  {
+	    label: 'settings',
+	    click: ()=>{
+	    	//ipcMain.send('show')
+	    	mainWindow.show();
+	    }
+	  },
+	  {
+	    label: 'exit',
+	    click: ()=>{
+	      //stopListeners()
+	      app.exit()
+	    }
+	  }
+	]
+	let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
+	trayIcon.setContextMenu(trayMenu)	
 }
 
 function stop(){
@@ -105,6 +136,7 @@ ipcMain.on('contents-loaded', (event, data) => {
   presenceClient.start(configuration, handlePresenceUpdate);
 });
 */
+
 module.exports = {
   start: start,
   stop: stop
