@@ -26,14 +26,29 @@ function addCallEventTriggerRow(values) {
   callEventTriggerPane.appendChild(triggerRow.createElement);
 }
 
-function getTriggerList() {
+function getPresenceTriggerList() {
   const triggerList = [];
-  const rowList = triggerPane.children;
+  const rowList = presenceTriggerPane.children;
   for (let i = 0; i < rowList.length; i++) {
     const thisRow = rowList.item(i);
     const triggerObject = {};
     triggerObject.stateChange = thisRow.querySelector(".stateChange").value;
     triggerObject.presenceValue = thisRow.querySelector(".presenceValue").value;
+    triggerObject.cmd = thisRow.querySelector(".cmd").value;
+    if (triggerObject.cmd) {
+      triggerList.push(triggerObject);
+    }
+  }
+  return triggerList;
+}
+
+function getCallEventTriggerList() {
+  const triggerList = [];
+  const rowList = callEventTriggerPane.children;
+  for (let i = 0; i < rowList.length; i++) {
+    const thisRow = rowList.item(i);
+    const triggerObject = {};
+    triggerObject.callEvent = thisRow.querySelector(".callEvent").value;
     triggerObject.cmd = thisRow.querySelector(".cmd").value;
     if (triggerObject.cmd) {
       triggerList.push(triggerObject);
@@ -64,9 +79,11 @@ function cancel() {
 }
 
 function saveSettings() {
-  const triggerList = getTriggerList();
   const triggerOnStartup = document.getElementById("trigger-on-startup").checked;
-  settings.set("appSettings.triggers", triggerList);
+  const presenceTriggerList = getPresenceTriggerList();
+  const callEventTriggerList = getCallEventTriggerList();
+  settings.set("appSettings.triggers.presenceTriggers", presenceTriggerList);
+  settings.set("appSettings.triggers.callEventTriggers", callEventTriggerList);
   settings.set("appSettings.triggerOnStartup", triggerOnStartup);
 
   ipcRenderer.send("close-settings");
