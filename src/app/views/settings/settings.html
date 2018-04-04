@@ -1,22 +1,30 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="../../css/settings.css">
+	<link rel="stylesheet" href="./settings.css">
 
 </head>
 
 <body>
-	<div id="text">
-		<h2>Settings:</h2>
-	</div>
-	<div id="general-settings"></div>
-	<div id="trigger-menu">Triggers:
-		<div id="trigger-list"></div>
-	</div>
-	<div id="navigation-buttons">
-		<div id="add-trigger">Add trigger</div>
-		<div id="cancle-button">Cancel</div>
-		<div id="save-button">Save</div>
+	<div id="wrapper">
+		<div id="text">
+			<h2>Settings:</h2>
+		</div>
+		<div id="general-settings"></div>
+			<div id="presnce-trigger-menu">Presence Triggers:
+				<div id="presence-trigger-list"></div>
+				<div id="add-presence-trigger" class="button">Add trigger</div>
+			</div>
+
+			<div id="presnce-trigger-menu">Call Event Triggers:
+				<div id="call-event-trigger-list"></div>
+				<div id="add-call-event-trigger" class="button">Add trigger</div>
+			</div>
+
+		<div id="navigation-buttons">
+			<div id="cancel-button" class="button">Cancel</div>
+			<div id="save-button" class="button">Save</div>
+		</div>
 	</div>
 
 	<script>

@@ -1,0 +1,51 @@
+#wrapper {
+	height: 100%;
+	display: grid;
+	grid-template-rows: 50px 30px 1fr 1fr 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+  "header"
+  "general-settings"
+  "presence-triggers"
+  "call-event-triggers"
+  "navigation-buttons";
+}
+
+#navigation-buttons {
+	grid-area: navigation-buttons;
+	display: grid;
+	grid-template-rows: 1fr [bottom] 30px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+  "empty empty"
+  "cancel save";
+}
+
+#cancel-button {
+	grid-area: cancel;
+	background-color: red;
+
+}
+
+#save-button {
+	grid-area: save;
+	background-color: green;
+}
+
+#add-trigger {
+	grid-area: add-row;
+	background-color: gray;
+}
+
+.button {
+	background-color: silver;
+	cursor: hand;
+	padding: 5px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.delete-button {
+	cursor: hand;
+	vertical-align: middle;
+}

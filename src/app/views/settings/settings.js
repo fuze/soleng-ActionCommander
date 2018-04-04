@@ -1,25 +1,29 @@
 const { ipcRenderer, remote } = require("electron");
 const settings = remote.require("electron-settings");
-const { TriggerRow } = require("./TriggerRow");
+const { PresenceTriggerRow, CallEventTriggerRow } = require("./TriggerRow");
 
-const cancelButton = document.getElementById("cancle-button");
+const cancelButton = document.getElementById("cancel-button");
 const saveButton = document.getElementById("save-button");
-const addTriggerButton = document.getElementById("add-trigger");
+const addPresenceTriggerButton = document.getElementById("add-presence-trigger");
+const addCallEventTriggerButton = document.getElementById("add-call-event-trigger");
 const generalSettings = document.getElementById("general-settings");
-const triggerPane = document.getElementById("trigger-list");
+const presenceTriggerPane = document.getElementById("presence-trigger-list");
+const callEventTriggerPane = document.getElementById("call-event-trigger-list");
 
-function addTriggerRow(values) {
+function addPresenceTriggerRow(values) {
   if (values === undefined) {
     values = { stateChange: "to", presenceValue: "busy", cmd: undefined };
   }
-  const triggerRow = new TriggerRow(values);
-  triggerPane.appendChild(triggerRow.createElement);
+  const triggerRow = new PresenceTriggerRow(values);
+  presenceTriggerPane.appendChild(triggerRow.createElement);
 }
 
-function removeTriggerRow(buttonElement) {
-  let row = buttonElement.parentElement;
-  row.parentElement.removeChild(row);
-  return null;
+function addCallEventTriggerRow(values) {
+  if (values === undefined) {
+    values = { callEvnet: "bing", cmd: undefined };
+  }
+  const triggerRow = new CallEventTriggerRow(values);
+  callEventTriggerPane.appendChild(triggerRow.createElement);
 }
 
 function getTriggerList() {
@@ -39,12 +43,19 @@ function getTriggerList() {
 }
 
 function loadTriggerList(triggerPane) {
-  const triggerList = settings.get("appSettings.triggers", []); //get the list of triggers that are saved. If the setting does not exist, initize an array
-  for (i in triggerList) {
-    addTriggerRow(triggerList[i]);
+  const presenceTriggerList = settings.get("appSettings.triggers.presenceTriggers", []); //get the list of triggers that are saved. If the setting does not exist, initize an array
+  const callEventTriggerList = settings.get("appSettings.triggers.callEventTriggers", []);
+  for (trigger of presenceTriggerList) {
+    addPresenceTriggerRow(trigger);
   }
-  if (triggerList.length == 0) {
-    addTriggerRow();
+  if (presenceTriggerList.length == 0) { //if there are no triggers, spawn a blank one to invite the user
+    addPresenceTriggerRow();
+  }
+  for (trigger of callEventTriggerList){
+    addCallEventTriggerRow(trigger);
+  }
+  if (callEventTriggerList.length == 0) { //if there are no triggers, spawn a blank one to invite the user
+    addCallEventTriggerRow();
   }
 }
 
@@ -81,7 +92,8 @@ function createGeneralSettings(settingsPane) {
 
 cancelButton.addEventListener("click", cancel);
 saveButton.addEventListener("click", saveSettings);
-addTriggerButton.addEventListener("click", addTriggerRow);
+addPresenceTriggerButton.addEventListener("click", addPresenceTriggerRow);
+addCallEventTriggerButton.addEventListener("click", addCallEventTriggerRow);
 
 createGeneralSettings(generalSettings);
-loadTriggerList(triggerPane);
+loadTriggerList();

@@ -1,9 +1,5 @@
 class TriggerRow {
-  constructor(values) {
-    this.stateChange = values.stateChange;
-    this.presenceValue = values.presenceValue;
-    this.cmd = values.cmd;
-  }
+  constructor(){}
 
   createSelect(className, value, list) {
     let input = document.createElement("select");
@@ -13,7 +9,6 @@ class TriggerRow {
       option.setAttribute("value", list[i]);
       option.innerHTML = list[i];
       //if (list[i] == value){input.selectedIndex = option.index} //Sets the default state of the dropdown
-
       input.appendChild(option);
     }
     if (value) {
@@ -21,6 +16,7 @@ class TriggerRow {
     }
     return input;
   }
+
   createInput(className, value) {
     let input = document.createElement("input");
     input.setAttribute("class", className);
@@ -39,6 +35,16 @@ class TriggerRow {
       removeTriggerRow(event.target);
     });
     return trash;
+  }
+
+}
+
+class PresenceTriggerRow extends TriggerRow {
+  constructor(values) {
+    super()
+    this.stateChange = values.stateChange;
+    this.presenceValue = values.presenceValue;
+    this.cmd = values.cmd;
   }
 
   get createElement() {
@@ -63,6 +69,37 @@ class TriggerRow {
   }
 }
 
+class CallEventTriggerRow extends TriggerRow {
+  constructor(values) {
+    super()
+    this.callEvent = values.callEvent;
+    this.cmd = values.cmd;
+  }
+
+  get createElement() {
+    let row = document.createElement("div");
+    row.setAttribute("class", "trigger-row");
+    let callEventInput = this.createSelect("callEvent", this.callEvent, [
+      "ring",
+      "bing",
+      "bong"
+    ]);
+    let cmdInput = this.createInput("cmd", this.cmd);
+    let trash = this.createTrash();
+    row.appendChild(callEventInput);
+    row.appendChild(cmdInput);
+    row.appendChild(trash);
+    return row;
+  }
+}
+
+function removeTriggerRow(buttonElement) {
+  let row = buttonElement.parentElement;
+  row.parentElement.removeChild(row);
+  return null;
+}
+
 module.exports = {
-  TriggerRow,
+  PresenceTriggerRow,
+  CallEventTriggerRow
 }
