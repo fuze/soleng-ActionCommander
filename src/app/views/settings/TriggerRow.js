@@ -43,7 +43,7 @@ class PresenceTriggerRow extends TriggerRow {
   constructor(values) {
     super()
     this.stateChange = values.stateChange;
-    this.presenceValue = values.presenceValue;
+    this.triggerValue = values.triggerValue;
     this.cmd = values.cmd;
   }
 
@@ -56,7 +56,7 @@ class PresenceTriggerRow extends TriggerRow {
     ]);
     let presenceValueInput = this.createSelect(
       "presenceValue",
-      this.presenceValue,
+      this.triggerValue,
       ["available", "away", "busy", "out", "dnd", "meeting", "call"]
     ); //add more values
     let cmdInput = this.createInput("cmd", this.cmd);
@@ -74,14 +74,14 @@ class PresenceTriggerRow extends TriggerRow {
 class CallEventTriggerRow extends TriggerRow {
   constructor(values) {
     super()
-    this.callEvent = values.callEvent;
+    this.triggerValue = values.triggerValue;
     this.cmd = values.cmd;
   }
 
   get createElement() {
     let row = document.createElement("div");
     row.setAttribute("class", "trigger-row");
-    let callEventInput = this.createSelect("callEvent", this.callEvent, [
+    let callEventInput = this.createSelect("callEvent", this.triggerValue, [
       "dial_call_start",
       "call_ring",
       "call_connected",

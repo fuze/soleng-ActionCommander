@@ -7,6 +7,7 @@ const { TriggerManager } = require('../../js/triggerManager.js')
 const cjson = require('../../../config/config.json');
 const statusLabel = document.getElementById('status');
 const callStatusLabel = document.getElementById('call-status');
+const triggerManager = new TriggerManager()
 
 function handlePresenceUpdate(status, result) {
   if (status) {
@@ -18,6 +19,7 @@ function handlePresenceUpdate(status, result) {
     statusLabel.innerHTML = 'Presence: ' + result.status.presence;
     console.log('Received a presence result')
     console.log(result);
+    triggerManager.newPresenceUpdate(result)
   }
 }
 
@@ -31,6 +33,7 @@ function handleCallUpdate(status, result) {
     callStatusLabel.innerHTML = 'Call Event: ' + result.status.presence;
     console.log('Received a call event result')
     console.log(result);
+    triggerManager.newCallEvent(result)
   }
 }
 
@@ -48,7 +51,7 @@ function setUpCallEventTriggers(triggerManager, triggerList){
     console.log("setting up trigger: ")
     console.log(trigger)
     console.log(typeof trigger.callback)
-    triggerManager.addPresenceTrigger(trigger)
+    triggerManager.addCallEventTrigger(trigger)
   }
 }
 
@@ -68,7 +71,7 @@ function setUpPresenceTriggers(triggerManager, triggerList){
 }
 
 ipcRenderer.on('contents-loaded', (event, data) => {
-  const triggerManager = new TriggerManager()
+  
   setUpCallEventTriggers(triggerManager, settings.get("appSettings.triggers.callEventTriggers", []))
   setUpPresenceTriggers(triggerManager, settings.get("appSettings.triggers.presenceTriggers", []))
   settings.watch("appSettings.triggers", newTriggers => { //if the trigger settings change, clear the triggers and load the new ones

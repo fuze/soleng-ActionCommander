@@ -13,7 +13,7 @@ const callEventTriggerPane = document.getElementById("call-event-trigger-list");
 
 function addPresenceTriggerRow(values) {
   if (values === undefined) {
-    values = { stateChange: "to", presenceValue: "busy", cmd: undefined };
+    values = { stateChange: "to", triggerValue: "busy", cmd: undefined };
   }
   const triggerRow = new PresenceTriggerRow(values);
   presenceTriggerPane.appendChild(triggerRow.createElement);
@@ -21,7 +21,7 @@ function addPresenceTriggerRow(values) {
 
 function addCallEventTriggerRow(values) {
   if (values === undefined) {
-    values = { callEvnet: "bing", cmd: undefined };
+    values = { triggerValue: "dial_call_start", cmd: undefined };
   }
   const triggerRow = new CallEventTriggerRow(values);
   callEventTriggerPane.appendChild(triggerRow.createElement);
@@ -34,7 +34,7 @@ function getPresenceTriggerList() {
     const thisRow = rowList.item(i);
     const triggerObject = {};
     triggerObject.stateChange = thisRow.querySelector(".stateChange").value;
-    triggerObject.presenceValue = thisRow.querySelector(".presenceValue").value;
+    triggerObject.triggerValue = thisRow.querySelector(".presenceValue").value;
     triggerObject.cmd = thisRow.querySelector(".cmd").value;
     if (triggerObject.cmd && typeof triggerObject.cmd == "string" && triggerObject.cmd.length > 0) {
       triggerList.push(triggerObject);
@@ -49,7 +49,7 @@ function getCallEventTriggerList() {
   for (let i = 0; i < rowList.length; i++) {
     const thisRow = rowList.item(i);
     const triggerObject = {};
-    triggerObject.callEvent = thisRow.querySelector(".callEvent").value;
+    triggerObject.triggerValue = thisRow.querySelector(".callEvent").value;
     triggerObject.cmd = thisRow.querySelector(".cmd").value;
     if (triggerObject.cmd && typeof triggerObject.cmd == "string" && triggerObject.cmd.length > 0) {
       triggerList.push(triggerObject);
