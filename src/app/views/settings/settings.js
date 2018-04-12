@@ -1,5 +1,6 @@
 const { ipcRenderer, remote } = require("electron");
-const settings = remote.require("electron-settings");
+//const settings = remote.require("electron-settings");
+const settings = require('electron').remote.require('electron-settings')
 const { PresenceTriggerRow, CallEventTriggerRow } = require("./TriggerRow");
 
 const cancelButton = document.getElementById("cancel-button");
@@ -35,7 +36,7 @@ function getPresenceTriggerList() {
     triggerObject.stateChange = thisRow.querySelector(".stateChange").value;
     triggerObject.presenceValue = thisRow.querySelector(".presenceValue").value;
     triggerObject.cmd = thisRow.querySelector(".cmd").value;
-    if (triggerObject.cmd) {
+    if (triggerObject.cmd && typeof triggerObject.cmd == "string" && triggerObject.cmd.length > 0) {
       triggerList.push(triggerObject);
     }
   }
@@ -50,7 +51,7 @@ function getCallEventTriggerList() {
     const triggerObject = {};
     triggerObject.callEvent = thisRow.querySelector(".callEvent").value;
     triggerObject.cmd = thisRow.querySelector(".cmd").value;
-    if (triggerObject.cmd) {
+    if (triggerObject.cmd && typeof triggerObject.cmd == "string" && triggerObject.cmd.length > 0) {
       triggerList.push(triggerObject);
     }
   }

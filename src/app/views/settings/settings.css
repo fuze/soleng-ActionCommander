@@ -11,6 +11,12 @@
   "navigation-buttons";
 }
 
+.trigger-row {
+	display: grid;
+	grid-template-columns: 1fr 20px;
+	grid-template-areas: "input remove"
+}
+
 #navigation-buttons {
 	grid-area: navigation-buttons;
 	display: grid;
@@ -46,6 +52,8 @@
 }
 
 .delete-button {
+	grid-area: remove;
 	cursor: hand;
 	vertical-align: middle;
+
 }

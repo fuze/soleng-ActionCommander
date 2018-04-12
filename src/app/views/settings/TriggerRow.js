@@ -61,9 +61,11 @@ class PresenceTriggerRow extends TriggerRow {
     ); //add more values
     let cmdInput = this.createInput("cmd", this.cmd);
     let trash = this.createTrash();
-    row.appendChild(stateChangeInput);
-    row.appendChild(presenceValueInput);
-    row.appendChild(cmdInput);
+    let inputDiv = document.createElement("div");
+    row.appendChild(inputDiv)
+    inputDiv.appendChild(stateChangeInput);
+    inputDiv.appendChild(presenceValueInput);
+    inputDiv.appendChild(cmdInput);
     row.appendChild(trash);
     return row;
   }
@@ -80,14 +82,17 @@ class CallEventTriggerRow extends TriggerRow {
     let row = document.createElement("div");
     row.setAttribute("class", "trigger-row");
     let callEventInput = this.createSelect("callEvent", this.callEvent, [
-      "ring",
-      "bing",
-      "bong"
+      "dial_call_start",
+      "call_ring",
+      "call_connected",
+      "call_end"
     ]);
     let cmdInput = this.createInput("cmd", this.cmd);
     let trash = this.createTrash();
-    row.appendChild(callEventInput);
-    row.appendChild(cmdInput);
+    let inputDiv = document.createElement("div");
+    row.appendChild(inputDiv)
+    inputDiv.appendChild(callEventInput);
+    inputDiv.appendChild(cmdInput);
     row.appendChild(trash);
     return row;
   }

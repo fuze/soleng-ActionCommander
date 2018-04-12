@@ -4,15 +4,15 @@ class TriggerManager {
 		this.presenceTriggers = {'from' : [], 'to' : []}
 	}
 
-	addPresenceTrigger(trigger) {
-		this.presenceTriggers.push(trigger)
+	addCallEventTrigger(trigger) {
+		this.callEventTriggers.push(trigger)
 	}
 
-	addCallEventTrigger(trigger) {
+	addPresenceTrigger(trigger) {
 		if (trigger.stateChange == "to"){
-			this.callEventTriggers.to.push(trigger)
+			this.presenceTriggers.to.push(trigger)
 		} else if (trigger.stateChange == "from"){
-			this.callEventTriggers.from.push(trigger)
+			this.presenceTriggers.from.push(trigger)
 		}
 	}
 

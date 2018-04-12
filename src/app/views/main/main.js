@@ -1,5 +1,6 @@
 const { ipcRenderer } = require('electron');
-const settings = require("electron-settings");
+//const settings = require("electron-settings");
+const settings = require('electron').remote.require('electron-settings')
 const { exec } = require("child_process");
 const { PresenceWatcher, PresenceUpdateRate, CallEventsWatcher } = require('soleng-presence-client');
 const { TriggerManager } = require('../../js/triggerManager.js')
@@ -9,21 +10,27 @@ const callStatusLabel = document.getElementById('call-status');
 
 function handlePresenceUpdate(status, result) {
   if (status) {
-    console.log('Received a status message ' + status);
+    //console.log('Received a call event status message')
+    //console.log(status);
   }
 
   if (result) {
-    statusLabel.innerHTML = 'New status : ' + result.status.presence;
+    statusLabel.innerHTML = 'Presence: ' + result.status.presence;
+    console.log('Received a presence result')
+    console.log(result);
   }
 }
 
 function handleCallUpdate(status, result) {
   if (status) {
-    console.log('Received a status message' + status);
+    //console.log('Received a presence status message')
+    //console.log(status)
   }
 
   if (result) {
-    callStatusLabel.innerHTML = 'New status : ' + result.status.presence;
+    callStatusLabel.innerHTML = 'Call Event: ' + result.status.presence;
+    console.log('Received a call event result')
+    console.log(result);
   }
 }
 
@@ -38,6 +45,9 @@ function pushDataToConfObject(confObject, authDetails) {
 function setUpCallEventTriggers(triggerManager, triggerList){
   for (trigger of triggerList){
     trigger.callback = (platformData)=>{exec(commandSubsitution(trigger.cmd, platformData))}
+    console.log("setting up trigger: ")
+    console.log(trigger)
+    console.log(typeof trigger.callback)
     triggerManager.addPresenceTrigger(trigger)
   }
 }
