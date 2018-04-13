@@ -1,0 +1,28 @@
+#wrapper {
+	height: 100%;
+	display: grid;
+	grid-template-rows: 1fr 1fr 1fr 50px;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+  "header"
+  "presence-section"
+  "call-event-section"
+  "footer"
+}
+
+.section-header {
+	font-size: 25px;
+	text-align: center;
+}
+
+#call-event-0 {
+	color: #000000;
+}
+
+#call-event-1 {
+	color: #555555;	
+}
+
+#call-event-2 {
+	color: #999999;		
+}

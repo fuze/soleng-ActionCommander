@@ -5,8 +5,8 @@ const { exec } = require("child_process");
 const { PresenceWatcher, PresenceUpdateRate, CallEventsWatcher } = require('soleng-presence-client');
 const { TriggerManager } = require('../../js/triggerManager.js')
 const cjson = require('../../../config/config.json');
-const statusLabel = document.getElementById('status');
-const callStatusLabel = document.getElementById('call-status');
+
+
 const triggerManager = new TriggerManager()
 
 function handlePresenceUpdate(status, result) {
@@ -16,9 +16,15 @@ function handlePresenceUpdate(status, result) {
   }
 
   if (result) {
-    statusLabel.innerHTML = 'Presence: ' + result.status.presence;
     console.log('Received a presence result')
-    console.log(result);
+    console.log(result.status.platformData);
+    const presenceElement = document.getElementById('presence-status');
+    const tagsElement = document.getElementById('presence-tags');
+    presenceElement.innerHTML = result.status.presence;
+    let tags = result.status.platformData.data.tags;
+    if (tags.length == 0){tags = "none"}
+    tagsElement.innerHTML = tags
+
     triggerManager.newPresenceUpdate(result)
   }
 }
@@ -30,7 +36,12 @@ function handleCallUpdate(status, result) {
   }
 
   if (result) {
-    callStatusLabel.innerHTML = 'Call Event: ' + result.status.presence;
+    const callEventElement0 = document.getElementById('call-event-0');
+    const callEventElement1 = document.getElementById('call-event-1');
+    const callEventElement2 = document.getElementById('call-event-2');
+    callEventElement2.innerHTML = callEventElement1.innerHTML
+    callEventElement1.innerHTML = callEventElement0.innerHTML
+    callEventElement0.innerHTML = result.status.presence
     console.log('Received a call event result')
     console.log(result);
     triggerManager.newCallEvent(result)
@@ -48,9 +59,6 @@ function pushDataToConfObject(confObject, authDetails) {
 function setUpCallEventTriggers(triggerManager, triggerList){
   for (trigger of triggerList){
     trigger.callback = (platformData)=>{exec(commandSubsitution(trigger.cmd, platformData))}
-    console.log("setting up trigger: ")
-    console.log(trigger)
-    console.log(typeof trigger.callback)
     triggerManager.addCallEventTrigger(trigger)
   }
 }

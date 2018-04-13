@@ -1,12 +1,24 @@
 <html>
-
+<head><link rel="stylesheet" href="./main.css"></head>
 <body>
-	<div id="status-text">Current status:</div>
-	<div id="status">unknown</div>
-	<div id="call-status">unknown</div>
-	<div id="tags-text">Current tags:</div>
-	<div id="tags">unknown</div>
-	<div id="settings-button"></div>
+	<div id="wrapper">
+		<div id="presence-section">
+			<div class="section-header">Presence</div>
+			<div id="status-text">Current status:</div>
+			<div id="presence-status">unknown</div>
+			<div id="tags-text">Current tags:</div>
+			<div id="presence-tags">unknown</div>
+		</div>
+		<div id="call-event-section">
+			<div class="section-header">Call events</div>
+			<div>Recent Call Events:</div>
+			<div id="call-event-0"></div>	
+			<div id="call-event-1"></div>	
+			<div id="call-event-2"></div>	
+		</div>
+		
+		<div id="settings-button">Settings</div>
+	</div>
 	<script>
 		require('./main.js');
 	</script>
