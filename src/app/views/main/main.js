@@ -57,10 +57,26 @@ function setUpCallEventTriggers(triggerManager, triggerList){
 
 function commandSubsitution(command, platformData){
   //parses the command for data to subsitute from platformData
-  //clid
-  //clidname
-  //etc
+  const keys = [
+    "callid",
+    "clid",
+    "clidname",
+    "destnumber",
+    "direction",
+    "duration",
+    "inConfrence",
+    "userId",
+    "ThinkingId"
+    ]
+  for (key of keys){
+    command = stringReplacer(command, "{" + key + "}", platformData[key])
+  }
   return command
+}
+
+function stringReplacer(string, key, value){
+  let regex = new RegExp(key, 'g')
+  return string.replace(regex, value)
 }
 
 function setUpPresenceTriggers(triggerManager, triggerList){

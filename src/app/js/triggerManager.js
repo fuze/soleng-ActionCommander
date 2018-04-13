@@ -45,11 +45,8 @@ class TriggerManager {
 			oldState = []
 		}
 		for (trigger of this.presenceTriggers.to) {
-			console.log(trigger)
-			console.log(newState.includes(trigger.triggerValue))
 			if (newState.includes(trigger.triggerValue) && !(oldState.includes(trigger.triggerValue))){
 				try {
-					console.log("triggering")
 					trigger.callback()
 				} catch(err) {
 					console.log("error exicuting trigger callback: " + err)
