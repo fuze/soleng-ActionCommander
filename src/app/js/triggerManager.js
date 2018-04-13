@@ -38,24 +38,30 @@ class TriggerManager {
 		//then check to make sure that the value we are looking for is in the newState but not the oldState
 		//or vice versa
 		let newState = data.status.platformData.data.tags.concat(data.status.platformData.data.status)
+		let oldState
+		if (data.previousStatus){
+			oldState = data.previousStatus.platformData.data.tags.concat(data.previousStatus.platformData.data.status)
+		} else {
+			oldState = []
+		}
 		for (trigger of this.presenceTriggers.to) {
+			console.log(trigger)
+			console.log(newState.includes(trigger.triggerValue))
 			if (newState.includes(trigger.triggerValue) && !(oldState.includes(trigger.triggerValue))){
 				try {
+					console.log("triggering")
 					trigger.callback()
 				} catch(err) {
 					console.log("error exicuting trigger callback: " + err)
 				}
 			}
 		}
-		if (data.previousStatus){
-			let oldState = data.previousStatus.platformData.data.tags.concat(data.previousStatus.platformData.data.status)		
-			for (trigger of this.presenceTriggers.from) {
-				if (oldState.includes(trigger.triggerValue) && !(newState.includes(trigger.triggerValue))){
-					try {
-						trigger.callback()
-					} catch(err) {
-						console.log("error exicuting trigger callback: " + err)
-					}
+		for (trigger of this.presenceTriggers.from) {
+			if (oldState.includes(trigger.triggerValue) && !(newState.includes(trigger.triggerValue))){
+				try {
+					trigger.callback()
+				} catch(err) {
+					console.log("error exicuting trigger callback: " + err)
 				}
 			}
 		}
