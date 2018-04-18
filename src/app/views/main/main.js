@@ -112,5 +112,8 @@ ipcRenderer.on('contents-loaded', (event, data) => {
 
   const callEventsWatcher = new CallEventsWatcher(cjson);
   callEventsWatcher.start(handleCallUpdate);
+
+  const settingsButton = document.getElementById("settings-button");
+  settingsButton.addEventListener("click", () => {ipcRenderer.send("open-settings")});
 });
 
