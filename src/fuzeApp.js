@@ -69,6 +69,7 @@ console.info("User Locale ==  " + app.getLocale());
 global.mainWindow = null;
 global.loginWindow = null;
 global.settingsWindow = null;
+global.trayIcon = null
 
 let infoWindow = null;
 
@@ -410,9 +411,8 @@ function initialize() {
 
   ipcMain.on('close-settings', () => {
     settingsWindow.close();
+    settingsWindow = null
   })
-  
-  let tray = null
   
   function createTrayMenu(){
   ///////////////////////
@@ -421,7 +421,7 @@ function initialize() {
 
   //trayIcon = new Tray('../../../assets/icons/png/16x16.png')
   //console.log(path.join(__dirname, "../../assets/icons/png/64x64.png"))
-  var trayIcon = new Tray(path.join(__dirname, "./assets/icons/png/64x64.png"))
+  trayIcon = new Tray(path.join(__dirname, "./assets/icons/png/64x64.png"))
   const trayMenuTemplate = [
     {
       label: 'view',
