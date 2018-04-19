@@ -5,6 +5,7 @@ const {
   BrowserWindow,
   ipcMain,
   ipcRenderer,
+  Tray,
   Menu,
   Dialog
 } = require("electron");
@@ -214,6 +215,11 @@ function initialize() {
     fWin.loadURL(`file://${__dirname}/${pjson.config.mainurl}`, {});
     console.log(pjson.config.mainurl);
 
+    fWin.on('close', (event)=> {
+      event.preventDefault()
+      fWin.hide()
+    })
+
     //letnew_window = window.open('https://auth.thinkingphones.com?accessToken=2.M9G01Num4hZ08KQ.YXBwbGljYXRpb246dmh5NE5MMUU4UToyMU5VUk5Cd2NQ&redirectUri=https%3A%2F%2Fwblogin.gts.fuze.com');
     //new_window.focus();
     fWin.on("closed", onClosed);
@@ -343,6 +349,7 @@ function initialize() {
   });
 
   app.on("ready", () => {
+    createTrayMenu()
     Menu.setApplicationMenu(createMenu());
 
     isUserAuthenticated(function(res) {
@@ -394,12 +401,52 @@ function initialize() {
   //////////////////////////////////////////////////////////////////////////////////////
 
   ipcMain.on('open-settings', () => {
-    settingsWindow = createSettingsWindow();
+    if (!settingsWindow){
+      settingsWindow = createSettingsWindow();
+    } else {
+      settingsWindow.show()
+    }
   });
 
   ipcMain.on('close-settings', () => {
     settingsWindow.close();
   })
+  
+  let tray = null
+  
+  function createTrayMenu(){
+  ///////////////////////
+  // Tray interactions //
+  ///////////////////////
+
+  //trayIcon = new Tray('../../../assets/icons/png/16x16.png')
+  //console.log(path.join(__dirname, "../../assets/icons/png/64x64.png"))
+  var trayIcon = new Tray(path.join(__dirname, "./assets/icons/png/64x64.png"))
+  const trayMenuTemplate = [
+    {
+      label: 'view',
+      click: ()=>{
+        mainWindow.show();
+      }
+    },
+    {
+      label: 'settings',
+      click: ()=>{
+        //ipcMain.send('show')
+        settingsWindow = createSettingsWindow();
+      }
+    },
+    {
+      label: 'exit',
+      click: ()=>{
+        //stopListeners()
+        app.exit()
+      }
+    }
+  ]
+  let trayMenu = Menu.buildFromTemplate(trayMenuTemplate)
+  trayIcon.setContextMenu(trayMenu) 
+}
 
 
 }
