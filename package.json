@@ -1,7 +1,7 @@
 {
-  "name": "fuze-presence-commander",
-  "description": "Presence Commander",
-  "version": "0.0.1",
+  "name": "fuze-action-gateway",
+  "description": "Fuze Action Gateway",
+  "version": "0.0.2",
   "target": "electron",
   "author": {
     "name": "Fuze <support@fuze.com>",
@@ -55,19 +55,17 @@
   },
   "pre-commit": [],
   "keywords": [
-    "presence-commander",
+    "action-gateway",
     "presence",
     "fuze"
   ],
   "build": {
-    "appId": "com.soleng-presence-commander",
-    "productName": "Fuze Presence Commander",
+    "appId": "com.soleng-action-gateway",
+    "productName": "Fuze Action Gateway",
     "asar": true,
     "compression": "maximum",
     "win": {
-      "target": [
-        "squirrel"
-      ],
+      "target": "msi",
       "icon": "src/assets/icons/win/icon.ico"
     },
     "mac": {
@@ -76,6 +74,9 @@
         "dmg"
       ],
       "icon": "src/assets/icons/mac/icon.icns"
+    },
+    "msi": {
+      "warningsAsErrors": false
     },
     "nsis": {
       "oneClick": false,

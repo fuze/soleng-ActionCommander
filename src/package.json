@@ -1,8 +1,8 @@
 {
-  "name": "soleng-presence-commander-internal",
-  "productName": "Presence Commander",
-  "description": "Presence Commander Installable",
-  "version": "0.0.1",
+  "name": "soleng-action-gateway-internal",
+  "productName": "Action Gateway",
+  "description": "Action Gateway Installable",
+  "version": "0.0.2",
   "homepage": "https://www.fuze.com",
   "author": {
     "name": "Fuze <support@fuze.com>",
