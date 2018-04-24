@@ -91,21 +91,12 @@ function saveSettings() {
 }
 
 function createGeneralSettings(settingsPane) {
-  const triggerOnStartup = document.createElement("input");
-  const label = document.createElement("label");
+  const triggerOnStartup = document.getElementById("trigger-on-startup");
 
-  triggerOnStartup.id = "trigger-on-startup";
-  triggerOnStartup.type = "checkbox";
   triggerOnStartup.checked = settings.get(
     "appSettings.triggerOnStartup",
     false
   ); //read the saved value. Default to false
-
-  label.for = "trigger-on-startup";
-  label.innerHTML = "Proccess triggers on startup";
-
-  settingsPane.appendChild(triggerOnStartup);
-  settingsPane.appendChild(label);
 }
 
 cancelButton.addEventListener("click", cancel);
