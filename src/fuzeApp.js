@@ -421,7 +421,7 @@ function initialize() {
 
   //trayIcon = new Tray('../../../assets/icons/png/16x16.png')
   //console.log(path.join(__dirname, "../../assets/icons/png/64x64.png"))
-  trayIcon = new Tray(path.join(__dirname, "./assets/icons/png/64x64.png"))
+  trayIcon = new Tray(path.join(__dirname, "./assets/icons/png/16x16.png"))
   const trayMenuTemplate = [
     {
       label: 'view',
