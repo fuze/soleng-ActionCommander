@@ -1,3 +1,3 @@
-# Presence Commander
+# Action Commander
 
-Lets you set up triggers to run programs when your fuze presence changes
+Lets you set up triggers to run programs when you recive call events or your Fuze presence changes 
