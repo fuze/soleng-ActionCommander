@@ -65,6 +65,7 @@
     "asar": true,
     "compression": "maximum",
     "win": {
+      "target": "msi",
       "icon": "src/assets/icons/win/icon.ico"
     },
     "mac": {
@@ -73,6 +74,9 @@
         "dmg"
       ],
       "icon": "src/assets/icons/mac/icon.icns"
+    },
+    "msi": {
+      "warningsAsErrors": false
     },
     "nsis": {
       "oneClick": false,
